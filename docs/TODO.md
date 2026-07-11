@@ -7,12 +7,12 @@ and the module boundaries in the [architecture](./ARCHITECTURE.md).
 
 ## 0. Release Definition
 
-- [ ] Define the first release version and supported Node.js versions.
-- [ ] Confirm the initial supported selections and explicitly defer future
+- [x] Define the first release version and supported Node.js versions.
+- [x] Confirm the initial supported selections and explicitly defer future
   features (authentication, analytics, search, presets, and project updates).
-- [ ] Define the generated-project support policy, including supported Astro and
+- [x] Define the generated-project support policy, including supported Astro and
   package-manager versions.
-- [ ] Establish release owners, issue labels, and the definition of done for a
+- [x] Establish release owners, issue labels, and the definition of done for a
   production release.
 
 ## 1. Workspace Foundation

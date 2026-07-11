@@ -160,6 +160,39 @@ Developers can:
 - ESLint
 - Prettier
 
+## v0.1.0 Scope Boundary
+
+The initial release supports only the project types and selections listed in
+this document's **Initial Project Types** and **Initial Feature Set** sections.
+Authentication, analytics, search, community or team presets, and updates to
+existing generated projects are explicitly deferred beyond v0.1.0. They must
+not be presented as available CLI selections or implied by generated-project
+behavior until their requirements and support policies are defined.
+
+## Generated-Project Support Policy
+
+Astro Stack v0.1.0 generates projects with `astro` `^7.0.7`. Generated
+projects require Node.js `>=22.12.0` and an even-numbered Node.js release. This
+is intentionally stricter than the CLI's Node.js `>=20` requirement: running
+the generator on Node.js 20 does not make the generated Astro project runnable
+on Node.js 20.
+
+The generator supports these package-manager versions for generated projects:
+
+| Package manager | Supported version |
+| --- | --- |
+| npm | `>=9.6.5` |
+| pnpm | `>=7.1.0` |
+| Yarn | `>=4.0.0` |
+| Bun | `>=1.3.0` |
+
+Each generated project uses exactly the package manager selected in the CLI and
+produces only that manager's lockfile. The v0.1.0 compatibility commitment is
+to install dependencies, type-check, and production-build every supported
+selection with the listed runtime and package-manager ranges. Compatibility
+with older Astro majors, older package-manager releases, or an unlisted package
+manager is outside the release support policy.
+
 ---
 
 # Success Metrics
