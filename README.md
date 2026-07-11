@@ -58,6 +58,8 @@ yarn create astro-stack
 bun create astro-stack
 ```
 
+For interactive and automation options, see the [CLI usage guide](./docs/CLI.md).
+
 ---
 
 ## Example

@@ -39,13 +39,13 @@ and the module boundaries in the [architecture](./ARCHITECTURE.md).
 
 ## 3. CLI Experience
 
-- [ ] Implement the `create astro-stack` command entry point and help/version
+- [x] Implement the `create astro-stack` command entry point and help/version
   output.
-- [ ] Build the grouped wizard with sensible defaults and back/cancel support.
-- [ ] Show a final, accurate summary before any files are written.
-- [ ] Provide clear progress, errors, recovery guidance, and non-interactive
+- [x] Build the grouped wizard with sensible defaults and back/cancel support.
+- [x] Show a final, accurate summary before any files are written.
+- [x] Provide clear progress, errors, recovery guidance, and non-interactive
   behavior where supported.
-- [ ] Verify the CLI works from a clean environment and does not leave partial
+- [x] Verify the CLI works from a clean environment and does not leave partial
   output after cancellation or failure.
 
 ## 4. Feature Registry and Resolution

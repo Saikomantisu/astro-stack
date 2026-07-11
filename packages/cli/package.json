@@ -15,10 +15,15 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "dev": "pnpm run build && pnpm run start",
+    "start": "node dist/index.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "@astro-stack/generator": "workspace:*",
-    "@astro-stack/utils": "workspace:*"
+    "@astro-stack/utils": "workspace:*",
+    "@clack/prompts": "^1.7.0",
+    "commander": "^15.0.0"
   }
 }
