@@ -4,7 +4,7 @@
   "private": true,
   "description": "Production-ready Astro project generator.",
   "engines": {
-    "node": ">=20"
+    "node": ">=22.13"
   },
   "packageManager": "pnpm@11.0.8",
   "scripts": {

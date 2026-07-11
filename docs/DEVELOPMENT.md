@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Node.js 20 or later for the Astro Stack workspace.
+- Node.js 22.13 or later for the Astro Stack workspace.
 - Corepack-enabled pnpm 11.0.8, as pinned in the root `package.json`.
 
 Generated projects have separate runtime and package-manager requirements;

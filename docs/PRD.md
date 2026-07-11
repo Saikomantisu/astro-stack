@@ -172,10 +172,9 @@ behavior until their requirements and support policies are defined.
 ## Generated-Project Support Policy
 
 Astro Stack v0.1.0 generates projects with `astro` `^7.0.7`. Generated
-projects require Node.js `>=22.12.0` and an even-numbered Node.js release. This
-is intentionally stricter than the CLI's Node.js `>=20` requirement: running
-the generator on Node.js 20 does not make the generated Astro project runnable
-on Node.js 20.
+projects require Node.js `>=22.12.0` and an even-numbered Node.js release. The
+CLI requires Node.js `>=22.13` because its pinned pnpm version has that runtime
+minimum.
 
 The generator supports these package-manager versions for generated projects:
 
