@@ -7,9 +7,14 @@
   "scripts": {
     "build": "pnpm --recursive run build",
     "check": "pnpm --recursive run check",
-    "clean": "pnpm --recursive run clean"
+    "clean": "pnpm --recursive run clean",
+    "lint": "biome lint .",
+    "format": "biome format . --write",
+    "format:check": "biome format .",
+    "check:biome": "biome check ."
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.5.3",
     "typescript": "^5.8.3"
   }
 }
