@@ -76,6 +76,11 @@ Each section returns a partial configuration.
 
 The final configuration is merged into a single object.
 
+The shared configuration model, defaults, merging API, validation result, and
+summary projection are owned by `@astro-stack/utils`. See
+[Configuration Model](./CONFIGURATION.md) for the contract used by the CLI and
+generator.
+
 Example:
 
 ```ts

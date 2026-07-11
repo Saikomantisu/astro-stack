@@ -27,14 +27,14 @@ and the module boundaries in the [architecture](./ARCHITECTURE.md).
 
 ## 2. Configuration Model and Validation
 
-- [ ] Define the complete, typed project configuration and defaults.
-- [ ] Implement section-level configuration for project, styling/tooling,
+- [x] Define the complete, typed project configuration and defaults.
+- [x] Implement section-level configuration for project, styling/tooling,
   content, features, deployment, and summary.
-- [ ] Validate required selections, invalid values, and incompatible
+- [x] Validate required selections, invalid values, and incompatible
   combinations before generation.
-- [ ] Represent validation errors and warnings in a form the CLI can display
+- [x] Represent validation errors and warnings in a form the CLI can display
   clearly.
-- [ ] Test configuration merging, defaults, and validation independently of the
+- [x] Test configuration merging, defaults, and validation independently of the
   CLI.
 
 ## 3. CLI Experience

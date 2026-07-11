@@ -1,1 +1,1 @@
-export type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
+export * from "./configuration.js";
