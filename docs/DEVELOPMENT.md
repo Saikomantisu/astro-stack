@@ -34,7 +34,7 @@ pnpm format        # Apply formatting changes
 Run the same verification as CI before handing off a change:
 
 ```sh
-pnpm test && pnpm check && pnpm check:biome && pnpm build
+pnpm build && pnpm check && pnpm check:biome && pnpm test
 ```
 
 To run a command for one package, use pnpm filters. For example:
