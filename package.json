@@ -14,10 +14,13 @@
     "lint": "biome lint .",
     "format": "biome format . --write",
     "format:check": "biome format .",
-    "check:biome": "biome check ."
+    "check:biome": "biome check .",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   }
 }

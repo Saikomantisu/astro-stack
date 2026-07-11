@@ -1,11 +1,8 @@
 {
-  "name": "@astro-stack/cli",
+  "name": "@astro-stack/features",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "bin": {
-    "astro-stack": "./dist/index.js"
-  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -16,9 +13,5 @@
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
     "clean": "rm -rf dist"
-  },
-  "dependencies": {
-    "@astro-stack/generator": "workspace:*",
-    "@astro-stack/utils": "workspace:*"
   }
 }

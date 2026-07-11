@@ -191,9 +191,9 @@ Astro Stack follows a few simple principles.
 
 ## Contributing
 
-Contributions, ideas, and feedback are always welcome.
-
-If you'd like to improve Astro Stack, feel free to open an issue or submit a pull request.
+Contributions, ideas, and feedback are welcome. See
+[CONTRIBUTING.md](./CONTRIBUTING.md) and the
+[local-development guide](./docs/DEVELOPMENT.md).
 
 ---
 

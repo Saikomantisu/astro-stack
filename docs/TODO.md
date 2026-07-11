@@ -17,13 +17,13 @@ and the module boundaries in the [architecture](./ARCHITECTURE.md).
 
 ## 1. Workspace Foundation
 
-- [ ] Configure the pnpm workspace, root scripts, shared TypeScript settings,
+- [x] Configure the pnpm workspace, root scripts, shared TypeScript settings,
   linting, formatting, and test tooling.
-- [ ] Define public package exports for `cli`, `generator`, `features`, and
+- [x] Define public package exports for `cli`, `generator`, `features`, and
   `utils`.
-- [ ] Add CI to install dependencies, run checks, run tests, and build all
+- [x] Add CI to install dependencies, run checks, run tests, and build all
   packages on every change.
-- [ ] Add contribution, local-development, and architecture documentation.
+- [x] Add contribution, local-development, and architecture documentation.
 
 ## 2. Configuration Model and Validation
 

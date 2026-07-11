@@ -34,6 +34,20 @@ Project Ready
 
 # Core Modules
 
+## Package Boundaries
+
+| Package | Public responsibility | May depend on |
+| --- | --- | --- |
+| `@astro-stack/cli` | Command entry point and user interaction | generator, features, utils |
+| `@astro-stack/generator` | Rendering, file creation, and configuration application | features, utils, templates |
+| `@astro-stack/features` | Feature contracts, definitions, validation, and resolution | utils, templates |
+| `@astro-stack/utils` | Framework-agnostic shared types and helpers | no Astro Stack package |
+| `packages/templates` | Source assets used only while generating a project | no runtime consumer |
+
+Packages communicate through their declared public exports. A package must not
+import another package's `src` or `dist` files. The dependency directions above
+keep the CLI thin and ensure generated projects never depend on Astro Stack.
+
 ## CLI
 
 Responsible for:
@@ -136,7 +150,7 @@ Responsible for:
 
 ---
 
-# Folder Structure
+## Workspace Layout
 
 ```
 packages/
@@ -148,6 +162,10 @@ packages/
 
 docs/
 ```
+
+`packages/features` is the public registry boundary. Individual feature
+definitions are added beneath it only when their dependencies, templates,
+configuration changes, validation, and lifecycle behavior are specified.
 
 ---
 
