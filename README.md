@@ -1,74 +1,47 @@
-# Astro Stack
+# ✦ astro stack ✦
 
-> Production-ready Astro apps.
+> Your Astro project, ready for liftoff.
 
-Astro Stack is a CLI that helps you create production-ready Astro projects in minutes.
+Astro Stack is a guided CLI for launching production-ready Astro projects.
+Choose the pieces your project needs and it assembles a clean, project-owned
+codebase—without a starter repository full of things you did not choose.
 
-Instead of cloning starter repositories or repeatedly configuring the same tools, Astro Stack guides you through a modern setup wizard and generates a clean project tailored to your needs.
+**No unnecessary files. No unnecessary dependencies. Just the stack you choose.**
 
-No unnecessary files.
-
-No unnecessary dependencies.
-
-Just the stack you choose.
-
----
-
-## Release Baseline
-
-The initial public release is **v0.1.0**. The Astro Stack CLI supports
-**Node.js >=22.13** and uses the pinned pnpm workspace version **pnpm@11.0.8**.
-Generated-project runtime and package-manager requirements are defined in the
-[support policy](./docs/PRD.md#generated-project-support-policy).
-
----
-
-## Features
-
-- 🚀 Interactive setup wizard
-- 📦 Production-ready project structure
-- 🎨 Styling options
-- 📝 Content configuration
-- 🌐 Deployment presets
-- 🛠️ Developer tooling
-- 📁 Clean, maintainable project structure
-- ⚡ Fast project generation
-
----
-
-## Installation
+## Start a flight plan
 
 Run Astro Stack directly:
 
-```bash
+```sh
 npm create astro-stack@latest
 ```
 
-Or using your preferred package manager:
+Or use your preferred package manager:
 
-```bash
+```sh
 pnpm create astro-stack
-```
-
-```bash
 yarn create astro-stack
-```
-
-```bash
 bun create astro-stack
 ```
 
 For interactive and automation options, see the [CLI usage guide](./docs/CLI.md).
 
----
+## What you configure
 
-## Example
+Astro Stack groups decisions into a focused setup flow, then generates only the
+corresponding files, dependencies, and configuration.
+
+| Flight system | Available choices |
+| --- | --- |
+| Project | Marketing site, client site, blog, documentation, portfolio, SaaS landing page, or blank project |
+| Styling | Tailwind CSS or vanilla CSS |
+| Content | None, Markdown, MDX, or Content Collections |
+| Forms | None, Resend, or webhooks |
+| Deployment | Static hosting, Vercel, Netlify, or Cloudflare |
+| Tooling | TypeScript, ESLint, Prettier, Biome, AI instructions, and editor integrations |
 
 ```text
-┌──────────────────────────────┐
-│         Astro Stack          │
-│ Production-ready Astro apps. │
-└──────────────────────────────┘
+✦ astro stack ✦
 
 Project
 ───────────────────────────────
@@ -83,128 +56,42 @@ Package manager
 ❯ pnpm
 ```
 
-After completing the configuration, Astro Stack generates your project, installs dependencies, and gets everything ready for development.
+When your flight plan is complete, Astro Stack creates the project, installs
+its selected dependencies, and leaves it ready for development.
 
----
+## Built for a clean launch
 
-## Project Types
+- **Close to Astro** — prefer Astro’s official capabilities over custom layers.
+- **Project-owned output** — generated projects have no runtime dependency on Astro Stack.
+- **Production-minded defaults** — start from a maintainable structure, not demo code.
+- **Intentional prompts** — each selection changes the generated output.
+- **Modular choices** — features own their dependencies, templates, configuration, and hooks.
 
-Astro Stack currently supports:
+Read the full [product principles](./docs/PRINCIPLES.md) and
+[architecture](./docs/ARCHITECTURE.md).
 
-- Marketing Website
-- Client Website
-- Blog
-- Documentation
-- Portfolio
-- SaaS Landing Page
-- Blank Project
+## Release baseline
 
----
+The initial public release is **v0.1.0**. The CLI supports **Node.js >=22.13**
+and uses the pinned pnpm workspace version **pnpm@11.0.8**. Generated-project
+runtime and package-manager requirements are defined in the
+[support policy](./docs/PRD.md#generated-project-support-policy).
 
-## Styling
-
-Choose from:
-
-- Tailwind CSS
-- Vanilla CSS
-
-More options will be added over time.
-
----
-
-## Content
-
-Configure your content layer:
-
-- None
-- Markdown
-- MDX
-- Content Collections
-
----
-
-## Forms
-
-Choose how your project handles forms:
-
-- None
-- Resend
-- Webhooks
-
----
-
-## Deployment
-
-Generate projects configured for:
-
-- Static Hosting
-- Vercel
-- Netlify
-- Cloudflare
-
----
-
-## Tooling
-
-Optional developer tooling:
-
-- TypeScript
-- ESLint
-- Prettier
-- Biome
-- Optional Codex and Claude instruction files
-- Optional VS Code, Cursor, and Zed workspace integration
-
----
-
-## Philosophy
-
-Astro Stack follows a few simple principles.
-
-- Generate only what you need.
-- Stay close to Astro.
-- Produce code developers fully own.
-- Keep projects clean and maintainable.
-- Prefer official Astro solutions whenever possible.
-
----
-
-## Roadmap
-
-### v0.1
-
-- Interactive project wizard
-- Project generation
-- Styling configuration
-- Content configuration
-- Deployment presets
-- Forms
-- TypeScript
-- ESLint
-- Prettier
-- Biome
-
-### Future
+## On the horizon
 
 - Pre-commit hooks
 - A concise, consistent generated-project command surface
-- Add integrations to existing projects
-- Remove integrations
-- Community presets
-- Team presets
+- Add and remove integrations in existing projects
+- Community and team presets
 - Plugin system
 - Configuration sync
 
----
-
 ## Contributing
 
-Contributions, ideas, and feedback are welcome. See
+Ideas, feedback, and contributions are welcome. Start with
 [CONTRIBUTING.md](./CONTRIBUTING.md) and the
-[local-development guide](./docs/DEVELOPMENT.md).
-
----
+[local development guide](./docs/DEVELOPMENT.md).
 
 ## License
 
-MIT
+[MIT](./LICENSE)
