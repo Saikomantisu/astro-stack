@@ -151,6 +151,7 @@ Optional developer tooling:
 - TypeScript
 - ESLint
 - Prettier
+- Biome
 
 ---
 
@@ -179,6 +180,7 @@ Astro Stack follows a few simple principles.
 - TypeScript
 - ESLint
 - Prettier
+- Biome
 
 ### Future
 

@@ -58,14 +58,14 @@ and the module boundaries in the [architecture](./ARCHITECTURE.md).
 
 ## 5. Base Project Generation
 
-- [ ] Create the minimal Astro project structure for each initial project type:
+- [x] Create the minimal Astro project structure for each initial project type:
   marketing, client, blog, documentation, portfolio, SaaS landing page, and
   blank.
-- [ ] Render templates safely with project variables and predictable naming.
-- [ ] Generate only selected files, dependencies, and configuration.
-- [ ] Merge JSON, TypeScript, and Astro configuration without overwriting
+- [x] Render templates safely with project variables and predictable naming.
+- [x] Generate only selected files, dependencies, and configuration.
+- [x] Merge JSON, TypeScript, and Astro configuration without overwriting
   intentional feature changes.
-- [ ] Ensure generated projects have no runtime dependency on Astro Stack.
+- [x] Ensure generated projects have no runtime dependency on Astro Stack.
 
 ## 6. Initial Supported Features
 
@@ -76,6 +76,7 @@ and the module boundaries in the [architecture](./ARCHITECTURE.md).
 - [ ] TypeScript preferences
 - [ ] ESLint
 - [ ] Prettier
+- [ ] Biome
 
 ### Content
 

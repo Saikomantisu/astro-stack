@@ -55,7 +55,12 @@ describe("validateProjectConfiguration", () => {
 
   it("returns warnings without rejecting an otherwise valid configuration", () => {
     const configuration = mergeProjectConfiguration({
-      styling: { typescript: "relaxed", eslint: false, prettier: false },
+      styling: {
+        typescript: "relaxed",
+        eslint: false,
+        prettier: false,
+        biome: false,
+      },
       project: { initializeGit: false },
     });
 
@@ -84,7 +89,7 @@ describe("summarizeProjectConfiguration", () => {
 
     expect(summary).toMatchObject({
       project: "my-astro-project",
-      styling: "tailwind; TypeScript (strict), ESLint, Prettier",
+      styling: "tailwind; TypeScript (strict), ESLint, Prettier, Biome",
       content: "mdx",
     });
   });

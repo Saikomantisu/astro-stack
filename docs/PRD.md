@@ -81,6 +81,7 @@ Instead of asking one question at a time, Astro Stack groups related settings in
 - CSS framework
 - ESLint
 - Prettier
+- Biome
 - TypeScript preferences
 
 ### 3. Content
@@ -159,6 +160,7 @@ Developers can:
 - TypeScript
 - ESLint
 - Prettier
+- Biome
 
 ## v0.1.0 Scope Boundary
 

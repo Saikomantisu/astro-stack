@@ -5,7 +5,8 @@ registry, and generator. The complete `ProjectConfiguration` is assembled from
 the following independently collected sections:
 
 - `project`: name, output directory, project type, package manager, and Git.
-- `styling`: CSS choice, TypeScript preference, ESLint, and Prettier.
+- `styling`: CSS choice, TypeScript preference, and tooling selections for
+  ESLint, Prettier, and Biome.
 - `content`: none, Markdown, MDX, or Content Collections.
 - `features`: forms integration.
 - `deployment`: static, Vercel, Netlify, or Cloudflare.

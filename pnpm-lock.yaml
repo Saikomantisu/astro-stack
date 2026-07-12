@@ -44,6 +44,9 @@ importers:
 
   packages/generator:
     dependencies:
+      '@astro-stack/features':
+        specifier: workspace:*
+        version: link:../features
       '@astro-stack/utils':
         specifier: workspace:*
         version: link:../utils

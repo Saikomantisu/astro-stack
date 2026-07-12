@@ -2,72 +2,26 @@ import type {
   ConfigurationIssue,
   ProjectConfiguration,
 } from "@astro-stack/utils";
+import type {
+  FeatureConfigurationChange,
+  FeatureConflict,
+  FeatureDefinition,
+  FeatureDependency,
+  FeatureLifecycleHooks,
+  FeatureResolution,
+  FeatureTemplate,
+} from "./contracts.js";
 
-/** A package required by a selected feature in the generated project. */
-export interface FeatureDependency {
-  name: string;
-  version: string;
-  type: "dependency" | "devDependency";
-}
-
-/** A template file a feature asks the generator to render. */
-export interface FeatureTemplate {
-  source: string;
-  destination: string;
-}
-
-/** A single, addressable configuration value a feature asks the generator to set. */
-export interface FeatureConfigurationChange {
-  file: string;
-  path: string;
-  value: unknown;
-}
-
-/** Hooks are invoked by the generator at its corresponding lifecycle boundary. */
-export interface FeatureLifecycleContext {
-  configuration: ProjectConfiguration;
-  feature: FeatureDefinition;
-}
-
-export interface FeatureLifecycleHooks {
-  beforeGenerate?: (context: FeatureLifecycleContext) => void | Promise<void>;
-  afterGenerate?: (context: FeatureLifecycleContext) => void | Promise<void>;
-}
-
-export interface FeatureDefinition {
-  /** Globally stable identifier, used in diagnostics and generated plans. */
-  id: string;
-  /** Returns whether this definition is selected by a complete configuration. */
-  isSelected: (configuration: ProjectConfiguration) => boolean;
-  dependencies?: readonly FeatureDependency[];
-  templates?: readonly FeatureTemplate[];
-  configurationChanges?: readonly FeatureConfigurationChange[];
-  validate?: (
-    configuration: ProjectConfiguration,
-  ) => readonly ConfigurationIssue[];
-  hooks?: FeatureLifecycleHooks;
-}
-
-export interface FeatureConflict {
-  kind: "file" | "configuration" | "dependency";
-  target: string;
-  featureIds: readonly string[];
-  message: string;
-}
-
-export interface FeatureResolution {
-  features: readonly FeatureDefinition[];
-  dependencies: readonly FeatureDependency[];
-  templates: readonly FeatureTemplate[];
-  configurationChanges: readonly FeatureConfigurationChange[];
-  hooks: readonly {
-    feature: FeatureDefinition;
-    hooks: FeatureLifecycleHooks;
-  }[];
-  errors: readonly ConfigurationIssue[];
-  conflicts: readonly FeatureConflict[];
-  valid: boolean;
-}
+export type {
+  FeatureConfigurationChange,
+  FeatureConflict,
+  FeatureDefinition,
+  FeatureDependency,
+  FeatureLifecycleContext,
+  FeatureLifecycleHooks,
+  FeatureResolution,
+  FeatureTemplate,
+} from "./contracts.js";
 
 function selectedFeature(
   id: string,
@@ -117,6 +71,10 @@ export const featureRegistry: readonly FeatureDefinition[] = [
   selectedFeature(
     "tooling:prettier",
     (configuration) => configuration.styling.prettier,
+  ),
+  selectedFeature(
+    "tooling:biome",
+    (configuration) => configuration.styling.biome,
   ),
   ...(["none", "markdown", "mdx", "collections"] as const).map((setup) =>
     selectedFeature(

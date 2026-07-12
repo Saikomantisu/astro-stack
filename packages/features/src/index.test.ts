@@ -14,6 +14,7 @@ describe("resolveFeatures", () => {
     ["typescript:relaxed", { styling: { typescript: "relaxed" } }],
     ["tooling:eslint", { styling: { eslint: true } }],
     ["tooling:prettier", { styling: { prettier: true } }],
+    ["tooling:biome", { styling: { biome: true } }],
     ["content:none", { content: { setup: "none" } }],
     ["content:markdown", { content: { setup: "markdown" } }],
     ["content:mdx", { content: { setup: "mdx" } }],
@@ -45,6 +46,7 @@ describe("resolveFeatures", () => {
         typescript: "relaxed",
         eslint: false,
         prettier: true,
+        biome: true,
       },
       content: { setup: "mdx" },
       features: { forms: "webhooks" },
@@ -59,6 +61,7 @@ describe("resolveFeatures", () => {
       "deployment:cloudflare",
       "forms:webhooks",
       "styling:tailwind",
+      "tooling:biome",
       "tooling:prettier",
       "typescript:relaxed",
     ]);

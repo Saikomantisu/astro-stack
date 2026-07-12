@@ -3,9 +3,7 @@
 import { createProject } from "@astro-stack/generator";
 import {
   mergeProjectConfiguration,
-  type ProjectConfiguration,
   summarizeProjectConfiguration,
-  validateProjectConfiguration,
 } from "@astro-stack/utils";
 import {
   cancel,
@@ -15,106 +13,29 @@ import {
   log,
   multiselect,
   note,
-  outro,
   select,
   text,
 } from "@clack/prompts";
 import { Command } from "commander";
+import { generateProject, validateForGeneration } from "./generation.js";
+import {
+  type CliOptions,
+  configurationFrom,
+  contentOptions,
+  cssOptions,
+  deploymentOptions,
+  formOptions,
+  type Generate,
+  managers,
+  tsOptions,
+  types,
+} from "./options.js";
 
 const version = "0.1.0";
-const types = [
-  "marketing",
-  "client",
-  "blog",
-  "documentation",
-  "portfolio",
-  "saas-landing",
-  "blank",
-] as const;
-const managers = ["npm", "pnpm", "yarn", "bun"] as const;
-const cssOptions = ["vanilla", "tailwind"] as const;
-const tsOptions = ["strict", "relaxed"] as const;
-const contentOptions = ["none", "markdown", "mdx", "collections"] as const;
-const formOptions = ["none", "resend", "webhooks"] as const;
-const deploymentOptions = [
-  "static",
-  "vercel",
-  "netlify",
-  "cloudflare",
-] as const;
-type Generate = (configuration: ProjectConfiguration) => Promise<void>;
 
-export interface CliOptions {
-  name?: string;
-  directory?: string;
-  type?: ProjectConfiguration["project"]["type"];
-  packageManager?: ProjectConfiguration["project"]["packageManager"];
-  css?: ProjectConfiguration["styling"]["css"];
-  typescript?: ProjectConfiguration["styling"]["typescript"];
-  content?: ProjectConfiguration["content"]["setup"];
-  forms?: ProjectConfiguration["features"]["forms"];
-  deployment?: ProjectConfiguration["deployment"]["target"];
-  eslint: boolean;
-  prettier: boolean;
-  git: boolean;
-  nonInteractive?: boolean;
-  yes?: boolean;
-}
+export type { CliOptions } from "./options.js";
+
 const cancelled = (value: unknown): value is symbol => isCancel(value);
-function validate(configuration: ProjectConfiguration): boolean {
-  const result = validateProjectConfiguration(configuration);
-  result.warnings.forEach((issue) => {
-    log.warn(issue.message);
-  });
-  result.errors.forEach((issue) => {
-    log.error(
-      `${issue.message}${issue.suggestion ? ` ${issue.suggestion}` : ""}`,
-    );
-  });
-  return result.valid;
-}
-async function generate(
-  configuration: ProjectConfiguration,
-  generator: Generate,
-): Promise<number> {
-  if (!validate(configuration)) return 2;
-  try {
-    log.step("Generating your project...");
-    await generator(configuration);
-    outro("Project ready.");
-    return 0;
-  } catch (error) {
-    log.error(
-      `Generation failed: ${error instanceof Error ? error.message : String(error)}`,
-    );
-    outro("No project is ready. Fix the issue and run the command again.");
-    return 1;
-  }
-}
-function configurationFrom(options: CliOptions): ProjectConfiguration {
-  return mergeProjectConfiguration({
-    project: {
-      ...(options.name ? { name: options.name } : {}),
-      ...(options.directory ? { directory: options.directory } : {}),
-      ...(options.type ? { type: options.type } : {}),
-      ...(options.packageManager
-        ? { packageManager: options.packageManager }
-        : {}),
-      initializeGit: options.git,
-    },
-    styling: {
-      ...(options.css ? { css: options.css } : {}),
-      ...(options.typescript ? { typescript: options.typescript } : {}),
-      eslint: options.eslint,
-      prettier: options.prettier,
-    },
-    ...(options.content ? { content: { setup: options.content } } : {}),
-    ...(options.forms ? { features: { forms: options.forms } } : {}),
-    ...(options.deployment
-      ? { deployment: { target: options.deployment } }
-      : {}),
-  });
-}
 export async function runNonInteractive(
   options: CliOptions,
   generator: Generate = createProject,
@@ -123,7 +44,7 @@ export async function runNonInteractive(
     log.error("Non-interactive generation requires --yes.");
     return 2;
   }
-  return generate(configurationFrom(options), generator);
+  return generateProject(configurationFrom(options), generator);
 }
 export async function runInteractive(
   generator: Generate = createProject,
@@ -173,8 +94,9 @@ export async function runInteractive(
     options: [
       { value: "eslint", label: "ESLint" },
       { value: "prettier", label: "Prettier" },
+      { value: "biome", label: "Biome" },
     ],
-    initialValues: ["eslint", "prettier"],
+    initialValues: ["eslint", "prettier", "biome"],
   });
   if (cancelled(tooling)) return 0;
   const content = await select({
@@ -202,12 +124,13 @@ export async function runInteractive(
       typescript,
       eslint: tooling.includes("eslint"),
       prettier: tooling.includes("prettier"),
+      biome: tooling.includes("biome"),
     },
     content: { setup: content },
     features: { forms },
     deployment: { target: deployment },
   });
-  if (!validate(configuration)) return 2;
+  if (!validateForGeneration(configuration)) return 2;
   note(
     Object.entries(summarizeProjectConfiguration(configuration))
       .map(([key, value]) => `${key}: ${value}`)
@@ -222,7 +145,7 @@ export async function runInteractive(
     cancel("Generation cancelled. No files were written.");
     return 0;
   }
-  return generate(configuration, generator);
+  return generateProject(configuration, generator);
 }
 export function createCli(generator: Generate = createProject): Command {
   const cli = new Command();
@@ -267,6 +190,7 @@ export function createCli(generator: Generate = createProject): Command {
     )
     .option("--no-eslint")
     .option("--no-prettier")
+    .option("--no-biome")
     .option("--no-git")
     .action(async (options: CliOptions) => {
       process.exitCode = options.nonInteractive
