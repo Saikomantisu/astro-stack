@@ -184,6 +184,9 @@ Astro Stack follows a few simple principles.
 
 ### Future
 
+- Optional coding-agent instruction files, editor workspace settings, and
+  pre-commit hooks
+- A concise, consistent generated-project command surface
 - Add integrations to existing projects
 - Remove integrations
 - Community presets

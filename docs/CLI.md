@@ -15,6 +15,27 @@ and a final Summary. Arrow keys navigate menus, Enter selects an option, and
 Space toggles selections in the tooling multi-select. Press `Ctrl+C` to cancel
 without writing files.
 
+The project-name and output-directory fields are intentionally empty. Their
+`my-astro-project` and `./my-astro-project` hints are examples, not values that
+Enter can accidentally accept; enter both values explicitly.
+
+## Planned developer-experience additions
+
+The next CLI experience expansion will add optional, selection-driven setup for
+coding-agent instruction files, editor workspace settings, and pre-commit
+hooks. These will be presented in the guided flow and reflected in the final
+summary. Only the files and hooks explicitly selected by the developer will be
+generated.
+
+Its non-interactive equivalent will use repeatable `--agent <name>` and
+`--editor <name>` flags plus `--hooks` or `--no-hooks`. These flags are planned,
+not yet available; scripts must not rely on them until the implementation is
+released. Hook setup will require Git.
+
+The generated README and completion output will also converge on one concise
+command surface, showing the selected package manager's exact development,
+build, and project-health commands.
+
 For automation, use `--non-interactive` with explicit selections. Defaults are
 applied for omitted selections; use `--yes` to skip the final confirmation.
 

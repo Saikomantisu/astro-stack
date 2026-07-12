@@ -1,0 +1,45 @@
+# Quality Assurance
+
+Astro Stack verifies the configuration model, feature resolution, generation,
+and generated-project runtime separately. The standard test suite is fast and
+does not require registry access. Generated-project smoke tests install real
+dependencies and therefore run as their own CI step.
+
+Run both locally before a release:
+
+```sh
+pnpm test
+pnpm test:generated
+```
+
+`test:generated` creates disposable projects, installs their dependencies with
+pnpm (without running third-party install hooks), runs `astro check`, builds
+them, and starts an Astro preview server for a static project. It never writes
+to the repository.
+
+## Compatibility matrix
+
+Every valid selection is covered at the generator level. The matrix below is
+the release contract and identifies the focused smoke-test representatives.
+
+| Area | Supported selections | Verification |
+| --- | --- | --- |
+| Project type | marketing, client, blog, documentation, portfolio, SaaS landing, blank | Each type generates its required page structure. |
+| Styling | vanilla, Tailwind | Each styling option and every TypeScript/tooling combination generates only selected configuration and dependencies. Tailwind + MDX is smoke-tested. |
+| TypeScript | strict, relaxed | Both preferences generate the matching `tsconfig` setting. |
+| Tooling | ESLint, Prettier, Biome independently enabled or disabled | All 8 tooling combinations are generation-tested. |
+| Content | none, Markdown, MDX, Content Collections | Each content setup is generation-tested; MDX and Collections are smoke-tested. |
+| Forms | none, Resend, webhooks | Valid server-target combinations are generation-tested; Resend and webhooks are smoke-tested. Static forms are rejected. |
+| Deployment | static, Vercel, Netlify, Cloudflare | Each adapter is generation-tested. Static preview, Vercel build, Netlify build, and Cloudflare build are smoke-tested. |
+
+The generated-project smoke representatives deliberately combine selections
+that exercise integration merging: static marketing, Tailwind + MDX + Vercel,
+Collections + webhooks + Netlify, and Resend + Cloudflare.
+
+## Failure-path coverage
+
+The automated suite verifies invalid selections, incompatible static forms,
+invalid or existing target directories, unavailable package-manager commands,
+dependency-install failures, and the non-interactive confirmation guard. The
+interactive flow returns before invoking generation when the user cancels any
+prompt or declines the final summary; its copy is documented in `CLI.md`.

@@ -41,3 +41,6 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+
+      - name: Smoke-test generated projects
+        run: pnpm test:generated

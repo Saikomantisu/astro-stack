@@ -72,7 +72,8 @@ Instead of asking one question at a time, Astro Stack groups related settings in
 
 ### 1. Project
 
-- Project name
+- Project name, entered explicitly with an example placeholder rather than a
+  pre-filled value
 - What are you building?
 - Package manager
 
@@ -113,6 +114,42 @@ Developers can:
 - Confirm
 - Go back and edit
 - Cancel
+
+## Developer Experience Integrations
+
+Astro Stack should make common project setup choices available during creation
+without making them mandatory or adding unrelated dependencies. These options
+belong after the project and package-manager choices, before the final summary:
+
+- **Agent instructions:** developers may select one or more supported coding
+  agents. Astro Stack writes only the corresponding instruction files, such as
+  `AGENTS.md` or `CLAUDE.md`, from maintained templates.
+- **Editor integration:** developers may select one or more supported editors.
+  Astro Stack writes only the selected workspace settings and recommended
+  extension configuration, aligned with the selected linting and formatting
+  tools.
+- **Pre-commit hooks:** developers may opt into a Git pre-commit hook that runs
+  the generated project's formatting, linting, and type-checking command with
+  safe auto-fixes. Hook setup requires Git and must be skipped or rejected
+  clearly when Git initialization is disabled.
+
+Every integration is optional, is visible in the final summary, and must be
+safe to re-run without duplicating configuration or hooks.
+
+## Command Surface and Automation
+
+Generated projects must expose a small, predictable command surface. The
+completion message and generated README must describe the exact package-manager
+commands for the selected project, beginning with `dev` and `build`, and must
+not advertise scripts that were not generated. A selected tooling combination
+should expose one documented project-health command that performs its relevant
+format, lint, and type checks.
+
+The interactive choices must have equivalent automation flags. The intended
+interface is repeatable `--agent <name>` and `--editor <name>` options,
+`--hooks` / `--no-hooks`, and explicit `--git` / `--no-git` behavior, alongside
+the existing `--non-interactive --yes` flow. Invalid names and incompatible
+choices must fail before files are written.
 
 ---
 
@@ -169,7 +206,9 @@ this document's **Initial Project Types** and **Initial Feature Set** sections.
 Authentication, analytics, search, community or team presets, and updates to
 existing generated projects are explicitly deferred beyond v0.1.0. They must
 not be presented as available CLI selections or implied by generated-project
-behavior until their requirements and support policies are defined.
+behavior until their requirements and support policies are defined. The
+developer-experience integrations described above are separately planned work;
+they must not be presented as supported until implemented and tested.
 
 ## Generated-Project Support Policy
 

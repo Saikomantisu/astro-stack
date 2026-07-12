@@ -1,7 +1,7 @@
 import { mergeProjectConfiguration } from "@astro-stack/utils";
 import { describe, expect, it, vi } from "vitest";
 
-import { finishProject, installDependencies } from "./installer.js";
+import { finishProject, installDependencies, runCommand } from "./installer.js";
 
 describe("project finishing", () => {
   it.each([
@@ -51,5 +51,14 @@ describe("project finishing", () => {
       name: "InstallationError",
       command: { command: "pnpm", arguments: ["install"] },
     });
+  });
+
+  it("reports an unavailable command with its operating-system error", async () => {
+    await expect(
+      runCommand(
+        { command: "astro-stack-command-that-does-not-exist", arguments: [] },
+        "/tmp",
+      ),
+    ).rejects.toMatchObject({ code: "ENOENT" });
   });
 });

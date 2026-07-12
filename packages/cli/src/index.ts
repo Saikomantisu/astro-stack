@@ -54,7 +54,7 @@ export async function runInteractive(
   const defaults = mergeProjectConfiguration();
   const name = await text({
     message: "Project name",
-    initialValue: defaults.project.name,
+    placeholder: defaults.project.name,
     validate: (value) =>
       value && /^[a-z0-9][a-z0-9-]*$/.test(value)
         ? undefined
@@ -63,7 +63,7 @@ export async function runInteractive(
   if (cancelled(name)) return 0;
   const directory = await text({
     message: "Output directory",
-    initialValue: defaults.project.directory,
+    placeholder: defaults.project.directory,
   });
   if (cancelled(directory)) return 0;
   const projectType = await select({

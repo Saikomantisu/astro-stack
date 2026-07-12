@@ -16,6 +16,7 @@
     "format:check": "biome format .",
     "check:biome": "biome check .",
     "test": "vitest run --passWithNoTests",
+    "test:generated": "ASTRO_STACK_RUN_GENERATED_TESTS=1 vitest run packages/generator/src/generated-projects.test.ts",
     "test:watch": "vitest"
   },
   "devDependencies": {

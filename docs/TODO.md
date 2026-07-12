@@ -115,16 +115,16 @@ For each completed feature:
 
 ## 8. Quality Assurance
 
-- [ ] Add unit tests for utilities, configuration validation, feature
+- [x] Add unit tests for utilities, configuration validation, feature
   resolution, and configuration merging.
-- [ ] Add integration tests that generate representative supported projects.
-- [ ] Run generated projects through install, type-check, build, and preview
+- [x] Add integration tests that generate representative supported projects.
+- [x] Run generated projects through install, type-check, build, and preview
   smoke tests.
-- [ ] Maintain a compatibility matrix for project types, styling, content,
+- [x] Maintain a compatibility matrix for project types, styling, content,
   forms, tooling, and deployment selections.
-- [ ] Test failure paths: invalid directory, unavailable package manager,
+- [x] Test failure paths: invalid directory, unavailable package manager,
   dependency-install failure, invalid selection, and cancelled generation.
-- [ ] Review accessibility, developer-facing copy, and error messages.
+- [x] Review accessibility, developer-facing copy, and error messages.
 
 ## 9. Documentation and Release Readiness
 
@@ -137,6 +137,56 @@ For each completed feature:
   configuration.
 - [ ] Validate a published-package installation in a fresh temporary directory.
 - [ ] Publish the initial release and verify the documented `npm create` flow.
+
+## 10. Developer Experience Expansion
+
+This post-v0.1 work adopts the useful parts of Vite+'s creation experience
+while preserving Astro Stack's rule that generated output is entirely driven by
+explicit choices.
+
+### Project input and flow
+
+- [x] Show the suggested project name as a placeholder instead of a pre-filled
+  value, and require an explicit valid name.
+- [ ] Review every prompt's default, label, help text, ordering, and cancel
+  behavior as one coherent, concise setup flow.
+- [ ] Add CLI interaction tests for an empty project name, validation recovery,
+  cancellation, and final-summary accuracy.
+
+### Agent and editor setup
+
+- [ ] Define a typed developer-experience configuration section in
+  `@astro-stack/utils` for agent instructions, editor integration, and hooks.
+- [ ] Define supported agent instruction targets and versioned templates;
+  generate only selected files and never overwrite user-owned output.
+- [ ] Define supported editor targets and generate settings and extension
+  recommendations only when selected and compatible with the chosen tooling.
+- [ ] Implement repeatable interactive multiselects and matching repeatable
+  `--agent` and `--editor` non-interactive flags.
+- [ ] Validate unknown, duplicate, and incompatible agent/editor selections
+  before rendering begins.
+
+### Git hooks and command surface
+
+- [ ] Add `--hooks` / `--no-hooks` and an interactive opt-in for pre-commit
+  setup; validate that hooks require Git.
+- [ ] Generate an idempotent pre-commit hook that runs the selected project's
+  formatting, linting, and type-checking command with safe fixes.
+- [ ] Ensure hook installation runs only after Git initialization succeeds and
+  gives actionable recovery guidance on failure.
+- [ ] Define a minimal generated-project command contract for development,
+  build, preview, and selected project-health checks.
+- [ ] Make the generated README and completion output use that contract and
+  show exact commands for the selected package manager.
+
+### Verification and documentation
+
+- [ ] Add unit tests for configuration merging and validation plus generator
+  tests for each integration's selected and unselected output.
+- [ ] Add integration tests covering every package manager, Git/hooks
+  combination, and representative agent/editor selections.
+- [ ] Update CLI usage, configuration, architecture, and release documentation
+  when the supported targets and flags are finalized.
 
 ## Final Production Gate
 

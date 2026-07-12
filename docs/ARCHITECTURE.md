@@ -81,6 +81,24 @@ summary projection are owned by `@astro-stack/utils`. See
 [Configuration Model](./CONFIGURATION.md) for the contract used by the CLI and
 generator.
 
+### Planned developer-experience configuration
+
+The next configuration-model extension will add a separate developer-experience
+section for selected agent instruction files, editor configuration, and
+pre-commit hooks. It must not be folded into styling or project configuration:
+these selections have distinct output, validation, and lifecycle behavior.
+
+Feature definitions for these integrations should own their templates and
+configuration changes. The generator must apply them through the same
+deterministic resolution and conflict detection used for other selected
+features. The installer owns Git-hook activation after Git initialization; it
+must not install or modify hooks when Git is unavailable or unselected.
+
+The CLI translates repeatable automation flags into this section, validates
+them before generation, includes them in the final summary, and uses the same
+configuration in interactive and non-interactive modes. This keeps the CLI
+thin and prevents a prompt-only implementation from diverging from automation.
+
 Example:
 
 ```ts
@@ -152,6 +170,7 @@ Responsible for:
 - creating lockfiles
 - running package manager
 - initializing Git
+- activating selected Git hooks after successful Git initialization
 
 ---
 
