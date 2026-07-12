@@ -1,4 +1,11 @@
 # Features
 
-Each feature belongs in its own workspace package, for example `features/tailwind`.
-Feature packages own their dependencies, templates, configuration, and lifecycle hooks.
+`@astro-stack/features` owns the registry and resolution plan consumed by the
+generator. A feature definition declares its selection predicate, dependencies,
+templates, configuration changes, validation, and optional lifecycle hooks.
+
+`resolveFeatures()` selects and sorts definitions by their stable IDs, making
+the resulting plan deterministic. It also rejects conflicting template targets,
+configuration addresses, and incompatible dependency requests before any files
+are written. Concrete feature output is added only as each supported feature is
+implemented in the later generation phases.

@@ -24,6 +24,7 @@ confirmation.
 
 The initial cross-section rule is that the Resend integration cannot use the
 static deployment target because sending mail needs a server-capable runtime.
-Future feature contracts add their compatibility checks to this validation
-boundary. `summarizeProjectConfiguration()` produces the stable, display-ready
-values required by the CLI's final summary screen.
+Feature-specific validation and pre-write conflict detection are performed by
+`resolveFeatures()` in `@astro-stack/features`; its deterministic plan is the
+input to project generation. `summarizeProjectConfiguration()` produces the
+stable, display-ready values required by the CLI's final summary screen.

@@ -36,7 +36,11 @@ importers:
         specifier: ^15.0.0
         version: 15.0.0
 
-  packages/features: {}
+  packages/features:
+    dependencies:
+      '@astro-stack/utils':
+        specifier: workspace:*
+        version: link:../utils
 
   packages/generator:
     dependencies:

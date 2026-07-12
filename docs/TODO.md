@@ -50,11 +50,11 @@ and the module boundaries in the [architecture](./ARCHITECTURE.md).
 
 ## 4. Feature Registry and Resolution
 
-- [ ] Define a self-contained feature contract for dependencies, templates,
+- [x] Define a self-contained feature contract for dependencies, templates,
   configuration changes, validation, and lifecycle hooks.
-- [ ] Implement deterministic feature resolution for every valid selection.
-- [ ] Detect conflicting file and configuration changes before writing output.
-- [ ] Test feature resolution in isolation and across supported combinations.
+- [x] Implement deterministic feature resolution for every valid selection.
+- [x] Detect conflicting file and configuration changes before writing output.
+- [x] Test feature resolution in isolation and across supported combinations.
 
 ## 5. Base Project Generation
 
