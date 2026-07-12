@@ -43,6 +43,16 @@ To run a command for one package, use pnpm filters. For example:
 pnpm --filter @astro-stack/generator check
 ```
 
+To try the CLI from the workspace root, build it and run:
+
+```sh
+pnpm --filter @astro-stack/cli start
+```
+
+Its default output directory is then `./my-astro-project`. The generator never
+overwrites an existing directory; choose another output directory or remove the
+previous generated project before running it again.
+
 ## Workspace Layout
 
 - `packages/cli`: executable and user-facing flow.

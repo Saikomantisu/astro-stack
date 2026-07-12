@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { createProject } from "@astro-stack/generator";
 import {
   mergeProjectConfiguration,
   summarizeProjectConfiguration,
@@ -17,6 +16,8 @@ import {
   text,
 } from "@clack/prompts";
 import { Command } from "commander";
+import { astroStackWordmark } from "./brand.js";
+import { generateAndFinish } from "./finishing.js";
 import { generateProject, validateForGeneration } from "./generation.js";
 import {
   type CliOptions,
@@ -38,7 +39,7 @@ export type { CliOptions } from "./options.js";
 const cancelled = (value: unknown): value is symbol => isCancel(value);
 export async function runNonInteractive(
   options: CliOptions,
-  generator: Generate = createProject,
+  generator: Generate = generateAndFinish,
 ): Promise<number> {
   if (!options.yes) {
     log.error("Non-interactive generation requires --yes.");
@@ -47,9 +48,9 @@ export async function runNonInteractive(
   return generateProject(configurationFrom(options), generator);
 }
 export async function runInteractive(
-  generator: Generate = createProject,
+  generator: Generate = generateAndFinish,
 ): Promise<number> {
-  intro("Astro Stack — Production-ready Astro apps.");
+  intro(`${astroStackWordmark()} — Set your coordinates.`);
   const defaults = mergeProjectConfiguration();
   const name = await text({
     message: "Project name",
@@ -135,19 +136,19 @@ export async function runInteractive(
     Object.entries(summarizeProjectConfiguration(configuration))
       .map(([key, value]) => `${key}: ${value}`)
       .join("\n"),
-    "Summary",
+    "Flight plan",
   );
   const accepted = await confirm({
-    message: "Generate this project?",
+    message: "Launch this project?",
     initialValue: true,
   });
   if (cancelled(accepted) || !accepted) {
-    cancel("Generation cancelled. No files were written.");
+    cancel("Launch cancelled. No files were written.");
     return 0;
   }
   return generateProject(configuration, generator);
 }
-export function createCli(generator: Generate = createProject): Command {
+export function createCli(generator: Generate = generateAndFinish): Command {
   const cli = new Command();
   cli
     .name("create-astro-stack")

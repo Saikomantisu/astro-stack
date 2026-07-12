@@ -29,6 +29,11 @@ and incompatible choices return a non-zero exit status before the generator is
 called. A generator failure also returns a non-zero exit status and is never
 reported as a ready project.
 
-Project rendering and installation are implemented by the subsequent generator
-stages. Until then, the generation boundary returns a clear error rather than
-creating incomplete output.
+After rendering, the CLI installs dependencies using the selected package
+manager, which creates its lockfile, and initializes Git by default. Use
+`--no-git` to skip repository initialization. If installation or Git setup
+fails, the CLI returns a non-zero status and never reports the project as ready;
+the generated directory is retained so the failure can be inspected or removed.
+
+The completion message includes the exact development command, required form
+environment variables, and deployment guidance for the selected features.

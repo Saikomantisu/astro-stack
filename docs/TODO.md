@@ -106,11 +106,11 @@ For each completed feature:
 
 ## 7. Installation and Finishing Steps
 
-- [ ] Install dependencies with the selected package manager and produce a
+- [x] Install dependencies with the selected package manager and produce a
   lockfile.
-- [ ] Handle install failures without presenting a broken project as ready.
-- [ ] Initialize Git when selected or documented as the default behavior.
-- [ ] Print accurate next steps, including environment variables and deployment
+- [x] Handle install failures without presenting a broken project as ready.
+- [x] Initialize Git when selected or documented as the default behavior.
+- [x] Print accurate next steps, including environment variables and deployment
   instructions required by selected features.
 
 ## 8. Quality Assurance

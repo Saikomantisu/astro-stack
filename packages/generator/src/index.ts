@@ -18,6 +18,16 @@ export interface GeneratedProject {
   files: readonly string[];
 }
 
+export {
+  type Command,
+  type CommandRunner,
+  finishProject,
+  InstallationError,
+  initializeGit,
+  installDependencies,
+  runCommand,
+} from "./installer.js";
+
 /** Validates and creates a minimal independent Astro project. */
 export async function createProject(
   configuration: ProjectConfiguration,

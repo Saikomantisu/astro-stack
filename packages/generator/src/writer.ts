@@ -42,7 +42,9 @@ export async function writeProject(
   templates: readonly ProjectTemplate[],
 ): Promise<string[]> {
   if (await pathExists(directory))
-    throw new Error(`The target directory already exists: ${directory}`);
+    throw new Error(
+      `The target directory already exists: ${directory}. Choose a different output directory or remove it before launching again.`,
+    );
   const temporaryDirectory = `${directory}.astro-stack-${process.pid}-${Date.now()}`;
   if (await pathExists(temporaryDirectory))
     throw new Error(

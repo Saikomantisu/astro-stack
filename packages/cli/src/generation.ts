@@ -2,7 +2,9 @@ import {
   type ProjectConfiguration,
   validateProjectConfiguration,
 } from "@astro-stack/utils";
-import { log, outro } from "@clack/prompts";
+import { log, note, outro } from "@clack/prompts";
+import { projectReadyCard, projectReadyMessage } from "./brand.js";
+import { nextSteps } from "./finishing.js";
 import type { Generate } from "./options.js";
 /** Displays validation diagnostics and returns whether generation may proceed. */
 export function validateForGeneration(
@@ -26,15 +28,21 @@ export async function generateProject(
 ): Promise<number> {
   if (!validateForGeneration(configuration)) return 2;
   try {
-    log.step("Generating your project...");
+    log.step("Preparing your project for launch...");
     await generator(configuration);
-    outro("Project ready.");
+    const steps = nextSteps(configuration);
+    log.success(projectReadyMessage(configuration.project.name));
+    note(
+      projectReadyCard(configuration.project.name, steps),
+      "Your Astro project",
+    );
+    outro("The stars are aligned. Start building.");
     return 0;
   } catch (error) {
     log.error(
-      `Generation failed: ${error instanceof Error ? error.message : String(error)}`,
+      `Launch failed: ${error instanceof Error ? error.message : String(error)}`,
     );
-    outro("No project is ready. Fix the issue and run the command again.");
+    outro("No project is ready. Fix the issue and launch again.");
     return 1;
   }
 }

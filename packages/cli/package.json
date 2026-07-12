@@ -17,7 +17,7 @@
     "check": "tsc -p tsconfig.json --noEmit",
     "clean": "rm -rf dist",
     "dev": "pnpm run build && pnpm run start",
-    "start": "node dist/index.js",
+    "start": "cd ../.. && node packages/cli/dist/index.js",
     "test": "vitest run"
   },
   "dependencies": {

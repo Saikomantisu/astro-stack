@@ -142,7 +142,7 @@ describe("createProject", () => {
       ).resolves.toContain("Start writing in Markdown.");
       await expect(
         readFile(join(directory, "src/content.config.ts"), "utf8"),
-      ).resolves.toContain('const posts = defineCollection');
+      ).resolves.toContain("const posts = defineCollection");
       expect(manifest.devDependencies["@astrojs/mdx"]).toBeUndefined();
       return;
     }
@@ -155,7 +155,7 @@ describe("createProject", () => {
       ).resolves.toContain("JavaScript expressions");
       await expect(
         readFile(join(directory, "src/content.config.ts"), "utf8"),
-      ).resolves.toContain('const posts = defineCollection');
+      ).resolves.toContain("const posts = defineCollection");
       expect(manifest.devDependencies["@astrojs/mdx"]).toBe("^7.0.2");
       await expect(
         readFile(join(directory, "astro.config.mjs"), "utf8"),
