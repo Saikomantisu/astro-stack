@@ -120,6 +120,8 @@ For each completed feature:
 - [x] Add integration tests that generate representative supported projects.
 - [x] Run generated projects through install, type-check, build, and preview
   smoke tests.
+- [x] Keep generated-project smoke tests out of GitHub Actions and run them
+  manually before major generated-project changes and releases.
 - [x] Maintain a compatibility matrix for project types, styling, content,
   forms, tooling, and deployment selections.
 - [x] Test failure paths: invalid directory, unavailable package manager,

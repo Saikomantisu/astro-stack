@@ -1,9 +1,10 @@
 # Quality Assurance
 
 Astro Stack verifies the configuration model, feature resolution, generation,
-and generated-project runtime separately. The standard test suite is fast and
-does not require registry access. Generated-project smoke tests install real
-dependencies and therefore run as their own CI step.
+and generated-project runtime separately. The standard pull-request test suite
+is fast and does not require registry access. Generated-project smoke tests
+install real dependencies, so they are run manually before major
+generated-project changes and releases rather than in GitHub Actions.
 
 Run both locally before a release:
 

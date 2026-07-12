@@ -34,6 +34,13 @@ pnpm --filter @astro-stack/generator check
 
 Run `pnpm check` and `pnpm build` before considering a task complete. If tests are added, run the relevant package test command as well.
 
+Generated-project smoke tests are intentionally not part of GitHub Actions.
+Before handing off a major change to templates, feature resolution, generated
+project dependencies or configuration, installation, or CI/release behavior,
+run `pnpm test:generated` from the repository root and verify it passes. This
+suite installs and builds disposable generated projects, so reserve it for
+those higher-risk changes and release validation.
+
 ## Core priorities
 
 1. Correctness and predictable generation behavior.
@@ -68,4 +75,6 @@ When a tradeoff is required, favor correctness and robust generated projects ove
 
 - Run `pnpm check` for TypeScript changes.
 - Run `pnpm build` when package output or exports change.
+- Run and verify `pnpm test:generated` for major generated-project or release
+  changes.
 - Update relevant documentation when changing generation behavior, supported options, or architecture.
