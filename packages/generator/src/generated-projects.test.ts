@@ -1,5 +1,7 @@
 import { spawn } from "node:child_process";
+import { once } from "node:events";
 import { mkdtemp, rm } from "node:fs/promises";
+import { createServer } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -43,6 +45,35 @@ function run(
         : reject(new Error(`${command} exited with code ${code}: ${output}`)),
     );
   });
+}
+
+async function availablePort(): Promise<number> {
+  const server = createServer();
+  await new Promise<void>((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", resolve);
+  });
+  const address = server.address();
+  await new Promise<void>((resolve, reject) =>
+    server.close((error) => (error ? reject(error) : resolve())),
+  );
+  if (!address || typeof address === "string")
+    throw new Error("Unable to reserve a preview port.");
+  return address.port;
+}
+
+async function stop(child: ReturnType<typeof spawn>): Promise<void> {
+  if (child.exitCode !== null) return;
+  try {
+    if (child.pid) process.kill(-child.pid, "SIGTERM");
+    else child.kill("SIGTERM");
+  } catch {
+    child.kill("SIGTERM");
+  }
+  await Promise.race([
+    once(child, "exit"),
+    new Promise((resolve) => setTimeout(resolve, 5_000)),
+  ]);
 }
 
 async function generate(
@@ -111,16 +142,17 @@ describe.runIf(enabled)("generated-project quality assurance", () => {
     await run("pnpm", ["install", "--ignore-scripts"], directory);
     await run("pnpm", ["build"], directory);
 
+    const port = await availablePort();
     const preview = spawn(
       "pnpm",
-      ["preview", "--", "--host", "127.0.0.1", "--port", "4321"],
-      { cwd: directory, stdio: "ignore" },
+      ["preview", "--host", "127.0.0.1", "--port", String(port)],
+      { cwd: directory, detached: true, stdio: "ignore" },
     );
     try {
       let response: Response | undefined;
       for (let attempt = 0; attempt < 30; attempt += 1) {
         try {
-          response = await fetch("http://127.0.0.1:4321/");
+          response = await fetch(`http://127.0.0.1:${port}/`);
           break;
         } catch {
           await new Promise((resolve) => setTimeout(resolve, 250));
@@ -129,7 +161,7 @@ describe.runIf(enabled)("generated-project quality assurance", () => {
       expect(response?.status).toBe(200);
       await expect(response?.text()).resolves.toContain("Astro Project");
     } finally {
-      preview.kill("SIGTERM");
+      await stop(preview);
     }
   }, 180_000);
 });
