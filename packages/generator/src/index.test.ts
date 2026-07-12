@@ -122,25 +122,40 @@ describe("createProject", () => {
 
     if (setup === "none") {
       await expect(
-        readFile(join(directory, "src/pages/posts/getting-started.md"), "utf8"),
+        readFile(
+          join(directory, "src/content/posts/getting-started.md"),
+          "utf8",
+        ),
+      ).rejects.toMatchObject({ code: "ENOENT" });
+      await expect(
+        readFile(join(directory, "src/content.config.ts"), "utf8"),
       ).rejects.toMatchObject({ code: "ENOENT" });
       expect(manifest.devDependencies["@astrojs/mdx"]).toBeUndefined();
       return;
     }
     if (setup === "markdown") {
       await expect(
-        readFile(join(directory, "src/pages/posts/getting-started.md"), "utf8"),
+        readFile(
+          join(directory, "src/content/posts/getting-started.md"),
+          "utf8",
+        ),
       ).resolves.toContain("Start writing in Markdown.");
+      await expect(
+        readFile(join(directory, "src/content.config.ts"), "utf8"),
+      ).resolves.toContain('const posts = defineCollection');
       expect(manifest.devDependencies["@astrojs/mdx"]).toBeUndefined();
       return;
     }
     if (setup === "mdx") {
       await expect(
         readFile(
-          join(directory, "src/pages/posts/getting-started.mdx"),
+          join(directory, "src/content/posts/getting-started.mdx"),
           "utf8",
         ),
       ).resolves.toContain("JavaScript expressions");
+      await expect(
+        readFile(join(directory, "src/content.config.ts"), "utf8"),
+      ).resolves.toContain('const posts = defineCollection');
       expect(manifest.devDependencies["@astrojs/mdx"]).toBe("^7.0.2");
       await expect(
         readFile(join(directory, "astro.config.mjs"), "utf8"),
@@ -150,10 +165,10 @@ describe("createProject", () => {
     await expect(
       readFile(join(directory, "src/content.config.ts"), "utf8"),
     ).resolves.toContain(
-      'loader: glob({ pattern: "**/*.md", base: "./src/data/blog" })',
+      'loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/posts" })',
     );
     await expect(
-      readFile(join(directory, "src/data/blog/getting-started.md"), "utf8"),
+      readFile(join(directory, "src/content/posts/getting-started.md"), "utf8"),
     ).resolves.toContain("content layer");
     expect(manifest.devDependencies["@astrojs/mdx"]).toBeUndefined();
   });

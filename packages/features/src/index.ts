@@ -47,6 +47,12 @@ function selectionIssue(
   };
 }
 
+const contentConfigTemplate = {
+  destination: "src/content.config.ts",
+  content:
+    'import { defineCollection } from "astro:content";\nimport { glob } from "astro/loaders";\n\nconst posts = defineCollection({\n  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/posts" }),\n});\n\nexport const collections = { posts };\n',
+};
+
 /**
  * The complete initial registry. Each feature owns the files, dependencies,
  * and configuration it adds to a generated project.
@@ -204,10 +210,11 @@ export const featureRegistry: readonly FeatureDefinition[] = [
     (configuration) => configuration.content.setup === "markdown",
     {
       templates: [
+        contentConfigTemplate,
         {
-          destination: "src/pages/posts/getting-started.md",
+          destination: "src/content/posts/getting-started.md",
           content:
-            "---\ntitle: Getting started\ndescription: Your first Markdown post.\n---\n\n# Getting started\n\nStart writing in Markdown. Astro turns this file into a page automatically.\n",
+            "---\ntitle: Getting started\ndescription: Your first Markdown post.\n---\n\n# Getting started\n\nStart writing in Markdown. This entry is available through Astro's content layer.\n",
         },
       ],
     },
@@ -220,8 +227,9 @@ export const featureRegistry: readonly FeatureDefinition[] = [
         { name: "@astrojs/mdx", version: "^7.0.2", type: "devDependency" },
       ],
       templates: [
+        contentConfigTemplate,
         {
-          destination: "src/pages/posts/getting-started.mdx",
+          destination: "src/content/posts/getting-started.mdx",
           content:
             "---\ntitle: Getting started\ndescription: Your first MDX post.\n---\n\n# Getting started\n\nYou can use **Markdown** and {`JavaScript expressions`} in this page.\n",
         },
@@ -241,13 +249,9 @@ export const featureRegistry: readonly FeatureDefinition[] = [
     (configuration) => configuration.content.setup === "collections",
     {
       templates: [
+        contentConfigTemplate,
         {
-          destination: "src/content.config.ts",
-          content:
-            'import { defineCollection } from "astro:content";\nimport { glob } from "astro/loaders";\n\nconst blog = defineCollection({\n  loader: glob({ pattern: "**/*.md", base: "./src/data/blog" }),\n});\n\nexport const collections = { blog };\n',
-        },
-        {
-          destination: "src/data/blog/getting-started.md",
+          destination: "src/content/posts/getting-started.md",
           content:
             "---\ntitle: Getting started\ndescription: Your first content collection entry.\n---\n\n# Getting started\n\nThis entry is loaded through Astro's content layer.\n",
         },

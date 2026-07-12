@@ -42,11 +42,10 @@ separate: `lint` for ESLint, `format` and `format:check` for Prettier, and
 
 ## Content output
 
-`none` leaves the generated project without starter content. Markdown and MDX
-create a starter post under `src/pages/posts`; MDX additionally installs and
-configures Astro's official MDX integration. Content Collections create a
-`src/content.config.ts` using Astro's built-in `glob()` loader and a starter
-Markdown entry under `src/data/blog`.
+`none` leaves the generated project without starter content. Every other
+content selection creates `src/content.config.ts` and a starter post under
+`src/content/posts`, using Astro's built-in `glob()` loader. MDX additionally
+installs and configures Astro's official MDX integration.
 
 ## Forms output
 
