@@ -10,28 +10,32 @@ Run it interactively from a terminal:
 npm create astro-stack@latest
 ```
 
-The guided flow covers Project, Styling & Tooling, Content, Forms, Deployment,
-and a final Summary. Prompts use concise human-readable labels while retaining
-safe defaults. Arrow keys navigate menus, Enter selects an option, and Space
-toggles selections in the tooling multi-select. The final review lets you
-launch or cancel; `Ctrl+C` also cancels without writing files.
+The guided flow covers Project, optional Agent Instructions and Editor
+Integration, Styling & Tooling, Content, Forms, Deployment, and a final
+Summary. Prompts use concise human-readable labels while retaining safe
+defaults. Arrow keys navigate menus, Enter selects an option, and Space toggles
+selections in the multi-selects. The final review lets you launch or cancel;
+`Ctrl+C` also cancels without writing files.
 
 The project-name field is intentionally empty: its `my-astro-project` hint is
 an example, not a value that Enter can accidentally accept. After entering a
 name, the output directory defaults to `./<project-name>` and can be edited.
 
-## Planned developer-experience additions
+## Agent and editor setup
 
-The next CLI experience expansion will add optional, selection-driven setup for
-coding-agent instruction files, editor workspace settings, and pre-commit
-hooks. These will be presented in the guided flow and reflected in the final
-summary. Only the files and hooks explicitly selected by the developer will be
-generated.
+Agent and editor setup is optional: press Enter on either interactive
+multi-select, or omit the corresponding automation flags, to skip it. Optional
+`codex` and `claude` agent targets generate versioned `AGENTS.md` and
+`CLAUDE.md` files respectively. Optional `vscode` and `cursor` targets generate
+`.vscode/settings.json` and `.vscode/extensions.json`, with recommendations
+only for the selected code-quality tooling. The `zed` target generates
+`.zed/settings.json` with selected formatting behavior. VS Code and Cursor
+cannot be used together because they own the same workspace files.
 
-Its non-interactive equivalent will use repeatable `--agent <name>` and
-`--editor <name>` flags plus `--hooks` or `--no-hooks`. These flags are planned,
-not yet available; scripts must not rely on them until the implementation is
-released. Hook setup will require Git.
+Use repeatable `--agent <name>` and `--editor <name>` options in
+non-interactive mode. Unknown, duplicate, and incompatible selections fail
+before any files are written. Pre-commit hooks remain a separate planned step
+and will require Git.
 
 The generated README and completion output will also converge on one concise
 command surface, showing the selected package manager's exact development,
@@ -43,7 +47,8 @@ applied for omitted selections; use `--yes` to skip the final confirmation.
 ```sh
 create-astro-stack --non-interactive --yes \
   --name launch-site --directory ./launch-site --type marketing \
-  --css tailwind --content mdx --deployment vercel
+  --css tailwind --content mdx --deployment vercel \
+  --agent codex --agent claude --editor vscode
 ```
 
 Use `--help` for the complete option list and supported values. Invalid values

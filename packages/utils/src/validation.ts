@@ -1,7 +1,9 @@
 import {
+  agentInstructionTargets,
   contentSetups,
   cssFrameworks,
   deploymentTargets,
+  editorTargets,
   formIntegrations,
   type ProjectConfiguration,
   packageManagers,
@@ -42,8 +44,15 @@ export function validateProjectConfiguration(
 ): ConfigurationValidationResult {
   const errors: ConfigurationIssue[] = [];
   const warnings: ConfigurationIssue[] = [];
-  const { project, styling, content, features, deployment, summary } =
-    configuration;
+  const {
+    project,
+    styling,
+    content,
+    features,
+    deployment,
+    developerExperience,
+    summary,
+  } = configuration;
   const checks: readonly [
     unknown,
     readonly string[],
@@ -123,6 +132,71 @@ export function validateProjectConfiguration(
   for (const [value, values, code, path, message] of checks)
     if (!isOneOf(value, values))
       errors.push(issue("error", code, path, message));
+  const validateSelections = (
+    selections: unknown,
+    supported: readonly string[],
+    path: string,
+    label: string,
+  ) => {
+    if (!Array.isArray(selections)) {
+      errors.push(
+        issue(
+          "error",
+          `invalid-${label}-selections`,
+          path,
+          `Selected ${label} targets must be a list.`,
+        ),
+      );
+      return;
+    }
+    const seen = new Set<string>();
+    for (const selection of selections) {
+      if (!isOneOf(selection, supported))
+        errors.push(
+          issue(
+            "error",
+            `invalid-${label}-target`,
+            path,
+            `The selected ${label} target '${String(selection)}' is not supported.`,
+          ),
+        );
+      else if (seen.has(selection))
+        errors.push(
+          issue(
+            "error",
+            `duplicate-${label}-target`,
+            path,
+            `The ${label} target '${selection}' was selected more than once.`,
+          ),
+        );
+      else seen.add(selection);
+    }
+  };
+  validateSelections(
+    developerExperience.agents,
+    agentInstructionTargets,
+    "developerExperience.agents",
+    "agent",
+  );
+  validateSelections(
+    developerExperience.editors,
+    editorTargets,
+    "developerExperience.editors",
+    "editor",
+  );
+  if (
+    developerExperience.editors.includes("vscode") &&
+    developerExperience.editors.includes("cursor")
+  )
+    errors.push(
+      issue(
+        "error",
+        "incompatible-editor-targets",
+        "developerExperience.editors",
+        "VS Code and Cursor cannot be selected together because both own .vscode workspace configuration.",
+        "Choose either vscode or cursor.",
+      ),
+    );
   if (
     (features.forms === "resend" || features.forms === "webhooks") &&
     deployment.target === "static"

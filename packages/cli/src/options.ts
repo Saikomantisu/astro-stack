@@ -28,6 +28,8 @@ export const deploymentOptions = [
   "netlify",
   "cloudflare",
 ] as const;
+export const agentOptions = ["codex", "claude"] as const;
+export const editorOptions = ["vscode", "cursor", "zed"] as const;
 export interface CliOptions {
   name?: string;
   directory?: string;
@@ -38,6 +40,8 @@ export interface CliOptions {
   content?: ProjectConfiguration["content"]["setup"];
   forms?: ProjectConfiguration["features"]["forms"];
   deployment?: ProjectConfiguration["deployment"]["target"];
+  agent?: string[];
+  editor?: string[];
   eslint: boolean;
   prettier: boolean;
   biome: boolean;
@@ -72,5 +76,11 @@ export function configurationFrom(options: CliOptions): ProjectConfiguration {
     ...(options.deployment
       ? { deployment: { target: options.deployment } }
       : {}),
+    developerExperience: {
+      agents: (options.agent ??
+        []) as ProjectConfiguration["developerExperience"]["agents"],
+      editors: (options.editor ??
+        []) as ProjectConfiguration["developerExperience"]["editors"],
+    },
   });
 }

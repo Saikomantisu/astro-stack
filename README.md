@@ -152,6 +152,8 @@ Optional developer tooling:
 - ESLint
 - Prettier
 - Biome
+- Optional Codex and Claude instruction files
+- Optional VS Code, Cursor, and Zed workspace integration
 
 ---
 
@@ -184,8 +186,7 @@ Astro Stack follows a few simple principles.
 
 ### Future
 
-- Optional coding-agent instruction files, editor workspace settings, and
-  pre-commit hooks
+- Pre-commit hooks
 - A concise, consistent generated-project command surface
 - Add integrations to existing projects
 - Remove integrations

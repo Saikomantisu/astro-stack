@@ -10,6 +10,8 @@ the following independently collected sections:
 - `content`: none, Markdown, MDX, or Content Collections.
 - `features`: forms integration.
 - `deployment`: static, Vercel, Netlify, or Cloudflare.
+- `developerExperience`: optional agent instructions, editor integration, and
+  the planned Git-hook choice.
 - `summary`: whether the CLI requires final confirmation before writing files.
 
 Use `mergeProjectConfiguration()` to combine wizard-section values with the
@@ -29,6 +31,18 @@ Feature-specific validation and pre-write conflict detection are performed by
 `resolveFeatures()` in `@astro-stack/features`; its deterministic plan is the
 input to project generation. `summarizeProjectConfiguration()` produces the
 stable, display-ready values required by the CLI's final summary screen.
+
+## Agent and editor output
+
+Supported agent targets are `codex` (versioned `AGENTS.md`) and `claude`
+(versioned `CLAUDE.md`). Supported editor targets are `vscode`, `cursor`, and
+`zed`; leaving either selection list empty skips that integration. VS Code and
+Cursor own `.vscode/settings.json` and `.vscode/extensions.json`, so they are
+mutually exclusive. Zed uses `.zed/settings.json`. VS Code/Cursor
+recommendations include Astro plus only the selected ESLint, Prettier, and
+Biome extensions. The generator creates these files only for selected targets,
+and its new-project-only writer never replaces an existing project directory or
+user-owned file.
 
 ## Styling and tooling output
 

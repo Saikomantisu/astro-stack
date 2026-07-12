@@ -15,6 +15,8 @@ export interface ProjectConfigurationSummary {
   content: ContentSetup;
   forms: FormIntegration;
   deployment: DeploymentTarget;
+  agents: string;
+  editors: string;
 }
 /** Creates display-ready stable values for the CLI final summary. */
 export function summarizeProjectConfiguration(
@@ -35,5 +37,7 @@ export function summarizeProjectConfiguration(
     content: configuration.content.setup,
     forms: configuration.features.forms,
     deployment: configuration.deployment.target,
+    agents: configuration.developerExperience.agents.join(", ") || "none",
+    editors: configuration.developerExperience.editors.join(", ") || "none",
   };
 }

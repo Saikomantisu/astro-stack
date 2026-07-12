@@ -88,6 +88,26 @@ describe("validateProjectConfiguration", () => {
       ]),
     );
   });
+
+  it("rejects unknown, duplicate, and incompatible developer-experience selections", () => {
+    const result = validateProjectConfiguration(
+      mergeProjectConfiguration({
+        developerExperience: {
+          agents: ["codex", "codex", "unknown"] as never,
+          editors: ["vscode", "cursor", "unknown"] as never,
+        },
+      }),
+    );
+
+    expect(result.errors.map(({ code }) => code)).toEqual(
+      expect.arrayContaining([
+        "duplicate-agent-target",
+        "invalid-agent-target",
+        "invalid-editor-target",
+        "incompatible-editor-targets",
+      ]),
+    );
+  });
 });
 
 describe("summarizeProjectConfiguration", () => {

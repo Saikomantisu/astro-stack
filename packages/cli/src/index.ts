@@ -19,11 +19,13 @@ import { astroStackWordmark, flightPlan } from "./brand.js";
 import { generateAndFinish } from "./finishing.js";
 import { generateProject, validateForGeneration } from "./generation.js";
 import {
+  agentOptions,
   type CliOptions,
   configurationFrom,
   contentOptions,
   cssOptions,
   deploymentOptions,
+  editorOptions,
   formOptions,
   type Generate,
   managers,
@@ -61,6 +63,7 @@ export interface InteractivePrompts {
     message: string;
     options: PromptOption<Value>[];
     initialValues?: Value[];
+    required?: boolean;
   }): Promise<Value[] | symbol>;
   note(message: string, title?: string): void;
   cancel(message: string): void;
@@ -101,6 +104,11 @@ const labels: Record<string, string> = {
   vercel: "Vercel",
   netlify: "Netlify",
   cloudflare: "Cloudflare",
+  codex: "Codex (AGENTS.md)",
+  claude: "Claude Code (CLAUDE.md)",
+  vscode: "VS Code",
+  cursor: "Cursor",
+  zed: "Zed",
 };
 
 function promptOptions<Value extends string>(
@@ -153,6 +161,20 @@ export async function runInteractive(
     initialValue: defaults.project.packageManager,
   });
   if (cancelled(packageManager)) return 0;
+  const agents = await prompts.multiselect({
+    message: "Agent instructions (optional — Enter to skip)",
+    options: promptOptions(agentOptions),
+    initialValues: defaults.developerExperience.agents,
+    required: false,
+  });
+  if (cancelled(agents)) return 0;
+  const editors = await prompts.multiselect({
+    message: "Editor integration (optional — Enter to skip)",
+    options: promptOptions(editorOptions),
+    initialValues: defaults.developerExperience.editors,
+    required: false,
+  });
+  if (cancelled(editors)) return 0;
   const css = await prompts.select({
     message: "Styling: CSS",
     options: promptOptions(cssOptions),
@@ -205,6 +227,7 @@ export async function runInteractive(
     content: { setup: content },
     features: { forms },
     deployment: { target: deployment },
+    developerExperience: { agents, editors },
   });
   if (!validateForGeneration(configuration)) return 2;
   prompts.note(
@@ -265,6 +288,18 @@ export function createCli(generator: Generate = generateAndFinish): Command {
       cli
         .createOption("--deployment <target>", "Deployment target")
         .choices(deploymentOptions),
+    )
+    .option(
+      "--agent <target>",
+      "Agent instruction target (repeatable)",
+      (value: string, previous: string[] = []) => [...previous, value],
+      [],
+    )
+    .option(
+      "--editor <target>",
+      "Editor integration target (repeatable)",
+      (value: string, previous: string[] = []) => [...previous, value],
+      [],
     )
     .option("--no-eslint")
     .option("--no-prettier")

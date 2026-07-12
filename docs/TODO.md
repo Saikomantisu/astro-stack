@@ -157,15 +157,15 @@ explicit choices.
 
 ### Agent and editor setup
 
-- [ ] Define a typed developer-experience configuration section in
+- [x] Define a typed developer-experience configuration section in
   `@astro-stack/utils` for agent instructions, editor integration, and hooks.
-- [ ] Define supported agent instruction targets and versioned templates;
+- [x] Define supported agent instruction targets and versioned templates;
   generate only selected files and never overwrite user-owned output.
-- [ ] Define supported editor targets and generate settings and extension
+- [x] Define supported editor targets and generate settings and extension
   recommendations only when selected and compatible with the chosen tooling.
-- [ ] Implement repeatable interactive multiselects and matching repeatable
+- [x] Implement repeatable interactive multiselects and matching repeatable
   `--agent` and `--editor` non-interactive flags.
-- [ ] Validate unknown, duplicate, and incompatible agent/editor selections
+- [x] Validate unknown, duplicate, and incompatible agent/editor selections
   before rendering begins.
 
 ### Git hooks and command surface

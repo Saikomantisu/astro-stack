@@ -81,36 +81,30 @@ summary projection are owned by `@astro-stack/utils`. See
 [Configuration Model](./CONFIGURATION.md) for the contract used by the CLI and
 generator.
 
-### Planned developer-experience configuration
+### Developer-experience configuration
 
-The next configuration-model extension will add a separate developer-experience
-section for selected agent instruction files, editor configuration, and
-pre-commit hooks. It must not be folded into styling or project configuration:
-these selections have distinct output, validation, and lifecycle behavior.
+The `developerExperience` section contains selected agent instruction files,
+editor configuration, and the pre-commit-hook choice. It is not folded into
+styling or project configuration because these selections have distinct output,
+validation, and lifecycle behavior.
 
-Feature definitions for these integrations should own their templates and
+Feature definitions for these integrations own their templates and
 configuration changes. The generator must apply them through the same
 deterministic resolution and conflict detection used for other selected
-features. The installer owns Git-hook activation after Git initialization; it
-must not install or modify hooks when Git is unavailable or unselected.
+features. The installer will own Git-hook activation after Git initialization;
+it must not install or modify hooks when Git is unavailable or unselected.
 
-The CLI translates repeatable automation flags into this section, validates
-them before generation, includes them in the final summary, and uses the same
+The CLI translates repeatable `--agent` and `--editor` automation flags into
+this section, validates them before generation, includes them in the final
+summary, and uses the same
 configuration in interactive and non-interactive modes. This keeps the CLI
 thin and prevents a prompt-only implementation from diverging from automation.
 
-Example:
-
-```ts
-{
-  projectType: "marketing",
-  packageManager: "pnpm",
-  styling: "tailwind",
-  content: "collections",
-  forms: "resend",
-  deployment: "vercel"
-}
-```
+Codex and Claude instruction files use maintained, versioned templates. Both
+integration types are optional. VS Code and Cursor workspace targets share
+`.vscode` output and are consequently incompatible; validation rejects that
+pair before rendering. Zed uses isolated `.zed` output. Workspace extension
+recommendations are composed from the selected formatting and linting tools.
 
 ---
 

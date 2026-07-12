@@ -23,6 +23,8 @@ export const deploymentTargets = [
   "netlify",
   "cloudflare",
 ] as const;
+export const agentInstructionTargets = ["codex", "claude"] as const;
+export const editorTargets = ["vscode", "cursor", "zed"] as const;
 export type ProjectType = (typeof projectTypes)[number];
 export type PackageManager = (typeof packageManagers)[number];
 export type CssFramework = (typeof cssFrameworks)[number];
@@ -30,6 +32,8 @@ export type TypeScriptPreference = (typeof typeScriptPreferences)[number];
 export type ContentSetup = (typeof contentSetups)[number];
 export type FormIntegration = (typeof formIntegrations)[number];
 export type DeploymentTarget = (typeof deploymentTargets)[number];
+export type AgentInstructionTarget = (typeof agentInstructionTargets)[number];
+export type EditorTarget = (typeof editorTargets)[number];
 export interface ProjectConfiguration {
   project: {
     name: string;
@@ -48,6 +52,11 @@ export interface ProjectConfiguration {
   content: { setup: ContentSetup };
   features: { forms: FormIntegration };
   deployment: { target: DeploymentTarget };
+  developerExperience: {
+    agents: AgentInstructionTarget[];
+    editors: EditorTarget[];
+    hooks: boolean;
+  };
   summary: { confirmBeforeWrite: boolean };
 }
 export type ProjectConfigurationInput = {
@@ -73,6 +82,7 @@ export const defaultProjectConfiguration: Readonly<ProjectConfiguration> = {
   content: { setup: "none" },
   features: { forms: "none" },
   deployment: { target: "static" },
+  developerExperience: { agents: [], editors: [], hooks: false },
   summary: { confirmBeforeWrite: true },
 };
 /** Combines independently collected wizard sections with detached defaults. */
@@ -87,6 +97,18 @@ export function mergeProjectConfiguration(
     deployment: {
       ...defaultProjectConfiguration.deployment,
       ...input.deployment,
+    },
+    developerExperience: {
+      ...defaultProjectConfiguration.developerExperience,
+      ...input.developerExperience,
+      agents: [
+        ...(input.developerExperience?.agents ??
+          defaultProjectConfiguration.developerExperience.agents),
+      ],
+      editors: [
+        ...(input.developerExperience?.editors ??
+          defaultProjectConfiguration.developerExperience.editors),
+      ],
     },
     summary: { ...defaultProjectConfiguration.summary, ...input.summary },
   };

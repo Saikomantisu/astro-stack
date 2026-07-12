@@ -39,7 +39,9 @@ export interface FeatureDefinition {
   id: string;
   isSelected: (configuration: ProjectConfiguration) => boolean;
   dependencies?: readonly FeatureDependency[];
-  templates?: readonly FeatureTemplate[];
+  templates?:
+    | readonly FeatureTemplate[]
+    | ((configuration: ProjectConfiguration) => readonly FeatureTemplate[]);
   configurationChanges?: readonly FeatureConfigurationChange[];
   validate?: (
     configuration: ProjectConfiguration,

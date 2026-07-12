@@ -317,6 +317,71 @@ describe("createProject", () => {
     expect(manifest).not.toContain("@astro-stack/");
   });
 
+  it("generates only selected agent and editor integration files", async () => {
+    const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
+    directories.push(parent);
+    const selectedDirectory = join(parent, "selected");
+    const skippedDirectory = join(parent, "skipped");
+
+    await createProject(
+      mergeProjectConfiguration({
+        project: { directory: selectedDirectory },
+        developerExperience: {
+          agents: ["codex", "claude"],
+          editors: ["vscode"],
+        },
+        styling: { eslint: true, prettier: false, biome: true },
+      }),
+    );
+    await createProject(
+      mergeProjectConfiguration({ project: { directory: skippedDirectory } }),
+    );
+
+    await expect(
+      readFile(join(selectedDirectory, "AGENTS.md"), "utf8"),
+    ).resolves.toContain("agent instructions v1");
+    await expect(
+      readFile(join(selectedDirectory, "CLAUDE.md"), "utf8"),
+    ).resolves.toContain("agent instructions v1");
+    const extensions = JSON.parse(
+      await readFile(
+        join(selectedDirectory, ".vscode/extensions.json"),
+        "utf8",
+      ),
+    ) as { recommendations: string[] };
+    expect(extensions.recommendations).toEqual([
+      "astro-build.astro-vscode",
+      "dbaeumer.vscode-eslint",
+      "biomejs.biome",
+    ]);
+    await expect(
+      readFile(join(skippedDirectory, "AGENTS.md"), "utf8"),
+    ).rejects.toMatchObject({ code: "ENOENT" });
+    await expect(
+      readFile(join(skippedDirectory, ".vscode/settings.json"), "utf8"),
+    ).rejects.toMatchObject({ code: "ENOENT" });
+  });
+
+  it("generates Zed settings without VS Code workspace files", async () => {
+    const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
+    directories.push(parent);
+    const directory = join(parent, "zed");
+    await createProject(
+      mergeProjectConfiguration({
+        project: { directory },
+        developerExperience: { editors: ["zed"] },
+        styling: { prettier: true, biome: false },
+      }),
+    );
+
+    await expect(
+      readFile(join(directory, ".zed/settings.json"), "utf8"),
+    ).resolves.toContain('"format_on_save": "on"');
+    await expect(
+      readFile(join(directory, ".vscode/settings.json"), "utf8"),
+    ).rejects.toMatchObject({ code: "ENOENT" });
+  });
+
   it("installs and configures Biome only when selected", async () => {
     const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
     directories.push(parent);

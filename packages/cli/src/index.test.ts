@@ -15,11 +15,15 @@ function interactivePrompts(
   selections: string[],
   tooling = ["eslint", "prettier", "biome"],
 ): InteractivePrompts {
+  let multiselectCount = 0;
   return {
     intro: vi.fn(),
     text: vi.fn(async () => textValues.shift() as string),
     select: vi.fn(async () => selections.shift() as never),
-    multiselect: vi.fn(async () => tooling as never),
+    multiselect: vi.fn(async () => {
+      multiselectCount += 1;
+      return (multiselectCount === 3 ? tooling : []) as never;
+    }),
     note: vi.fn(),
     cancel: vi.fn(),
   };
@@ -56,6 +60,21 @@ describe("CLI", () => {
     ).toMatchObject({ styling: { biome: false } });
   });
 
+  it("collects repeatable agent and editor options", () => {
+    expect(
+      configurationFrom({
+        agent: ["codex", "claude"],
+        editor: ["vscode"],
+        biome: true,
+        eslint: true,
+        git: true,
+        prettier: true,
+      }),
+    ).toMatchObject({
+      developerExperience: { agents: ["codex", "claude"], editors: ["vscode"] },
+    });
+  });
+
   it("keeps the project name empty until valid input is supplied", async () => {
     const prompts = interactivePrompts(
       ["./launch-site"],
@@ -86,9 +105,14 @@ describe("CLI", () => {
     expect(namePrompt?.placeholder).toBe("my-astro-project");
     expect(namePrompt?.validate?.("launch-site")).toBeUndefined();
     expect(directoryPrompt?.initialValue).toBe("./launch-site");
+    const agentPrompt = vi.mocked(prompts.multiselect).mock.calls[0]?.[0];
+    const editorPrompt = vi.mocked(prompts.multiselect).mock.calls[1]?.[0];
+    expect(agentPrompt?.required).toBe(false);
+    expect(editorPrompt?.required).toBe(false);
     expect(generate).toHaveBeenCalledWith(
       expect.objectContaining({
         project: expect.objectContaining({ name: "launch-site" }),
+        developerExperience: { agents: [], editors: [], hooks: false },
       }),
     );
   });
@@ -148,6 +172,8 @@ describe("CLI", () => {
         "content: collections",
         "forms: webhooks",
         "deployment: cloudflare",
+        "agents: none",
+        "editors: none",
       ].join("\n"),
     );
     expect(prompts.note).toHaveBeenCalledWith(

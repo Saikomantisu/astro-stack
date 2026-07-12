@@ -38,6 +38,8 @@ describe("CLI brand treatment", () => {
       content: "mdx",
       forms: "none",
       deployment: "vercel",
+      agents: "none",
+      editors: "none",
     });
 
     expect(stripVTControlCharacters(plan)).toBe(
@@ -50,6 +52,8 @@ describe("CLI brand treatment", () => {
         "content: mdx",
         "forms: none",
         "deployment: vercel",
+        "agents: none",
+        "editors: none",
       ].join("\n"),
     );
   });
