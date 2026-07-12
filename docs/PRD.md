@@ -112,7 +112,7 @@ A complete summary of the selected stack is shown before any files are generated
 Developers can:
 
 - Confirm
-- Go back and edit
+- Cancel
 - Cancel
 
 ## Developer Experience Integrations

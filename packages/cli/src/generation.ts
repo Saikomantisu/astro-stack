@@ -32,10 +32,7 @@ export async function generateProject(
     await generator(configuration);
     const steps = nextSteps(configuration);
     log.success(projectReadyMessage(configuration.project.name));
-    note(
-      projectReadyCard(configuration.project.name, steps),
-      "Your Astro project",
-    );
+    note(projectReadyCard(steps), "Your Astro project");
     outro("The stars are aligned. Start building.");
     return 0;
   } catch (error) {

@@ -11,13 +11,14 @@ npm create astro-stack@latest
 ```
 
 The guided flow covers Project, Styling & Tooling, Content, Forms, Deployment,
-and a final Summary. Arrow keys navigate menus, Enter selects an option, and
-Space toggles selections in the tooling multi-select. Press `Ctrl+C` to cancel
-without writing files.
+and a final Summary. Prompts use concise human-readable labels while retaining
+safe defaults. Arrow keys navigate menus, Enter selects an option, and Space
+toggles selections in the tooling multi-select. The final review lets you
+launch or cancel; `Ctrl+C` also cancels without writing files.
 
-The project-name and output-directory fields are intentionally empty. Their
-`my-astro-project` and `./my-astro-project` hints are examples, not values that
-Enter can accidentally accept; enter both values explicitly.
+The project-name field is intentionally empty: its `my-astro-project` hint is
+an example, not a value that Enter can accidentally accept. After entering a
+name, the output directory defaults to `./<project-name>` and can be edited.
 
 ## Planned developer-experience additions
 

@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   astroStackWordmark,
+  flightPlan,
   projectReadyCard,
   projectReadyMessage,
 } from "./brand.js";
@@ -22,13 +23,34 @@ describe("CLI brand treatment", () => {
   });
 
   it("keeps card content free from terminal color codes", () => {
-    const card = projectReadyCard("launch-site", [
-      "cd ./launch-site",
-      "pnpm dev",
-    ]);
-    expect(card).toBe(
-      "launch-site is ready for liftoff.\n\nNext steps\n1. cd ./launch-site\n2. pnpm dev",
-    );
+    const card = projectReadyCard(["cd ./launch-site", "pnpm dev"]);
+    expect(card).toBe("Next steps\n1. cd ./launch-site\n2. pnpm dev");
     expect(stripVTControlCharacters(card)).toBe(card);
+  });
+
+  it("syntax-highlights the flight plan without changing its content", () => {
+    const plan = flightPlan({
+      project: "launch-site",
+      location: "./launch-site",
+      projectType: "marketing",
+      packageManager: "pnpm",
+      styling: "tailwind; TypeScript (strict)",
+      content: "mdx",
+      forms: "none",
+      deployment: "vercel",
+    });
+
+    expect(stripVTControlCharacters(plan)).toBe(
+      [
+        "project: launch-site",
+        "location: ./launch-site",
+        "projectType: marketing",
+        "packageManager: pnpm",
+        "styling: tailwind; TypeScript (strict)",
+        "content: mdx",
+        "forms: none",
+        "deployment: vercel",
+      ].join("\n"),
+    );
   });
 });

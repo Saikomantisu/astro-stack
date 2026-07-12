@@ -41,7 +41,7 @@ and the module boundaries in the [architecture](./ARCHITECTURE.md).
 
 - [x] Implement the `create astro-stack` command entry point and help/version
   output.
-- [x] Build the grouped wizard with sensible defaults and back/cancel support.
+- [x] Build the grouped wizard with sensible defaults and cancellation support.
 - [x] Show a final, accurate summary before any files are written.
 - [x] Provide clear progress, errors, recovery guidance, and non-interactive
   behavior where supported.
@@ -150,9 +150,9 @@ explicit choices.
 
 - [x] Show the suggested project name as a placeholder instead of a pre-filled
   value, and require an explicit valid name.
-- [ ] Review every prompt's default, label, help text, ordering, and cancel
+- [x] Review every prompt's default, label, help text, ordering, and cancel
   behavior as one coherent, concise setup flow.
-- [ ] Add CLI interaction tests for an empty project name, validation recovery,
+- [x] Add CLI interaction tests for an empty project name, validation recovery,
   cancellation, and final-summary accuracy.
 
 ### Agent and editor setup

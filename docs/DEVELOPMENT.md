@@ -49,9 +49,10 @@ To try the CLI from the workspace root, build it and run:
 pnpm --filter @astro-stack/cli start
 ```
 
-Its default output directory is then `./my-astro-project`. The generator never
-overwrites an existing directory; choose another output directory or remove the
-previous generated project before running it again.
+After you enter a project name, its output directory defaults to
+`./<project-name>`. The generator never overwrites an existing directory;
+choose another output directory or remove the previous generated project before
+running it again.
 
 ## Workspace Layout
 

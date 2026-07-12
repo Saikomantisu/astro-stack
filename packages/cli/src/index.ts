@@ -6,7 +6,6 @@ import {
 } from "@astro-stack/utils";
 import {
   cancel,
-  confirm,
   intro,
   isCancel,
   log,
@@ -16,7 +15,7 @@ import {
   text,
 } from "@clack/prompts";
 import { Command } from "commander";
-import { astroStackWordmark } from "./brand.js";
+import { astroStackWordmark, flightPlan } from "./brand.js";
 import { generateAndFinish } from "./finishing.js";
 import { generateProject, validateForGeneration } from "./generation.js";
 import {
@@ -37,6 +36,79 @@ const version = "0.1.0";
 export type { CliOptions } from "./options.js";
 
 const cancelled = (value: unknown): value is symbol => isCancel(value);
+
+type PromptOption<Value extends string> = {
+  value: Value;
+  label: string;
+  hint?: string;
+};
+
+/** The small prompt surface is injectable so the wizard can be interaction-tested. */
+export interface InteractivePrompts {
+  intro(message: string): void;
+  text(options: {
+    message: string;
+    initialValue?: string;
+    placeholder?: string;
+    validate?: (value: string | undefined) => string | Error | undefined;
+  }): Promise<string | symbol>;
+  select<Value extends string>(options: {
+    message: string;
+    options: PromptOption<Value>[];
+    initialValue?: Value;
+  }): Promise<Value | symbol>;
+  multiselect<Value extends string>(options: {
+    message: string;
+    options: PromptOption<Value>[];
+    initialValues?: Value[];
+  }): Promise<Value[] | symbol>;
+  note(message: string, title?: string): void;
+  cancel(message: string): void;
+}
+
+const defaultPrompts: InteractivePrompts = {
+  intro,
+  text,
+  select,
+  multiselect,
+  note,
+  cancel,
+} as InteractivePrompts;
+
+const labels: Record<string, string> = {
+  marketing: "Marketing site",
+  client: "Client project",
+  blog: "Blog",
+  documentation: "Documentation",
+  portfolio: "Portfolio",
+  "saas-landing": "SaaS landing page",
+  blank: "Blank project",
+  npm: "npm",
+  pnpm: "pnpm",
+  yarn: "Yarn",
+  bun: "Bun",
+  vanilla: "Vanilla CSS",
+  tailwind: "Tailwind CSS",
+  strict: "Strict (recommended)",
+  relaxed: "Relaxed",
+  none: "None",
+  markdown: "Markdown",
+  mdx: "MDX",
+  collections: "Content Collections",
+  resend: "Resend",
+  webhooks: "Webhooks",
+  static: "Static site",
+  vercel: "Vercel",
+  netlify: "Netlify",
+  cloudflare: "Cloudflare",
+};
+
+function promptOptions<Value extends string>(
+  values: readonly Value[],
+): PromptOption<Value>[] {
+  return values.map((value) => ({ value, label: labels[value] ?? value }));
+}
+
 export async function runNonInteractive(
   options: CliOptions,
   generator: Generate = generateAndFinish,
@@ -49,49 +121,52 @@ export async function runNonInteractive(
 }
 export async function runInteractive(
   generator: Generate = generateAndFinish,
+  prompts: InteractivePrompts = defaultPrompts,
 ): Promise<number> {
-  intro(`${astroStackWordmark()} — Set your coordinates.`);
+  prompts.intro(`${astroStackWordmark()} — Set your coordinates.`);
   const defaults = mergeProjectConfiguration();
-  const name = await text({
+  const name = await prompts.text({
     message: "Project name",
     placeholder: defaults.project.name,
     validate: (value) =>
       value && /^[a-z0-9][a-z0-9-]*$/.test(value)
         ? undefined
-        : "Use lowercase letters, numbers, and hyphens.",
+        : "Enter lowercase letters, numbers, and hyphens.",
   });
   if (cancelled(name)) return 0;
-  const directory = await text({
-    message: "Output directory",
-    placeholder: defaults.project.directory,
+  const directory = await prompts.text({
+    message: "Where should it be created?",
+    initialValue: `./${name}`,
+    validate: (value) =>
+      value?.trim() ? undefined : "Enter an output directory.",
   });
   if (cancelled(directory)) return 0;
-  const projectType = await select({
+  const projectType = await prompts.select({
     message: "What are you building?",
-    options: types.map((value) => ({ value })),
+    options: promptOptions(types),
     initialValue: defaults.project.type,
   });
   if (cancelled(projectType)) return 0;
-  const packageManager = await select({
+  const packageManager = await prompts.select({
     message: "Package manager",
-    options: managers.map((value) => ({ value })),
+    options: promptOptions(managers),
     initialValue: defaults.project.packageManager,
   });
   if (cancelled(packageManager)) return 0;
-  const css = await select({
-    message: "CSS framework",
-    options: cssOptions.map((value) => ({ value })),
+  const css = await prompts.select({
+    message: "Styling: CSS",
+    options: promptOptions(cssOptions),
     initialValue: defaults.styling.css,
   });
   if (cancelled(css)) return 0;
-  const typescript = await select({
-    message: "TypeScript preference",
-    options: tsOptions.map((value) => ({ value })),
+  const typescript = await prompts.select({
+    message: "Styling: TypeScript",
+    options: promptOptions(tsOptions),
     initialValue: defaults.styling.typescript,
   });
   if (cancelled(typescript)) return 0;
-  const tooling = await multiselect({
-    message: "Select tooling (Space toggles an option)",
+  const tooling = await prompts.multiselect({
+    message: "Styling: code-quality tools (Space toggles)",
     options: [
       { value: "eslint", label: "ESLint" },
       { value: "prettier", label: "Prettier" },
@@ -100,21 +175,21 @@ export async function runInteractive(
     initialValues: ["eslint", "prettier", "biome"],
   });
   if (cancelled(tooling)) return 0;
-  const content = await select({
+  const content = await prompts.select({
     message: "Content setup",
-    options: contentOptions.map((value) => ({ value })),
+    options: promptOptions(contentOptions),
     initialValue: defaults.content.setup,
   });
   if (cancelled(content)) return 0;
-  const forms = await select({
+  const forms = await prompts.select({
     message: "Forms integration",
-    options: formOptions.map((value) => ({ value })),
+    options: promptOptions(formOptions),
     initialValue: defaults.features.forms,
   });
   if (cancelled(forms)) return 0;
-  const deployment = await select({
+  const deployment = await prompts.select({
     message: "Deployment target",
-    options: deploymentOptions.map((value) => ({ value })),
+    options: promptOptions(deploymentOptions),
     initialValue: defaults.deployment.target,
   });
   if (cancelled(deployment)) return 0;
@@ -132,18 +207,20 @@ export async function runInteractive(
     deployment: { target: deployment },
   });
   if (!validateForGeneration(configuration)) return 2;
-  note(
-    Object.entries(summarizeProjectConfiguration(configuration))
-      .map(([key, value]) => `${key}: ${value}`)
-      .join("\n"),
+  prompts.note(
+    flightPlan(summarizeProjectConfiguration(configuration)),
     "Flight plan",
   );
-  const accepted = await confirm({
+  const next = await prompts.select({
     message: "Launch this project?",
-    initialValue: true,
+    options: [
+      { value: "launch", label: "Launch project" },
+      { value: "cancel", label: "Cancel" },
+    ],
+    initialValue: "launch",
   });
-  if (cancelled(accepted) || !accepted) {
-    cancel("Launch cancelled. No files were written.");
+  if (cancelled(next) || next === "cancel") {
+    prompts.cancel("Launch cancelled. No files were written.");
     return 0;
   }
   return generateProject(configuration, generator);
