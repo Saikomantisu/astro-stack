@@ -17,6 +17,7 @@ export interface ProjectConfigurationSummary {
   deployment: DeploymentTarget;
   agents: string;
   editors: string;
+  hooks: string;
 }
 /** Creates display-ready stable values for the CLI final summary. */
 export function summarizeProjectConfiguration(
@@ -39,5 +40,6 @@ export function summarizeProjectConfiguration(
     deployment: configuration.deployment.target,
     agents: configuration.developerExperience.agents.join(", ") || "none",
     editors: configuration.developerExperience.editors.join(", ") || "none",
+    hooks: configuration.developerExperience.hooks ? "pre-commit" : "none",
   };
 }

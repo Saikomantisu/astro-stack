@@ -170,15 +170,15 @@ explicit choices.
 
 ### Git hooks and command surface
 
-- [ ] Add `--hooks` / `--no-hooks` and an interactive opt-in for pre-commit
+- [x] Add `--hooks` / `--no-hooks` and an interactive opt-in for pre-commit
   setup; validate that hooks require Git.
-- [ ] Generate an idempotent pre-commit hook that runs the selected project's
+- [x] Generate an idempotent pre-commit hook that runs the selected project's
   formatting, linting, and type-checking command with safe fixes.
-- [ ] Ensure hook installation runs only after Git initialization succeeds and
+- [x] Ensure hook installation runs only after Git initialization succeeds and
   gives actionable recovery guidance on failure.
-- [ ] Define a minimal generated-project command contract for development,
+- [x] Define a minimal generated-project command contract for development,
   build, preview, and selected project-health checks.
-- [ ] Make the generated README and completion output use that contract and
+- [x] Make the generated README and completion output use that contract and
   show exact commands for the selected package manager.
 
 ### Verification and documentation

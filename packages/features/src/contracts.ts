@@ -21,7 +21,8 @@ export interface AstroConfigExpression {
 }
 /** A single, addressable configuration value a feature asks the generator to set. */
 export interface FeatureConfigurationChange {
-  file: string;
+  /** JSON files and the generated Astro config are the supported merge targets. */
+  file: `${string}.json` | "astro.config.mjs";
   path: string;
   value: unknown;
   imports?: readonly string[];
@@ -31,7 +32,9 @@ export interface FeatureLifecycleContext {
   feature: FeatureDefinition;
 }
 export interface FeatureLifecycleHooks {
+  /** Runs after the complete plan is validated and before any files are written. */
   beforeGenerate?: (context: FeatureLifecycleContext) => void | Promise<void>;
+  /** Runs after all project files have been written successfully. */
   afterGenerate?: (context: FeatureLifecycleContext) => void | Promise<void>;
 }
 /** Self-contained behavior contributed by one selectable feature. */

@@ -81,6 +81,7 @@ describe("CLI", () => {
       [
         "marketing",
         "pnpm",
+        "no",
         "tailwind",
         "strict",
         "mdx",
@@ -117,12 +118,94 @@ describe("CLI", () => {
     );
   });
 
+  it("re-asks for editors immediately when VS Code and Cursor conflict", async () => {
+    const editorSelections = [["vscode", "cursor"], ["vscode"]];
+    const textValues = ["launch-site", "./launch-site"];
+    const selectValues = [
+      "blank",
+      "pnpm",
+      "no",
+      "vanilla",
+      "strict",
+      "none",
+      "none",
+      "static",
+      "launch",
+    ];
+    let multiselectCount = 0;
+    const prompts: InteractivePrompts = {
+      intro: vi.fn(),
+      text: vi.fn(async () => textValues.shift() as string),
+      select: vi.fn(async () => selectValues.shift() as never),
+      multiselect: vi.fn(async () => {
+        multiselectCount += 1;
+        if (multiselectCount === 1) return [] as never; // agents
+        if (multiselectCount === 2) return editorSelections[0] as never;
+        if (multiselectCount === 3) return editorSelections[1] as never;
+        return ["eslint", "prettier", "biome"] as never; // tooling
+      }),
+      note: vi.fn(),
+      cancel: vi.fn(),
+    };
+    const generate = vi.fn(async () => undefined);
+
+    await expect(runInteractive(generate, prompts)).resolves.toBe(0);
+
+    expect(prompts.note).toHaveBeenCalledWith(
+      expect.stringContaining(".vscode workspace configuration"),
+      "Incompatible editors",
+    );
+    expect(generate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        developerExperience: expect.objectContaining({ editors: ["vscode"] }),
+      }),
+    );
+  });
+
+  it("re-asks for a deployment target when forms need a server runtime", async () => {
+    const textValues = ["launch-site", "./launch-site"];
+    const selectValues = [
+      "blank",
+      "pnpm",
+      "no",
+      "vanilla",
+      "strict",
+      "none",
+      "resend",
+      "static", // rejected: Resend needs a server runtime
+      "vercel",
+      "launch",
+    ];
+    const prompts: InteractivePrompts = {
+      intro: vi.fn(),
+      text: vi.fn(async () => textValues.shift() as string),
+      select: vi.fn(async () => selectValues.shift() as never),
+      multiselect: vi.fn(async () => [] as never),
+      note: vi.fn(),
+      cancel: vi.fn(),
+    };
+    const generate = vi.fn(async () => undefined);
+
+    await expect(runInteractive(generate, prompts)).resolves.toBe(0);
+
+    expect(prompts.note).toHaveBeenCalledWith(
+      expect.stringContaining("server-capable deployment target"),
+      "Incompatible deployment target",
+    );
+    expect(generate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        deployment: expect.objectContaining({ target: "vercel" }),
+      }),
+    );
+  });
+
   it("cancels from the final review without generating files", async () => {
     const prompts = interactivePrompts(
       ["launch-site", "./launch-site"],
       [
         "blank",
         "pnpm",
+        "no",
         "vanilla",
         "strict",
         "none",
@@ -147,6 +230,7 @@ describe("CLI", () => {
       [
         "documentation",
         "bun",
+        "no",
         "tailwind",
         "relaxed",
         "collections",
@@ -174,11 +258,24 @@ describe("CLI", () => {
         "deployment: cloudflare",
         "agents: none",
         "editors: none",
+        "hooks: none",
       ].join("\n"),
     );
     expect(prompts.note).toHaveBeenCalledWith(
       expect.any(String),
       "Flight plan",
     );
+  });
+
+  it("maps --hooks into the generated-project configuration", () => {
+    expect(
+      configurationFrom({
+        biome: true,
+        eslint: true,
+        git: true,
+        hooks: true,
+        prettier: true,
+      }),
+    ).toMatchObject({ developerExperience: { hooks: true } });
   });
 });

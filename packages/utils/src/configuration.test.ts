@@ -2,10 +2,48 @@ import { describe, expect, it } from "vitest";
 
 import {
   defaultProjectConfiguration,
+  editorTargetsConflict,
   mergeProjectConfiguration,
+  serverRuntimeFormsConflict,
   summarizeProjectConfiguration,
   validateProjectConfiguration,
 } from "./configuration.js";
+
+describe("conflict helpers", () => {
+  it("flags VS Code and Cursor only when both are selected", () => {
+    expect(editorTargetsConflict(["vscode", "cursor"])).toMatchObject({
+      code: "incompatible-editor-targets",
+      path: "developerExperience.editors",
+    });
+    expect(editorTargetsConflict(["vscode", "zed"])).toBeUndefined();
+  });
+
+  it("flags server-runtime forms only on a static target", () => {
+    expect(serverRuntimeFormsConflict("resend", "static")).toMatchObject({
+      code: "resend-requires-server-runtime",
+    });
+    expect(serverRuntimeFormsConflict("webhooks", "static")).toMatchObject({
+      code: "webhooks-require-server-runtime",
+    });
+    expect(serverRuntimeFormsConflict("resend", "vercel")).toBeUndefined();
+    expect(serverRuntimeFormsConflict("none", "static")).toBeUndefined();
+  });
+
+  it("keeps the validator and helper copy in sync", () => {
+    const configuration = mergeProjectConfiguration({
+      features: { forms: "resend" },
+      deployment: { target: "static" },
+    });
+
+    const conflict = serverRuntimeFormsConflict("resend", "static");
+    const reported = validateProjectConfiguration(configuration).errors.find(
+      (error) => error.code === "resend-requires-server-runtime",
+    );
+
+    expect(reported?.message).toBe(conflict?.message);
+    expect(reported?.suggestion).toBe(conflict?.suggestion);
+  });
+});
 
 describe("mergeProjectConfiguration", () => {
   it("applies defaults to independently supplied wizard sections", () => {
@@ -105,6 +143,21 @@ describe("validateProjectConfiguration", () => {
         "invalid-agent-target",
         "invalid-editor-target",
         "incompatible-editor-targets",
+      ]),
+    );
+  });
+
+  it("requires Git when pre-commit hooks are selected", () => {
+    const result = validateProjectConfiguration(
+      mergeProjectConfiguration({
+        project: { initializeGit: false },
+        developerExperience: { hooks: true },
+      }),
+    );
+
+    expect(result.errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: "hooks-require-git" }),
       ]),
     );
   });

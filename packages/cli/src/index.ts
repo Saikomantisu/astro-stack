@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 import {
+  editorTargetsConflict,
   mergeProjectConfiguration,
+  serverRuntimeFormsConflict,
   summarizeProjectConfiguration,
 } from "@astro-stack/utils";
 import {
@@ -117,6 +119,62 @@ function promptOptions<Value extends string>(
   return values.map((value) => ({ value, label: labels[value] ?? value }));
 }
 
+/** Renders a conflict's message and its suggested fix as a single note body. */
+const conflictNote = (conflict: { message: string; suggestion: string }) =>
+  `${conflict.message} ${conflict.suggestion}`;
+
+/**
+ * Prompts for editor integrations, re-asking immediately if the selection is
+ * invalid so the conflict surfaces at this step instead of the final summary.
+ * VS Code and Cursor both own `.vscode` workspace config, so only one may win.
+ */
+async function promptEditors(
+  prompts: InteractivePrompts,
+  initialValues: (typeof editorOptions)[number][],
+): Promise<(typeof editorOptions)[number][] | symbol> {
+  while (true) {
+    const editors = await prompts.multiselect({
+      message: "Editor integration (optional — Enter to skip)",
+      options: promptOptions(editorOptions),
+      initialValues,
+      required: false,
+    });
+    if (cancelled(editors)) return editors;
+    const conflict = editorTargetsConflict(editors);
+    if (conflict) {
+      prompts.note(conflictNote(conflict), "Incompatible editors");
+      continue;
+    }
+    return editors;
+  }
+}
+
+/**
+ * Prompts for the deployment target, re-asking immediately when the chosen
+ * forms integration needs a server runtime that a static target cannot provide.
+ * Deployment is the second half of the pair, so this is the deciding step.
+ */
+async function promptDeployment(
+  prompts: InteractivePrompts,
+  forms: string,
+  initialValue: (typeof deploymentOptions)[number],
+): Promise<(typeof deploymentOptions)[number] | symbol> {
+  while (true) {
+    const deployment = await prompts.select({
+      message: "Deployment target",
+      options: promptOptions(deploymentOptions),
+      initialValue,
+    });
+    if (cancelled(deployment)) return deployment;
+    const conflict = serverRuntimeFormsConflict(forms, deployment);
+    if (conflict) {
+      prompts.note(conflictNote(conflict), "Incompatible deployment target");
+      continue;
+    }
+    return deployment;
+  }
+}
+
 export async function runNonInteractive(
   options: CliOptions,
   generator: Generate = generateAndFinish,
@@ -168,13 +226,20 @@ export async function runInteractive(
     required: false,
   });
   if (cancelled(agents)) return 0;
-  const editors = await prompts.multiselect({
-    message: "Editor integration (optional — Enter to skip)",
-    options: promptOptions(editorOptions),
-    initialValues: defaults.developerExperience.editors,
-    required: false,
-  });
+  const editors = await promptEditors(
+    prompts,
+    defaults.developerExperience.editors,
+  );
   if (cancelled(editors)) return 0;
+  const hooks = await prompts.select({
+    message: "Set up a pre-commit hook?",
+    options: [
+      { value: "yes", label: "Yes — run safe fixes and project checks" },
+      { value: "no", label: "No" },
+    ],
+    initialValue: "no",
+  });
+  if (cancelled(hooks)) return 0;
   const css = await prompts.select({
     message: "Styling: CSS",
     options: promptOptions(cssOptions),
@@ -209,11 +274,11 @@ export async function runInteractive(
     initialValue: defaults.features.forms,
   });
   if (cancelled(forms)) return 0;
-  const deployment = await prompts.select({
-    message: "Deployment target",
-    options: promptOptions(deploymentOptions),
-    initialValue: defaults.deployment.target,
-  });
+  const deployment = await promptDeployment(
+    prompts,
+    forms,
+    defaults.deployment.target,
+  );
   if (cancelled(deployment)) return 0;
   const configuration = mergeProjectConfiguration({
     project: { name, directory, type: projectType, packageManager },
@@ -227,7 +292,7 @@ export async function runInteractive(
     content: { setup: content },
     features: { forms },
     deployment: { target: deployment },
-    developerExperience: { agents, editors },
+    developerExperience: { agents, editors, hooks: hooks === "yes" },
   });
   if (!validateForGeneration(configuration)) return 2;
   prompts.note(
@@ -305,6 +370,8 @@ export function createCli(generator: Generate = generateAndFinish): Command {
     .option("--no-prettier")
     .option("--no-biome")
     .option("--no-git")
+    .option("--hooks", "Install a pre-commit hook (requires Git)")
+    .option("--no-hooks", "Do not install a pre-commit hook")
     .action(async (options: CliOptions) => {
       process.exitCode = options.nonInteractive
         ? await runNonInteractive(options, generator)

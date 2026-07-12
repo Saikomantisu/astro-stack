@@ -178,20 +178,10 @@ export const featureRegistry: readonly FeatureDefinition[] = [
     {
       dependencies: [
         { name: "@eslint/js", version: "^10.0.1", type: "devDependency" },
-        {
-          name: "@typescript-eslint/parser",
-          version: "^8.63.0",
-          type: "devDependency",
-        },
         { name: "eslint", version: "^10.7.0", type: "devDependency" },
         {
           name: "eslint-plugin-astro",
           version: "^3.0.0",
-          type: "devDependency",
-        },
-        {
-          name: "eslint-plugin-jsx-a11y",
-          version: "^6.10.2",
           type: "devDependency",
         },
         { name: "globals", version: "^17.7.0", type: "devDependency" },
@@ -208,6 +198,11 @@ export const featureRegistry: readonly FeatureDefinition[] = [
           file: "package.json",
           path: "scripts.lint",
           value: "eslint .",
+        },
+        {
+          file: "package.json",
+          path: "scripts.lint:fix",
+          value: "eslint . --fix",
         },
       ],
     },

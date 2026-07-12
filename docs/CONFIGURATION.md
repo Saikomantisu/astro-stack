@@ -11,7 +11,7 @@ the following independently collected sections:
 - `features`: forms integration.
 - `deployment`: static, Vercel, Netlify, or Cloudflare.
 - `developerExperience`: optional agent instructions, editor integration, and
-  the planned Git-hook choice.
+  pre-commit hook setup.
 - `summary`: whether the CLI requires final confirmation before writing files.
 
 Use `mergeProjectConfiguration()` to combine wizard-section values with the
@@ -43,6 +43,18 @@ recommendations include Astro plus only the selected ESLint, Prettier, and
 Biome extensions. The generator creates these files only for selected targets,
 and its new-project-only writer never replaces an existing project directory or
 user-owned file.
+
+## Hooks and command surface
+
+Set `developerExperience.hooks` to opt into a project-owned `.git/hooks/pre-commit`
+script. Hooks require `project.initializeGit`; invalid combinations are rejected
+before rendering. The hook is installed only after Git initialization succeeds,
+then runs selected formatting and safe ESLint fixes before `typecheck`.
+
+Every generated project documents the same command surface: `dev`, `build`,
+`preview`, and `typecheck`, plus selected `lint`, `format:check`, and Biome
+`check` health commands. The README and CLI completion message render these
+with the selected package manager.
 
 ## Styling and tooling output
 

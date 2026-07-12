@@ -34,12 +34,13 @@ cannot be used together because they own the same workspace files.
 
 Use repeatable `--agent <name>` and `--editor <name>` options in
 non-interactive mode. Unknown, duplicate, and incompatible selections fail
-before any files are written. Pre-commit hooks remain a separate planned step
-and will require Git.
+before any files are written. Use `--hooks` to opt into a pre-commit hook, or
+`--no-hooks` to explicitly skip it. Hooks require Git, so `--hooks --no-git`
+fails before files are written.
 
-The generated README and completion output will also converge on one concise
-command surface, showing the selected package manager's exact development,
-build, and project-health commands.
+The generated README and completion output use one concise command surface,
+showing the selected package manager's exact development, build, and
+project-health commands.
 
 For automation, use `--non-interactive` with explicit selections. Defaults are
 applied for omitted selections; use `--yes` to skip the final confirmation.
@@ -48,7 +49,7 @@ applied for omitted selections; use `--yes` to skip the final confirmation.
 create-astro-stack --non-interactive --yes \
   --name launch-site --directory ./launch-site --type marketing \
   --css tailwind --content mdx --deployment vercel \
-  --agent codex --agent claude --editor vscode
+  --agent codex --agent claude --editor vscode --hooks
 ```
 
 Use `--help` for the complete option list and supported values. Invalid values
@@ -62,5 +63,11 @@ manager, which creates its lockfile, and initializes Git by default. Use
 fails, the CLI returns a non-zero status and never reports the project as ready;
 the generated directory is retained so the failure can be inspected or removed.
 
-The completion message includes the exact development command, required form
-environment variables, and deployment guidance for the selected features.
+When selected, the pre-commit hook is installed only after `git init` succeeds.
+It runs selected formatting and safe lint fixes, followed by `typecheck`. If it
+cannot be installed, the CLI reports recovery guidance and does not report the
+project as ready.
+
+The completion message includes the selected package manager's exact development,
+build, preview, and project-health commands, followed by any required form
+environment variables and deployment guidance.

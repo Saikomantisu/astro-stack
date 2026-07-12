@@ -28,6 +28,17 @@ describe("CLI brand treatment", () => {
     expect(stripVTControlCharacters(card)).toBe(card);
   });
 
+  it("appends prerequisite notes below the numbered steps", () => {
+    const card = projectReadyCard(
+      ["cd ./launch-site", "pnpm dev"],
+      ["Set RESEND_API_KEY in .env before the contact form will work."],
+    );
+    expect(stripVTControlCharacters(card)).toBe(
+      "Next steps\n1. cd ./launch-site\n2. pnpm dev\n\n" +
+        "Note: Set RESEND_API_KEY in .env before the contact form will work.",
+    );
+  });
+
   it("syntax-highlights the flight plan without changing its content", () => {
     const plan = flightPlan({
       project: "launch-site",
@@ -40,6 +51,7 @@ describe("CLI brand treatment", () => {
       deployment: "vercel",
       agents: "none",
       editors: "none",
+      hooks: "none",
     });
 
     expect(stripVTControlCharacters(plan)).toBe(
@@ -54,6 +66,7 @@ describe("CLI brand treatment", () => {
         "deployment: vercel",
         "agents: none",
         "editors: none",
+        "hooks: none",
       ].join("\n"),
     );
   });

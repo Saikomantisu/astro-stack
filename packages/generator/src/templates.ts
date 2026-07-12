@@ -1,4 +1,7 @@
-import type { ProjectConfiguration } from "@astro-stack/utils";
+import {
+  generatedProjectCommands,
+  type ProjectConfiguration,
+} from "@astro-stack/utils";
 
 export interface ProjectTemplate {
   destination: string;
@@ -6,8 +9,6 @@ export interface ProjectTemplate {
 }
 
 interface TemplateContext {
-  buildCommand: string;
-  devCommand: string;
   installCommand: string;
   projectName: string;
   projectTitle: string;
@@ -32,7 +33,7 @@ const projectDetails = {
 
 function render(template: string, context: TemplateContext): string {
   return template.replace(
-    /{{(buildCommand|devCommand|installCommand|projectName|projectTitle|projectDescription)}}/g,
+    /{{(installCommand|projectName|projectTitle|projectDescription)}}/g,
     (_match, key: keyof TemplateContext) => context[key],
   );
 }
@@ -43,8 +44,6 @@ function createContext(configuration: ProjectConfiguration): TemplateContext {
   const manager = configuration.project.packageManager;
   return {
     installCommand: `${manager} install`,
-    devCommand: manager === "npm" ? "npm run dev" : `${manager} dev`,
-    buildCommand: manager === "npm" ? "npm run build" : `${manager} build`,
     projectName: configuration.project.name,
     projectTitle,
     projectDescription,
@@ -64,9 +63,12 @@ function manifest(configuration: ProjectConfiguration): string {
         start: "astro dev",
         build: "astro build",
         preview: "astro preview",
+        typecheck: "astro check",
       },
       devDependencies: {
+        "@astrojs/check": "^0.9.9",
         astro: "^7.0.7",
+        typescript: "^5.8.3",
       },
     },
     null,
@@ -97,7 +99,13 @@ export function createBaseTemplates(
     {
       destination: "README.md",
       content: render(
-        "# {{projectName}}\n\n{{projectDescription}}\n\n## Commands\n\n| Command | Action |\n| :-- | :-- |\n| `{{installCommand}}` | Install dependencies |\n| `{{devCommand}}` | Start the development server |\n| `{{buildCommand}}` | Build the site |\n",
+        `# {{projectName}}\n\n{{projectDescription}}\n\n## Commands\n\n| Command | Action |\n| :-- | :-- |\n| \`{{installCommand}}\` | Install dependencies |\n${generatedProjectCommands(
+          configuration,
+        )
+          .map(
+            ({ command, description }) => `| \`${command}\` | ${description} |`,
+          )
+          .join("\n")}\n`,
         context,
       ),
     },

@@ -46,12 +46,18 @@ export interface CliOptions {
   prettier: boolean;
   biome: boolean;
   git: boolean;
+  hooks?: boolean;
   nonInteractive?: boolean;
   yes?: boolean;
 }
+export interface GenerateResult {
+  /** Whether dependency installation completed; false leaves a ready-to-install project. */
+  dependenciesInstalled: boolean;
+  installError?: Error;
+}
 export type Generate = (
   configuration: ProjectConfiguration,
-) => Promise<unknown>;
+) => Promise<GenerateResult | undefined>;
 /** Converts Commander options into the shared complete configuration model. */
 export function configurationFrom(options: CliOptions): ProjectConfiguration {
   return mergeProjectConfiguration({
@@ -81,6 +87,7 @@ export function configurationFrom(options: CliOptions): ProjectConfiguration {
         []) as ProjectConfiguration["developerExperience"]["agents"],
       editors: (options.editor ??
         []) as ProjectConfiguration["developerExperience"]["editors"],
+      ...(typeof options.hooks === "boolean" ? { hooks: options.hooks } : {}),
     },
   });
 }

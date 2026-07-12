@@ -60,6 +60,31 @@ async function generate(type: ProjectType): Promise<string> {
 }
 
 describe("createProject", () => {
+  it("runs feature lifecycle hooks in deterministic generation order", async () => {
+    const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
+    directories.push(parent);
+    const calls: string[] = [];
+    const configuration = mergeProjectConfiguration({
+      project: { directory: join(parent, "project") },
+    });
+    const feature = {
+      id: "test:lifecycle",
+      isSelected: () => true,
+      hooks: {
+        beforeGenerate: () => {
+          calls.push("before");
+        },
+        afterGenerate: () => {
+          calls.push("after");
+        },
+      },
+    };
+
+    await createProject(configuration, [feature]);
+
+    expect(calls).toEqual(["before", "after"]);
+  });
+
   it.each([
     "marketing",
     "client",
@@ -456,7 +481,9 @@ describe("createProject", () => {
       !biome,
     );
     expect(manifest.scripts.lint === undefined).toBe(!eslint);
+    expect(manifest.scripts["lint:fix"] === undefined).toBe(!eslint);
     expect(manifest.scripts.format === undefined).toBe(!prettier);
     expect(manifest.scripts.check === undefined).toBe(!biome);
+    expect(manifest.scripts.typecheck).toBe("astro check");
   });
 });

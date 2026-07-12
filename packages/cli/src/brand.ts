@@ -18,11 +18,17 @@ export function projectReadyMessage(projectName: string): string {
 }
 
 /** Clack measures ANSI-styled content safely, so this keeps next steps readable. */
-export function projectReadyCard(steps: readonly string[]): string {
-  return [
+export function projectReadyCard(
+  steps: readonly string[],
+  notes: readonly string[] = [],
+): string {
+  const lines = [
     "Next steps",
     ...steps.map((step, index) => `${index + 1}. ${step}`),
-  ].join("\n");
+  ];
+  if (notes.length > 0)
+    lines.push("", ...notes.map((note) => `${soft("Note:")} ${note}`));
+  return lines.join("\n");
 }
 
 /** Formats the selected configuration like a small syntax-highlighted manifest. */

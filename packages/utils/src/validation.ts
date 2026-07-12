@@ -38,6 +38,61 @@ const issue = (
   message,
   ...(suggestion ? { suggestion } : {}),
 });
+/**
+ * A conflict between selected options, described independently of where it is
+ * surfaced. The interactive wizard uses these to warn at the deciding step; the
+ * validator turns them into {@link ConfigurationIssue}s. Keeping the copy here
+ * is the single source of truth so the two paths cannot drift.
+ */
+export interface ConfigurationConflict {
+  code: string;
+  path: string;
+  message: string;
+  suggestion: string;
+}
+/**
+ * VS Code and Cursor both own the `.vscode` workspace configuration, so at most
+ * one may be set up. Returns the conflict when both are selected.
+ */
+export function editorTargetsConflict(
+  editors: readonly string[],
+): ConfigurationConflict | undefined {
+  if (!(editors.includes("vscode") && editors.includes("cursor")))
+    return undefined;
+  return {
+    code: "incompatible-editor-targets",
+    path: "developerExperience.editors",
+    message:
+      "VS Code and Cursor cannot be selected together because both own .vscode workspace configuration.",
+    suggestion: "Choose either vscode or cursor.",
+  };
+}
+/**
+ * Resend and webhook forwarding need a server runtime, so they cannot pair with
+ * a static deployment target. Returns the conflict when they do.
+ */
+export function serverRuntimeFormsConflict(
+  forms: string,
+  deploymentTarget: string,
+): ConfigurationConflict | undefined {
+  if (
+    !(
+      (forms === "resend" || forms === "webhooks") &&
+      deploymentTarget === "static"
+    )
+  )
+    return undefined;
+  const isResend = forms === "resend";
+  return {
+    code: isResend
+      ? "resend-requires-server-runtime"
+      : "webhooks-require-server-runtime",
+    path: "features.forms",
+    message: `${isResend ? "Resend" : "Webhook forwarding"} requires a server-capable deployment target and cannot be used with static output.`,
+    suggestion:
+      "Choose Vercel, Netlify, or Cloudflare, or remove the Resend integration.",
+  };
+}
 /** Validates a complete configuration before files or dependencies are touched. */
 export function validateProjectConfiguration(
   configuration: ProjectConfiguration,
@@ -184,32 +239,48 @@ export function validateProjectConfiguration(
     "developerExperience.editors",
     "editor",
   );
-  if (
-    developerExperience.editors.includes("vscode") &&
-    developerExperience.editors.includes("cursor")
-  )
+  if (typeof developerExperience.hooks !== "boolean")
     errors.push(
       issue(
         "error",
-        "incompatible-editor-targets",
-        "developerExperience.editors",
-        "VS Code and Cursor cannot be selected together because both own .vscode workspace configuration.",
-        "Choose either vscode or cursor.",
+        "invalid-hooks-selection",
+        "developerExperience.hooks",
+        "The Git hooks selection must be true or false.",
       ),
     );
-  if (
-    (features.forms === "resend" || features.forms === "webhooks") &&
-    deployment.target === "static"
-  )
+  else if (developerExperience.hooks && !project.initializeGit)
     errors.push(
       issue(
         "error",
-        features.forms === "resend"
-          ? "resend-requires-server-runtime"
-          : "webhooks-require-server-runtime",
-        "features.forms",
-        `${features.forms === "resend" ? "Resend" : "Webhook forwarding"} requires a server-capable deployment target and cannot be used with static output.`,
-        "Choose Vercel, Netlify, or Cloudflare, or remove the Resend integration.",
+        "hooks-require-git",
+        "developerExperience.hooks",
+        "Pre-commit hooks require Git initialization.",
+        "Enable Git or disable hooks.",
+      ),
+    );
+  const editorConflict = editorTargetsConflict(developerExperience.editors);
+  if (editorConflict)
+    errors.push(
+      issue(
+        "error",
+        editorConflict.code,
+        editorConflict.path,
+        editorConflict.message,
+        editorConflict.suggestion,
+      ),
+    );
+  const formsConflict = serverRuntimeFormsConflict(
+    features.forms,
+    deployment.target,
+  );
+  if (formsConflict)
+    errors.push(
+      issue(
+        "error",
+        formsConflict.code,
+        formsConflict.path,
+        formsConflict.message,
+        formsConflict.suggestion,
       ),
     );
   if (styling.typescript === "relaxed")

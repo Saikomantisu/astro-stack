@@ -1,42 +1,46 @@
 import { createProject, finishProject } from "@astro-stack/generator";
-import type { ProjectConfiguration } from "@astro-stack/utils";
+import {
+  type ProjectConfiguration,
+  runProjectScript,
+} from "@astro-stack/utils";
 
 import type { Generate } from "./options.js";
-
-function managerRunCommand(
-  manager: ProjectConfiguration["project"]["packageManager"],
-  script: string,
-): string {
-  return manager === "npm" ? `npm run ${script}` : `${manager} ${script}`;
-}
 
 /** Creates, installs, and initializes the project used by the default CLI flow. */
 export const generateAndFinish: Generate = async (configuration) => {
   const project = await createProject(configuration);
-  await finishProject(configuration, project.directory);
-  return project;
+  const { dependenciesInstalled, installError } = await finishProject(
+    configuration,
+    project.directory,
+  );
+  return { dependenciesInstalled, installError };
 };
 
-/** Produces only the next steps required by the selected configuration. */
+/** The command that finishes setup when automatic dependency installation fails. */
+export function installCommand(configuration: ProjectConfiguration): string {
+  return configuration.project.packageManager === "npm"
+    ? "npm install"
+    : `${configuration.project.packageManager} install`;
+}
+
+/** The immediate actions to get the freshly generated project running. */
 export function nextSteps(
   configuration: ProjectConfiguration,
 ): readonly string[] {
-  const manager = configuration.project.packageManager;
-  const steps = [
+  return [
     `cd ${configuration.project.directory}`,
-    managerRunCommand(manager, "dev"),
+    runProjectScript(configuration.project.packageManager, "dev"),
   ];
+}
+
+/** Prerequisite caveats a selected feature needs before it will work. */
+export function projectNotes(
+  configuration: ProjectConfiguration,
+): readonly string[] {
+  const notes: string[] = [];
   if (configuration.features.forms === "resend")
-    steps.push(
-      "Set RESEND_API_KEY in .env before submitting the contact form.",
-    );
+    notes.push("Set RESEND_API_KEY in .env before the contact form will work.");
   if (configuration.features.forms === "webhooks")
-    steps.push("Set WEBHOOK_URL in .env before submitting the contact form.");
-  if (configuration.deployment.target === "vercel")
-    steps.push("Deploy the project with Vercel.");
-  if (configuration.deployment.target === "netlify")
-    steps.push("Deploy the project with Netlify.");
-  if (configuration.deployment.target === "cloudflare")
-    steps.push("Configure and deploy the project with Cloudflare Workers.");
-  return steps;
+    notes.push("Set WEBHOOK_URL in .env before the contact form will work.");
+  return notes;
 }
