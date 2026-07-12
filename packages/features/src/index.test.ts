@@ -1,9 +1,8 @@
-import { describe, expect, it } from "vitest";
-
 import {
   mergeProjectConfiguration,
   type ProjectConfigurationInput,
 } from "@astro-stack/utils";
+import { describe, expect, it } from "vitest";
 
 import { type FeatureDefinition, resolveFeatures } from "./index.js";
 
