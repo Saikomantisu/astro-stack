@@ -6,7 +6,10 @@ import {
   validateProjectConfiguration,
 } from "@astro-stack/utils";
 
-import { applyConfigurationChanges } from "./configuration.js";
+import {
+  applyConfigurationChanges,
+  applyDependencies,
+} from "./configuration.js";
 import { createBaseTemplates } from "./templates.js";
 import { writeProject } from "./writer.js";
 
@@ -36,7 +39,10 @@ export async function createProject(
   const files = await writeProject(
     directory,
     applyConfigurationChanges(
-      createBaseTemplates(configuration),
+      applyDependencies(
+        [...createBaseTemplates(configuration), ...featureResolution.templates],
+        featureResolution.dependencies,
+      ),
       featureResolution.configurationChanges,
     ),
   );

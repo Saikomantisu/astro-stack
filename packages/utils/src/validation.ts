@@ -123,13 +123,18 @@ export function validateProjectConfiguration(
   for (const [value, values, code, path, message] of checks)
     if (!isOneOf(value, values))
       errors.push(issue("error", code, path, message));
-  if (features.forms === "resend" && deployment.target === "static")
+  if (
+    (features.forms === "resend" || features.forms === "webhooks") &&
+    deployment.target === "static"
+  )
     errors.push(
       issue(
         "error",
-        "resend-requires-server-runtime",
+        features.forms === "resend"
+          ? "resend-requires-server-runtime"
+          : "webhooks-require-server-runtime",
         "features.forms",
-        "Resend requires a server-capable deployment target and cannot be used with static output.",
+        `${features.forms === "resend" ? "Resend" : "Webhook forwarding"} requires a server-capable deployment target and cannot be used with static output.`,
         "Choose Vercel, Netlify, or Cloudflare, or remove the Resend integration.",
       ),
     );

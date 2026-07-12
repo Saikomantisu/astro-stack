@@ -11,14 +11,20 @@ export interface FeatureDependency {
 }
 /** A template file a feature asks the generator to render. */
 export interface FeatureTemplate {
-  source: string;
   destination: string;
+  content: string;
+}
+/** A JavaScript expression rendered without JSON stringification in Astro config. */
+export interface AstroConfigExpression {
+  readonly type: "astro-config-expression";
+  readonly code: string;
 }
 /** A single, addressable configuration value a feature asks the generator to set. */
 export interface FeatureConfigurationChange {
   file: string;
   path: string;
   value: unknown;
+  imports?: readonly string[];
 }
 export interface FeatureLifecycleContext {
   configuration: ProjectConfiguration;

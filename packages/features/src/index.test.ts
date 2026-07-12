@@ -86,7 +86,7 @@ describe("resolveFeatures", () => {
       {
         id: "first",
         isSelected: alwaysSelected,
-        templates: [{ source: "a", destination: "src/page.astro" }],
+        templates: [{ content: "a", destination: "src/page.astro" }],
         configurationChanges: [
           { file: "astro.config.mjs", path: "output", value: "static" },
         ],
@@ -95,7 +95,7 @@ describe("resolveFeatures", () => {
       {
         id: "second",
         isSelected: alwaysSelected,
-        templates: [{ source: "b", destination: "src/page.astro" }],
+        templates: [{ content: "b", destination: "src/page.astro" }],
         configurationChanges: [
           { file: "astro.config.mjs", path: "output", value: "server" },
         ],

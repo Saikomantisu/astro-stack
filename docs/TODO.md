@@ -71,38 +71,38 @@ and the module boundaries in the [architecture](./ARCHITECTURE.md).
 
 ### Styling and tooling
 
-- [ ] Vanilla CSS
-- [ ] Tailwind CSS
-- [ ] TypeScript preferences
-- [ ] ESLint
-- [ ] Prettier
-- [ ] Biome
+- [x] Vanilla CSS
+- [x] Tailwind CSS
+- [x] TypeScript preferences
+- [x] ESLint
+- [x] Prettier
+- [x] Biome
 
 ### Content
 
-- [ ] No content setup
-- [ ] Markdown
-- [ ] MDX
-- [ ] Content Collections
+- [x] No content setup
+- [x] Markdown
+- [x] MDX
+- [x] Content Collections
 
 ### Forms
 
-- [ ] No forms integration
-- [ ] Resend
-- [ ] Webhooks
+- [x] No forms integration
+- [x] Resend
+- [x] Webhooks
 
 ### Deployment
 
-- [ ] Static output
-- [ ] Vercel
-- [ ] Netlify
-- [ ] Cloudflare
+- [x] Static output
+- [x] Vercel
+- [x] Netlify
+- [x] Cloudflare
 
 For each completed feature:
 
-- [ ] Add its feature definition, templates, dependencies, and configuration.
-- [ ] Add validation and any required environment-variable documentation.
-- [ ] Test it alone and in every supported combination it affects.
+- [x] Add its feature definition, templates, dependencies, and configuration.
+- [x] Add validation and any required environment-variable documentation.
+- [x] Test it alone and in every supported combination it affects.
 
 ## 7. Installation and Finishing Steps
 

@@ -1,4 +1,8 @@
-import type { FeatureConfigurationChange } from "@astro-stack/features";
+import type {
+  AstroConfigExpression,
+  FeatureConfigurationChange,
+  FeatureDependency,
+} from "@astro-stack/features";
 
 import type { ProjectTemplate } from "./templates.js";
 
@@ -59,14 +63,86 @@ function mergeAstroConfig(
   changes: readonly FeatureConfigurationChange[],
 ): string {
   const configuration: ConfigurationValue = {};
-  for (const change of changes)
+  const imports = new Set<string>();
+  for (const change of changes) {
     applyPath(configuration, change.path, change.value);
-  const rendered = JSON.stringify(configuration, null, 2);
+    for (const statement of change.imports ?? []) imports.add(statement);
+  }
+  const rendered = containsAstroConfigExpression(configuration)
+    ? renderAstroConfiguration(configuration)
+    : JSON.stringify(configuration, null, 2);
   if (!content.includes("defineConfig({})"))
     throw new Error(
       "Astro configuration must use the generated defineConfig({}) placeholder.",
     );
-  return content.replace("defineConfig({})", `defineConfig(${rendered})`);
+  const importBlock = [...imports].join("\n");
+  const withImports = importBlock
+    ? content.replace(
+        "\n\nexport default",
+        `\n${importBlock}\n\nexport default`,
+      )
+    : content;
+  return withImports.replace("defineConfig({})", `defineConfig(${rendered})`);
+}
+
+function isAstroConfigExpression(
+  value: unknown,
+): value is AstroConfigExpression {
+  return (
+    isObject(value) &&
+    value.type === "astro-config-expression" &&
+    typeof value.code === "string"
+  );
+}
+
+function containsAstroConfigExpression(value: unknown): boolean {
+  if (isAstroConfigExpression(value)) return true;
+  if (Array.isArray(value)) return value.some(containsAstroConfigExpression);
+  return (
+    isObject(value) && Object.values(value).some(containsAstroConfigExpression)
+  );
+}
+
+function renderAstroConfiguration(value: unknown, depth = 0): string {
+  if (isAstroConfigExpression(value)) return value.code;
+  if (Array.isArray(value))
+    return `[${value
+      .map((item) => renderAstroConfiguration(item, depth + 1))
+      .join(", ")}]`;
+  if (isObject(value)) {
+    const indentation = "  ".repeat(depth);
+    const childIndentation = "  ".repeat(depth + 1);
+    return `{\n${Object.entries(value)
+      .map(
+        ([key, item]) =>
+          `${childIndentation}${JSON.stringify(key)}: ${renderAstroConfiguration(item, depth + 1)}`,
+      )
+      .join(",\n")}\n${indentation}}`;
+  }
+  return JSON.stringify(value);
+}
+
+/** Adds selected feature packages to the generated package manifest. */
+export function applyDependencies(
+  templates: readonly ProjectTemplate[],
+  dependencies: readonly FeatureDependency[],
+): ProjectTemplate[] {
+  if (dependencies.length === 0) return [...templates];
+  return templates.map((template) => {
+    if (template.destination !== "package.json") return template;
+    const manifest: unknown = JSON.parse(template.content);
+    if (!isObject(manifest))
+      throw new Error("package.json must contain an object.");
+    for (const dependency of dependencies) {
+      const section =
+        dependency.type === "dependency" ? "dependencies" : "devDependencies";
+      const existing = manifest[section];
+      if (!isObject(existing)) manifest[section] = {};
+      (manifest[section] as ConfigurationValue)[dependency.name] =
+        dependency.version;
+    }
+    return { ...template, content: `${JSON.stringify(manifest, null, 2)}\n` };
+  });
 }
 
 /**

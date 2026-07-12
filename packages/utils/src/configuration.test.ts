@@ -76,6 +76,18 @@ describe("validateProjectConfiguration", () => {
       ]),
     );
   });
+
+  it("rejects webhook forwarding with static output", () => {
+    const result = validateProjectConfiguration(
+      mergeProjectConfiguration({ features: { forms: "webhooks" } }),
+    );
+
+    expect(result.errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: "webhooks-require-server-runtime" }),
+      ]),
+    );
+  });
 });
 
 describe("summarizeProjectConfiguration", () => {

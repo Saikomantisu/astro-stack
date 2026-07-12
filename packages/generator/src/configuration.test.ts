@@ -81,4 +81,22 @@ describe("applyConfigurationChanges", () => {
       ]),
     ).toThrow("Configuration target is not generated: missing.json");
   });
+
+  it("renders Astro imports and expressions supplied by a feature", () => {
+    const merged = applyConfigurationChanges(templates, [
+      {
+        file: "astro.config.mjs",
+        path: "vite.plugins",
+        value: { type: "astro-config-expression", code: "[tailwindcss()]" },
+        imports: ['import tailwindcss from "@tailwindcss/vite";'],
+      },
+    ]);
+    const astro = merged.find(
+      (template) => template.destination === "astro.config.mjs",
+    );
+
+    expect(astro?.content).toBe(
+      'import { defineConfig } from \'astro/config\';\nimport tailwindcss from "@tailwindcss/vite";\n\nexport default defineConfig({\n  "vite": {\n    "plugins": [tailwindcss()]\n  }\n});\n',
+    );
+  });
 });

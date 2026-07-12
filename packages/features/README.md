@@ -7,5 +7,5 @@ templates, configuration changes, validation, and optional lifecycle hooks.
 `resolveFeatures()` selects and sorts definitions by their stable IDs, making
 the resulting plan deterministic. It also rejects conflicting template targets,
 configuration addresses, and incompatible dependency requests before any files
-are written. Concrete feature output is added only as each supported feature is
-implemented in the later generation phases.
+are written. Each supported feature owns the templates, dependencies, and
+configuration it contributes to the generated project.

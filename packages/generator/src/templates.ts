@@ -64,85 +64,10 @@ function manifest(configuration: ProjectConfiguration): string {
         start: "astro dev",
         build: "astro build",
         preview: "astro preview",
-        ...(configuration.styling.biome
-          ? {
-              check: "biome check .",
-              format: "biome format --write .",
-            }
-          : {}),
       },
       devDependencies: {
         astro: "^7.0.7",
-        ...(configuration.styling.biome ? { "@biomejs/biome": "2.5.3" } : {}),
       },
-    },
-    null,
-    2,
-  )}\n`;
-}
-
-function biomeConfiguration(configuration: ProjectConfiguration): string {
-  return `${JSON.stringify(
-    {
-      $schema: "https://biomejs.dev/schemas/2.5.3/schema.json",
-      ...(configuration.project.initializeGit
-        ? {
-            vcs: {
-              enabled: true,
-              clientKind: "git",
-              useIgnoreFile: true,
-            },
-          }
-        : {}),
-      files: {
-        includes: ["**", "!!**/dist"],
-      },
-      formatter: {
-        enabled: true,
-        indentStyle: "tab",
-      },
-      linter: {
-        enabled: true,
-        rules: { preset: "recommended" },
-      },
-      javascript: {
-        formatter: {
-          quoteStyle: "double",
-        },
-      },
-      assist: {
-        enabled: true,
-        actions: {
-          source: {
-            organizeImports: "on",
-          },
-        },
-      },
-      ...(configuration.styling.css === "tailwind"
-        ? {
-            css: {
-              parser: {
-                tailwindDirectives: true,
-              },
-            },
-          }
-        : {}),
-      overrides: [
-        {
-          includes: ["**/*.astro"],
-          linter: {
-            rules: {
-              correctness: {
-                noUnusedVariables: "off",
-                noUnusedImports: "off",
-              },
-              style: {
-                useImportType: "off",
-              },
-            },
-          },
-        },
-      ],
     },
     null,
     2,
@@ -154,7 +79,6 @@ export function createBaseTemplates(
   configuration: ProjectConfiguration,
 ): ProjectTemplate[] {
   const context = createContext(configuration);
-  const usesVanillaCss = configuration.styling.css === "vanilla";
   const templates: ProjectTemplate[] = [
     { destination: "package.json", content: manifest(configuration) },
     {
@@ -178,7 +102,7 @@ export function createBaseTemplates(
       ),
     },
   ];
-  const cssImport = usesVanillaCss ? "import '../styles/global.css';\n\n" : "";
+  const cssImport = "import '../styles/global.css';\n\n";
   if (configuration.project.type === "blank") {
     templates.push({
       destination: "src/pages/index.astro",
@@ -202,16 +126,5 @@ export function createBaseTemplates(
       },
     );
   }
-  if (usesVanillaCss)
-    templates.push({
-      destination: "src/styles/global.css",
-      content:
-        ":root {\n  font-family: system-ui, sans-serif;\n  color: #1f2937;\n  background: #ffffff;\n}\n\nbody {\n  margin: 0;\n}\n\nmain {\n  max-width: 72rem;\n  margin: 0 auto;\n  padding: 4rem 1.5rem;\n}\n",
-    });
-  if (configuration.styling.biome)
-    templates.push({
-      destination: "biome.json",
-      content: biomeConfiguration(configuration),
-    });
   return templates;
 }
