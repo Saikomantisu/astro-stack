@@ -40,6 +40,9 @@ the following:
 - Required checks, tests, and builds pass from a clean checkout.
 - User-facing documentation, package metadata, the changelog, and release notes
   accurately describe the shipped behavior and known limitations.
+- The Astro Stack website is deployed on GitHub Pages, and its installation,
+  documentation, and repository links are verified before final release
+  validation begins.
 - The package is installed and smoke-tested from the published registry in a
   fresh temporary directory.
 - A rollback target and the rollback decision-maker are identified before

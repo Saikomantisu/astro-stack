@@ -13,6 +13,11 @@ pnpm test
 pnpm test:generated
 ```
 
+For the initial release, perform these final validation checks only after the
+Astro Stack website is deployed on GitHub Pages and its installation and
+documentation links have been verified. See the
+[release checklist](./TODO.md) for the complete ordering.
+
 `test:generated` creates disposable projects, installs their dependencies with
 pnpm (without running third-party install hooks), runs `astro check`, builds
 them, and starts an Astro preview server for a static project. It never writes

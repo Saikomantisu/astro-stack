@@ -128,19 +128,31 @@ For each completed feature:
   dependency-install failure, invalid selection, and cancelled generation.
 - [x] Review accessibility, developer-facing copy, and error messages.
 
-## 9. Documentation and Release Readiness
+## 9. Documentation and Website
 
 - [ ] Document installation, usage, all supported choices, defaults, and
   examples.
 - [ ] Document generated-project ownership and the no-runtime-dependency
   guarantee.
+- [ ] Create and deploy an Astro website on GitHub Pages with a clear product
+  overview, installation instructions, CLI walkthrough, and links to the
+  documentation and repository.
 - [ ] Add a changelog and release process, including versioning and rollback.
 - [ ] Prepare package metadata, license, repository links, and npm publishing
   configuration.
+
+## 10. Final Release Validation
+
+Complete this stage only after the website in stage 9 is deployed and its
+installation and documentation links have been verified.
+
+- [ ] Run the required checks, tests, and builds from a clean checkout.
+- [ ] Run the generated-project compatibility suite and verify every supported
+  combination passes installation, type-checking, and production builds.
 - [ ] Validate a published-package installation in a fresh temporary directory.
 - [ ] Publish the initial release and verify the documented `npm create` flow.
 
-## 10. Developer Experience Expansion
+## 11. Developer Experience Expansion
 
 This post-v0.1 work adopts the useful parts of Vite+'s creation experience
 while preserving Astro Stack's rule that generated output is entirely driven by
@@ -192,7 +204,7 @@ explicit choices.
 
 ## Final Production Gate
 
-Do not mark the initial release complete until all applicable items above are
-checked and each supported generated-project combination passes its install,
-type-check, and production build. Record any intentionally deferred item in the
-PRD rather than silently excluding it from this checklist.
+Do not mark the initial release complete until the website is deployed, all
+applicable items above are checked, and the final release validation stage has
+passed. Record any intentionally deferred item in the PRD rather than silently
+excluding it from this checklist.

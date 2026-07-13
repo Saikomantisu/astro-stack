@@ -208,6 +208,11 @@ existing generated projects are explicitly deferred beyond v0.1.0. They must
 not be presented as available CLI selections or implied by generated-project
 behavior until their requirements and support policies are defined.
 
+The initial release also includes an Astro Stack documentation and product
+website deployed on GitHub Pages. It must provide a product overview,
+installation instructions, a CLI walkthrough, and links to the repository and
+documentation before final release validation begins.
+
 ## Generated-Project Support Policy
 
 Astro Stack v0.1.0 generates projects with `astro` `^7.0.7`. Generated
