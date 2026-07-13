@@ -342,7 +342,10 @@ describe("createProject", () => {
     expect(manifest).not.toContain("@astro-stack/");
   });
 
-  it("generates only selected agent and editor integration files", async () => {
+  it.each([
+    ["codex", "AGENTS.md"],
+    ["claude", "CLAUDE.md"],
+  ] as const)("generates only the selected %s instruction file", async (agent, file) => {
     const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
     directories.push(parent);
     const selectedDirectory = join(parent, "selected");
@@ -352,9 +355,40 @@ describe("createProject", () => {
       mergeProjectConfiguration({
         project: { directory: selectedDirectory },
         developerExperience: {
-          agents: ["codex", "claude"],
-          editors: ["vscode"],
+          agents: [agent],
         },
+      }),
+    );
+    await createProject(
+      mergeProjectConfiguration({ project: { directory: skippedDirectory } }),
+    );
+
+    await expect(
+      readFile(join(selectedDirectory, file), "utf8"),
+    ).resolves.toContain("agent instructions v1");
+    const unselectedFile = agent === "codex" ? "CLAUDE.md" : "AGENTS.md";
+    await expect(
+      readFile(join(selectedDirectory, unselectedFile), "utf8"),
+    ).rejects.toMatchObject({ code: "ENOENT" });
+    await expect(
+      readFile(join(skippedDirectory, file), "utf8"),
+    ).rejects.toMatchObject({ code: "ENOENT" });
+  });
+
+  it.each([
+    ["vscode", ".vscode/settings.json"],
+    ["cursor", ".vscode/settings.json"],
+    ["zed", ".zed/settings.json"],
+  ] as const)("generates only the selected %s editor integration", async (editor, file) => {
+    const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
+    directories.push(parent);
+    const selectedDirectory = join(parent, "selected");
+    const skippedDirectory = join(parent, "skipped");
+
+    await createProject(
+      mergeProjectConfiguration({
+        project: { directory: selectedDirectory },
+        developerExperience: { editors: [editor] },
         styling: { eslint: true, prettier: false, biome: true },
       }),
     );
@@ -363,11 +397,17 @@ describe("createProject", () => {
     );
 
     await expect(
-      readFile(join(selectedDirectory, "AGENTS.md"), "utf8"),
-    ).resolves.toContain("agent instructions v1");
+      readFile(join(selectedDirectory, file), "utf8"),
+    ).resolves.toBeDefined();
     await expect(
-      readFile(join(selectedDirectory, "CLAUDE.md"), "utf8"),
-    ).resolves.toContain("agent instructions v1");
+      readFile(join(skippedDirectory, file), "utf8"),
+    ).rejects.toMatchObject({ code: "ENOENT" });
+    if (editor === "zed") {
+      await expect(
+        readFile(join(selectedDirectory, ".vscode/settings.json"), "utf8"),
+      ).rejects.toMatchObject({ code: "ENOENT" });
+      return;
+    }
     const extensions = JSON.parse(
       await readFile(
         join(selectedDirectory, ".vscode/extensions.json"),
@@ -379,9 +419,6 @@ describe("createProject", () => {
       "dbaeumer.vscode-eslint",
       "biomejs.biome",
     ]);
-    await expect(
-      readFile(join(skippedDirectory, "AGENTS.md"), "utf8"),
-    ).rejects.toMatchObject({ code: "ENOENT" });
     await expect(
       readFile(join(skippedDirectory, ".vscode/settings.json"), "utf8"),
     ).rejects.toMatchObject({ code: "ENOENT" });

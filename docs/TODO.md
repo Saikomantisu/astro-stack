@@ -183,11 +183,11 @@ explicit choices.
 
 ### Verification and documentation
 
-- [ ] Add unit tests for configuration merging and validation plus generator
+- [x] Add unit tests for configuration merging and validation plus generator
   tests for each integration's selected and unselected output.
-- [ ] Add integration tests covering every package manager, Git/hooks
+- [x] Add integration tests covering every package manager, Git/hooks
   combination, and representative agent/editor selections.
-- [ ] Update CLI usage, configuration, architecture, and release documentation
+- [x] Update CLI usage, configuration, architecture, and release documentation
   when the supported targets and flags are finalized.
 
 ## Final Production Gate

@@ -38,7 +38,7 @@ corresponding files, dependencies, and configuration.
 | Content | None, Markdown, MDX, or Content Collections |
 | Forms | None, Resend, or webhooks |
 | Deployment | Static hosting, Vercel, Netlify, or Cloudflare |
-| Tooling | TypeScript, ESLint, Prettier, Biome, AI instructions, and editor integrations |
+| Tooling | Strict or relaxed TypeScript, ESLint, Prettier, Biome, Codex/Claude instructions, VS Code/Cursor/Zed integration, and optional Git hooks |
 
 ```text
 ✦ astro stack ✦
@@ -79,8 +79,6 @@ runtime and package-manager requirements are defined in the
 
 ## On the horizon
 
-- Pre-commit hooks
-- A concise, consistent generated-project command surface
 - Add and remove integrations in existing projects
 - Community and team presets
 - Plugin system

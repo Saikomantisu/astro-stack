@@ -32,11 +32,11 @@ only for the selected code-quality tooling. The `zed` target generates
 `.zed/settings.json` with selected formatting behavior. VS Code and Cursor
 cannot be used together because they own the same workspace files.
 
-Use repeatable `--agent <name>` and `--editor <name>` options in
-non-interactive mode. Unknown, duplicate, and incompatible selections fail
-before any files are written. Use `--hooks` to opt into a pre-commit hook, or
-`--no-hooks` to explicitly skip it. Hooks require Git, so `--hooks --no-git`
-fails before files are written.
+Use repeatable `--agent <name>` (`codex` or `claude`) and `--editor <name>`
+(`vscode`, `cursor`, or `zed`) options in non-interactive mode. Unknown,
+duplicate, and incompatible selections fail before any files are written. Use
+`--hooks` to opt into a pre-commit hook, or `--no-hooks` to explicitly skip it.
+Hooks require Git, so `--hooks --no-git` fails before files are written.
 
 The generated README and completion output use one concise command surface,
 showing the selected package manager's exact development, build, and

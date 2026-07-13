@@ -206,9 +206,7 @@ this document's **Initial Project Types** and **Initial Feature Set** sections.
 Authentication, analytics, search, community or team presets, and updates to
 existing generated projects are explicitly deferred beyond v0.1.0. They must
 not be presented as available CLI selections or implied by generated-project
-behavior until their requirements and support policies are defined. The
-developer-experience integrations described above are separately planned work;
-they must not be presented as supported until implemented and tested.
+behavior until their requirements and support policies are defined.
 
 ## Generated-Project Support Policy
 

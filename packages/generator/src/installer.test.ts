@@ -47,6 +47,64 @@ describe("project finishing", () => {
     expect(runner).toHaveBeenCalledTimes(1);
   });
 
+  it.each(
+    (["npm", "pnpm", "yarn", "bun"] as const).flatMap((packageManager) =>
+      (
+        [
+          [false, false],
+          [true, false],
+          [true, true],
+        ] as const
+      ).map(([initializeGit, hooks]) => ({
+        packageManager,
+        initializeGit,
+        hooks,
+      })),
+    ),
+  )("finishes a $packageManager project with git=$initializeGit and hooks=$hooks", async ({
+    packageManager,
+    initializeGit,
+    hooks,
+  }) => {
+    const directory = await mkdtemp(join(tmpdir(), "astro-stack-lifecycle-"));
+    try {
+      const runner = vi.fn(async (command) => {
+        if (command.command === "git")
+          await import("node:fs/promises").then(({ mkdir }) =>
+            mkdir(join(directory, ".git", "hooks"), { recursive: true }),
+          );
+      });
+      const configuration = mergeProjectConfiguration({
+        project: { packageManager, initializeGit },
+        developerExperience: { hooks },
+        styling: { eslint: false, prettier: false, biome: false },
+      });
+
+      await expect(
+        finishProject(configuration, directory, runner),
+      ).resolves.toEqual({
+        dependenciesInstalled: true,
+      });
+      expect(runner).toHaveBeenLastCalledWith(
+        { command: packageManager, arguments: ["install"] },
+        directory,
+      );
+      expect(
+        runner.mock.calls.some(([command]) => command.command === "git"),
+      ).toBe(initializeGit);
+      const hook = join(directory, ".git", "hooks", "pre-commit");
+      if (hooks)
+        await expect(readFile(hook, "utf8")).resolves.toContain(
+          packageManager === "npm"
+            ? "npm run typecheck"
+            : `${packageManager} typecheck`,
+        );
+      else await expect(access(hook)).rejects.toMatchObject({ code: "ENOENT" });
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
   it("reports a failed install without discarding the repository or hooks", async () => {
     const directory = await mkdtemp(join(tmpdir(), "astro-stack-hook-"));
     try {

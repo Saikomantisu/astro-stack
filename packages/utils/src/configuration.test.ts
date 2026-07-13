@@ -64,6 +64,19 @@ describe("mergeProjectConfiguration", () => {
     });
     expect(configuration.project).not.toBe(defaultProjectConfiguration.project);
   });
+
+  it("copies developer-experience selections instead of retaining caller arrays", () => {
+    const agents = ["codex"] as const;
+    const editors = ["zed"] as const;
+    const configuration = mergeProjectConfiguration({
+      developerExperience: { agents: [...agents], editors: [...editors] },
+    });
+
+    expect(configuration.developerExperience.agents).toEqual(agents);
+    expect(configuration.developerExperience.editors).toEqual(editors);
+    expect(configuration.developerExperience.agents).not.toBe(agents);
+    expect(configuration.developerExperience.editors).not.toBe(editors);
+  });
 });
 
 describe("validateProjectConfiguration", () => {
@@ -160,6 +173,20 @@ describe("validateProjectConfiguration", () => {
         expect.objectContaining({ code: "hooks-require-git" }),
       ]),
     );
+  });
+
+  it.each([
+    ["codex", "vscode"],
+    ["claude", "cursor"],
+    ["codex", "zed"],
+  ] as const)("accepts the supported %s and %s targets", (agent, editor) => {
+    const result = validateProjectConfiguration(
+      mergeProjectConfiguration({
+        developerExperience: { agents: [agent], editors: [editor] },
+      }),
+    );
+
+    expect(result.errors).toEqual([]);
   });
 });
 

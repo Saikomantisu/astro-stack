@@ -45,3 +45,10 @@ the following:
 - A rollback target and the rollback decision-maker are identified before
   publishing; the release owner is the initial decision-maker.
 
+## Developer-experience release check
+
+Before publishing a release that includes developer-experience integrations,
+verify the documented `--agent codex`, `--agent claude`, `--editor vscode`,
+`--editor cursor`, `--editor zed`, `--hooks`, and `--no-hooks` paths. Confirm
+that VS Code plus Cursor and hooks plus `--no-git` fail before generation, and
+record the supported targets or any intentional deferral in the release notes.

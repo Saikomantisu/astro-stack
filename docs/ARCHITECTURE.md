@@ -66,6 +66,7 @@ The configuration wizard is divided into sections instead of individual prompts.
 Sections:
 
 - Project
+- Agent Instructions and Editor Integration
 - Styling & Tooling
 - Content
 - Features
@@ -96,8 +97,8 @@ it must not install or modify hooks when Git is unavailable or unselected.
 
 The CLI translates repeatable `--agent` and `--editor` automation flags into
 this section, validates them before generation, includes them in the final
-summary, and uses the same
-configuration in interactive and non-interactive modes. This keeps the CLI
+summary, and uses the same configuration in interactive and non-interactive
+modes. This keeps the CLI
 thin and prevents a prompt-only implementation from diverging from automation.
 
 Codex and Claude instruction files use maintained, versioned templates. Both

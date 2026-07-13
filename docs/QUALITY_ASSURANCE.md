@@ -32,10 +32,19 @@ the release contract and identifies the focused smoke-test representatives.
 | Content | none, Markdown, MDX, Content Collections | Each content setup is generation-tested; MDX and Collections are smoke-tested. |
 | Forms | none, Resend, webhooks | Valid server-target combinations are generation-tested; Resend and webhooks are smoke-tested. Static forms are rejected. |
 | Deployment | static, Vercel, Netlify, Cloudflare | Each adapter is generation-tested. Static preview, Vercel build, Netlify build, and Cloudflare build are smoke-tested. |
+| Agent instructions | none, Codex, Claude | Each selected target generates only its versioned instruction file; unselected targets generate no agent file. |
+| Editor integration | none, VS Code, Cursor, Zed | Each selected target generates only its workspace files and tooling-specific recommendations. The VS Code/Cursor conflict is rejected. |
+| Finishing | npm, pnpm, Yarn, Bun; Git/hooks off/on | The lifecycle suite covers every package manager with each valid Git/hooks combination and verifies the matching install and hook commands. |
 
 The generated-project smoke representatives deliberately combine selections
 that exercise integration merging: static marketing, Tailwind + MDX + Vercel,
 Collections + webhooks + Netlify, and Resend + Cloudflare.
+
+The package-manager lifecycle tests do not install dependencies: they exercise
+the generated-project finishing contract with a command runner test double.
+The pnpm smoke suite performs the real install, type-check, build, and preview
+verification. Run equivalent published-package checks with every supported
+package manager during release validation.
 
 ## Failure-path coverage
 
