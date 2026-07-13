@@ -10,6 +10,24 @@ Run it interactively from a terminal:
 npm create astro-stack@latest
 ```
 
+## Requirements and installation
+
+Astro Stack supports Node.js 22.13 or later. Run the create command with the
+package manager you already use; no global installation is required:
+
+```sh
+npm create astro-stack@latest
+pnpm create astro-stack
+yarn create astro-stack
+bun create astro-stack
+```
+
+The CLI installs the selected project's dependencies with the package manager
+chosen during setup and creates that package manager's lockfile. The generated
+project is independent of Astro Stack after creation. See the
+[generated-project ownership guarantee](./GENERATED_PROJECTS.md) for what that
+means in practice.
+
 The guided flow covers Project, optional Agent Instructions and Editor
 Integration, Styling & Tooling, Content, Forms, Deployment, and a final
 Summary. Prompts use concise human-readable labels while retaining safe
@@ -20,6 +38,45 @@ selections in the multi-selects. The final review lets you launch or cancel;
 The project-name field is intentionally empty: its `my-astro-project` hint is
 an example, not a value that Enter can accidentally accept. After entering a
 name, the output directory defaults to `./<project-name>` and can be edited.
+
+## Supported choices and defaults
+
+The following are the complete v0.1.0 selection set. Defaults apply to omitted
+non-interactive options and are preselected in the wizard unless noted
+otherwise.
+
+| Area | Supported choices | Default |
+| --- | --- | --- |
+| Project type | `marketing`, `client`, `blog`, `documentation`, `portfolio`, `saas-landing`, `blank` | `blank` |
+| Package manager | `npm`, `pnpm`, `yarn`, `bun` | `pnpm` |
+| CSS | `vanilla`, `tailwind` | `vanilla` |
+| TypeScript | `strict`, `relaxed` | `strict` |
+| Code quality | ESLint, Prettier, Biome | All selected |
+| Content | `none`, `markdown`, `mdx`, `collections` | `none` |
+| Forms | `none`, `resend`, `webhooks` | `none` |
+| Deployment | `static`, `vercel`, `netlify`, `cloudflare` | `static` |
+| Agent instructions | `codex`, `claude` | None |
+| Editor integration | `vscode`, `cursor`, `zed` | None |
+| Git repository | Initialize or skip | Initialize |
+| Pre-commit hook | Install or skip | Skip |
+| Final confirmation | Confirm or cancel | Confirm |
+
+In the interactive wizard, a project name is required and the directory starts
+as `./<project-name>`. In non-interactive mode, omitted project fields use
+`my-astro-project` and `./my-astro-project`; explicitly pass `--name` and
+`--directory` for automation so the destination is unambiguous.
+
+Project types choose a minimal starting page structure. Styling, content,
+forms, deployment, tooling, agent, editor, and hook selections add only the
+files, configuration, and dependencies needed for those selections. See the
+[configuration reference](./CONFIGURATION.md) for the generated output owned
+by each choice.
+
+Forms have one compatibility rule: `resend` and `webhooks` require a
+server-capable deployment (`vercel`, `netlify`, or `cloudflare`) and cannot be
+used with `static`. VS Code and Cursor also cannot be selected together because
+both own the same `.vscode` files. Invalid, duplicate, or incompatible choices
+fail before the CLI writes project files.
 
 ## Agent and editor setup
 
@@ -50,6 +107,59 @@ create-astro-stack --non-interactive --yes \
   --name launch-site --directory ./launch-site --type marketing \
   --css tailwind --content mdx --deployment vercel \
   --agent codex --agent claude --editor vscode --hooks
+```
+
+## Non-interactive reference
+
+Use `--non-interactive --yes` together. Non-interactive runs without `--yes`
+are rejected so a script cannot pause waiting for confirmation.
+
+| Option | Values or behavior |
+| --- | --- |
+| `--name <name>` | Lowercase letters, numbers, and hyphens; required for a clear automated destination. |
+| `--directory <path>` | Output directory. |
+| `--type <type>` | Any supported project type. |
+| `--package-manager <manager>` | `npm`, `pnpm`, `yarn`, or `bun`. |
+| `--css <framework>` | `vanilla` or `tailwind`. |
+| `--typescript <preference>` | `strict` or `relaxed`. |
+| `--content <setup>` | `none`, `markdown`, `mdx`, or `collections`. |
+| `--forms <integration>` | `none`, `resend`, or `webhooks`. |
+| `--deployment <target>` | `static`, `vercel`, `netlify`, or `cloudflare`. |
+| `--agent <target>` | Repeat for `codex` and/or `claude`. |
+| `--editor <target>` | Repeat for `vscode`, `cursor`, and/or `zed`; do not combine VS Code with Cursor. |
+| `--no-eslint`, `--no-prettier`, `--no-biome` | Remove a default code-quality tool. |
+| `--no-git` | Skip Git initialization. |
+| `--hooks`, `--no-hooks` | Explicitly enable or skip the pre-commit hook. Hooks require Git. |
+| `--yes` | Confirm generation; required with `--non-interactive`. |
+| `--non-interactive` | Do not display prompts. |
+
+### Examples
+
+Create a minimal static marketing site with vanilla CSS and no code-quality
+tooling:
+
+```sh
+npm create astro-stack@latest -- --non-interactive --yes \
+  --name launch-site --directory ./launch-site --type marketing \
+  --no-eslint --no-prettier --no-biome
+```
+
+Create a blog with MDX, Tailwind, Vercel deployment, and a Codex instruction
+file:
+
+```sh
+pnpm create astro-stack -- --non-interactive --yes \
+  --name studio-journal --type blog --css tailwind --content mdx \
+  --deployment vercel --agent codex
+```
+
+Create a Netlify project with a webhook form, VS Code setup, and the optional
+pre-commit hook:
+
+```sh
+yarn create astro-stack --non-interactive --yes \
+  --name contact-site --type client --forms webhooks --deployment netlify \
+  --editor vscode --hooks
 ```
 
 Use `--help` for the complete option list and supported values. Invalid values

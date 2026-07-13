@@ -130,9 +130,9 @@ For each completed feature:
 
 ## 9. Documentation and Website
 
-- [ ] Document installation, usage, all supported choices, defaults, and
+- [x] Document installation, usage, all supported choices, defaults, and
   examples.
-- [ ] Document generated-project ownership and the no-runtime-dependency
+- [x] Document generated-project ownership and the no-runtime-dependency
   guarantee.
 - [ ] Create and deploy an Astro website on GitHub Pages with a clear product
   overview, installation instructions, CLI walkthrough, and links to the

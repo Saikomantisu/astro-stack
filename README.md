@@ -8,6 +8,9 @@ codebase—without a starter repository full of things you did not choose.
 
 **No unnecessary files. No unnecessary dependencies. Just the stack you choose.**
 
+Every generated project is fully project-owned and has no Astro Stack runtime
+dependency. Read the [generated-project ownership guarantee](./docs/GENERATED_PROJECTS.md).
+
 ## Start a flight plan
 
 Run Astro Stack directly:
@@ -24,7 +27,8 @@ yarn create astro-stack
 bun create astro-stack
 ```
 
-For interactive and automation options, see the [CLI usage guide](./docs/CLI.md).
+For requirements, all supported choices and defaults, plus interactive and
+automation examples, see the [CLI usage guide](./docs/CLI.md).
 
 ## What you configure
 
