@@ -38,7 +38,7 @@ Project Ready
 
 | Package | Public responsibility | May depend on |
 | --- | --- | --- |
-| `@astro-stack/cli` | Command entry point and user interaction | generator, features, utils |
+| `create-astro-stack` | Command entry point and user interaction | generator, features, utils |
 | `@astro-stack/generator` | Rendering, file creation, and configuration application | features, utils, templates |
 | `@astro-stack/features` | Feature contracts, definitions, validation, and resolution | utils, templates |
 | `@astro-stack/utils` | Framework-agnostic shared types and helpers | no Astro Stack package |

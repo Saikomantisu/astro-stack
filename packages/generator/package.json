@@ -1,13 +1,39 @@
 {
   "name": "@astro-stack/generator",
   "version": "0.1.0",
-  "private": true,
+  "description": "Project generation engine for Astro Stack.",
+  "license": "MIT",
+  "author": "Ravinath Akalanka",
+  "homepage": "https://github.com/Saikomantisu/astro-stack#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Saikomantisu/astro-stack.git",
+    "directory": "packages/generator"
+  },
+  "bugs": {
+    "url": "https://github.com/Saikomantisu/astro-stack/issues"
+  },
+  "keywords": [
+    "astro",
+    "generator",
+    "scaffolding"
+  ],
   "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

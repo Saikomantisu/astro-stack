@@ -46,7 +46,7 @@ pnpm --filter @astro-stack/generator check
 To try the CLI from the workspace root, build it and run:
 
 ```sh
-pnpm --filter @astro-stack/cli start
+pnpm --filter create-astro-stack start
 ```
 
 After you enter a project name, its output directory defaults to

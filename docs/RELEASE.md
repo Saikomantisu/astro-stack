@@ -47,11 +47,11 @@ generated package changelog by hand.
    the GitHub release. The release owner must keep the release PR and tag as
    the audit trail.
 
-Publishing is intentionally a manual, credentialed step. It remains disabled
-until the separate package-metadata and npm-publishing configuration checklist
-item is complete. Before enabling it, configure the npm token with only the
-required publish scope and verify that `pnpm release:publish` publishes only
-the intended public packages.
+Publishing is intentionally a manual, credentialed step. Each publishable
+package targets the public npm registry explicitly and declares public access;
+the workspace package itself remains private. Before publishing, configure an
+npm token with only the required publish scope and verify that
+`pnpm release:publish` publishes only the intended public packages.
 
 ## Rollback
 

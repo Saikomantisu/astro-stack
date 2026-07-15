@@ -1,13 +1,39 @@
 {
   "name": "@astro-stack/features",
   "version": "0.1.0",
-  "private": true,
+  "description": "Composable feature definitions for Astro Stack projects.",
+  "license": "MIT",
+  "author": "Ravinath Akalanka",
+  "homepage": "https://github.com/Saikomantisu/astro-stack#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Saikomantisu/astro-stack.git",
+    "directory": "packages/features"
+  },
+  "bugs": {
+    "url": "https://github.com/Saikomantisu/astro-stack/issues"
+  },
+  "keywords": [
+    "astro",
+    "features",
+    "scaffolding"
+  ],
   "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

@@ -4,14 +4,14 @@
   "commit": false,
   "fixed": [
     [
-      "@astro-stack/cli",
+      "create-astro-stack",
       "@astro-stack/generator",
       "@astro-stack/features",
       "@astro-stack/utils"
     ]
   ],
   "linked": [],
-  "access": "restricted",
+  "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": []

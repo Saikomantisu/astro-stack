@@ -1,8 +1,29 @@
 {
-  "name": "@astro-stack/cli",
+  "name": "create-astro-stack",
   "version": "0.1.0",
-  "private": true,
+  "description": "Create a production-ready Astro project with a guided setup.",
+  "license": "MIT",
+  "author": "Ravinath Akalanka",
+  "homepage": "https://github.com/Saikomantisu/astro-stack#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Saikomantisu/astro-stack.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/Saikomantisu/astro-stack/issues"
+  },
+  "keywords": [
+    "astro",
+    "create-astro",
+    "starter",
+    "scaffolding",
+    "cli"
+  ],
   "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
   "bin": {
     "astro-stack": "./dist/index.js"
   },
@@ -11,6 +32,13 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

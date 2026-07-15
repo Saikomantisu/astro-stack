@@ -138,7 +138,7 @@ For each completed feature:
   overview, installation instructions, CLI walkthrough, and links to the
   documentation and repository.
 - [x] Add a changelog and release process, including versioning and rollback.
-- [ ] Prepare package metadata, license, repository links, and npm publishing
+- [x] Prepare package metadata, license, repository links, and npm publishing
   configuration.
 
 ## 10. Final Release Validation
