@@ -1,0 +1,38 @@
+---
+title: Deployment
+description: Choose static or server output and prepare the generated project for its host.
+section: Guide
+order: 6
+---
+
+## Choose the runtime
+
+| Target | Output | Generator adds |
+| --- | --- | --- |
+| `static` | Static HTML and assets | No deployment dependency. |
+| `vercel` | Server-capable | Astro's Vercel adapter. |
+| `netlify` | Server-capable | Astro's Netlify adapter. |
+| `cloudflare` | Server-capable | Astro's Cloudflare adapter and Wrangler. |
+
+Static output is a good fit for sites without server endpoints. Choose Vercel, Netlify, or Cloudflare when the project uses Resend, webhook forwarding, or another Astro server route.
+
+## Verify before publishing
+
+Run the generated project's build command locally before connecting a host:
+
+```sh
+pnpm build
+pnpm preview
+```
+
+Replace `pnpm` with the package manager selected during generation. `preview` lets you inspect the production build locally; the generated README lists the matching commands.
+
+## Connect the project
+
+Push the generated project to the Git repository of your choice, then create a project in the selected hosting provider and connect that repository. The provider runs the project's normal install and build steps. The adapter and output configuration already live in `astro.config.mjs`.
+
+For server-capable deployments, enter every value from your local `.env` file in the provider's environment-variable settings. Do not commit those values to the repository.
+
+## Change targets later
+
+Astro Stack generates new projects only; it does not synchronize a project after creation. To change hosts later, update the project's Astro adapter, dependencies, and deployment settings directly, then build and test the result before publishing.

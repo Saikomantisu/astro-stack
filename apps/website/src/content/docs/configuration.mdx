@@ -1,0 +1,54 @@
+---
+title: Configuration
+description: See the files, dependencies, and behavior owned by each Astro Stack selection.
+section: Reference
+order: 3
+---
+
+import Warning from "@/components/docs/Warning.astro";
+
+## How configuration works
+
+Astro Stack collects your project, styling/tooling, content, feature, deployment, developer-experience, and summary choices into one validated configuration. It validates that configuration before resolving features or writing files.
+
+Selections are additive: a project receives only the files, configuration, and dependencies required by the choices you make.
+
+## Project and developer experience
+
+Your project selection controls the name, output directory, starter page structure, package manager, and whether Git is initialized. The generator never replaces an existing directory or user-owned file.
+
+Optional agent instructions add versioned `AGENTS.md` for Codex and `CLAUDE.md` for Claude. Optional editor integrations add:
+
+- VS Code or Cursor: `.vscode/settings.json` and `.vscode/extensions.json`, with recommendations only for selected tooling.
+- Zed: `.zed/settings.json` with the selected formatting behavior.
+
+<Warning>
+  VS Code and Cursor own the same `.vscode` files and cannot be selected together. Pre-commit hooks require Git initialization.
+</Warning>
+
+## Styling and tooling
+
+Vanilla CSS and Tailwind each create `src/styles/global.css`. Tailwind also adds the Tailwind v4 Vite plugin and its required development dependencies.
+
+ESLint, Prettier, and Biome each add only their own configuration, scripts, and development dependencies. Their commands stay separate: `lint` for ESLint, `format` and `format:check` for Prettier, and `check` and `format:biome` for Biome.
+
+## Content
+
+Choosing `none` adds no starter content. Markdown, MDX, and Content Collections each create `src/content.config.ts` plus a starter post under `src/content/posts`, using Astro's built-in `glob()` loader. MDX additionally installs and configures Astro's official MDX integration.
+
+## Forms
+
+Both Resend and webhook forwarding generate `src/pages/api/contact.ts` and require a server-capable deployment.
+
+- **Resend** adds the `resend` runtime dependency and documents `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `RESEND_TO_EMAIL` in `.env.example`.
+- **Webhooks** documents `WEBHOOK_URL` in `.env.example`. It is read only on the server so the destination stays private.
+
+## Deployment
+
+Static output is explicit and adds no deployment dependency. Vercel, Netlify, and Cloudflare add their official Astro adapters and use server output. Cloudflare also includes Wrangler, which its adapter requires.
+
+Deploy by connecting the generated repository to the selected host, or by using that host's CLI after building the project.
+
+## Command surface
+
+Every generated project documents its exact `dev`, `build`, `preview`, and `typecheck` commands. Selected quality tools add their related health commands. The generated README and completion message use the package manager you selected.

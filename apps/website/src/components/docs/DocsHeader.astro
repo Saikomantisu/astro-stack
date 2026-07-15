@@ -1,0 +1,30 @@
+---
+import BookOpen from "@tabler/icons/outline/book-2.svg";
+import BrandGithub from "@tabler/icons/outline/brand-github.svg";
+import BaseLink from "@/components/common/BaseLink.astro";
+import Container from "@/components/common/Container.astro";
+import Wordmark from "@/components/common/Wordmark.astro";
+import { Button } from "@/components/starwind/button";
+import { links } from "@/lib/site";
+---
+
+<header class="border-border/70 bg-background/92 sticky top-0 z-40 border-b backdrop-blur-xl">
+  <Container class="flex h-16 items-center gap-3">
+    <Wordmark />
+    <span class="bg-border hidden h-5 w-px sm:block" aria-hidden="true"></span>
+    <nav class="hidden items-center gap-1 sm:flex" aria-label="Documentation">
+      <BaseLink href="docs/" aria-current="page" class="bg-primary/15 text-foreground focus-visible:ring-outline/60 rounded-md px-3 py-2 text-sm font-semibold outline-none focus-visible:ring-2">
+        Docs
+      </BaseLink>
+    </nav>
+    <div class="ml-auto flex items-center gap-2">
+      <Button href={links.github} variant="ghost" size="icon-sm" target="_blank" rel="noopener noreferrer" aria-label="View Astro Stack on GitHub" title="View on GitHub">
+        <BrandGithub aria-hidden="true" />
+      </Button>
+      <BaseLink href="docs/" class="text-muted-foreground hover:text-foreground focus-visible:ring-outline/60 inline-flex items-center gap-2 rounded-md px-2 py-2 text-sm font-medium outline-none focus-visible:ring-2 sm:hidden">
+        <BookOpen class="size-4" aria-hidden="true" />
+        Docs
+      </BaseLink>
+    </div>
+  </Container>
+</header>

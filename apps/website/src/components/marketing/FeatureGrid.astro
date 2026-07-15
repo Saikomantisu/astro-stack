@@ -1,0 +1,39 @@
+---
+import Section from "@/components/common/Section.astro";
+import FeatureCard from "@/components/marketing/FeatureCard.astro";
+import { features, featuresSection } from "@/lib/content/features";
+---
+
+<Section id={featuresSection.id} aria-labelledby="features-heading">
+  <div class="mx-auto mb-12 max-w-2xl text-center">
+    <p class="text-peach mb-3 text-sm font-medium tracking-wide uppercase">
+      <span aria-hidden="true">✦</span>
+      {" "}
+      {featuresSection.eyebrow}
+    </p>
+    <h2
+      id="features-heading"
+      class="font-display text-3xl tracking-tight text-balance sm:text-4xl"
+    >
+      {featuresSection.title}
+    </h2>
+    <p class="text-muted-foreground mt-4 text-lg leading-relaxed">
+      {featuresSection.description}
+    </p>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      features.map((feature) => (
+        <div>
+          <FeatureCard
+            title={feature.title}
+            description={feature.description}
+            icon={feature.icon}
+            iconAlt={feature.iconAlt}
+          />
+        </div>
+      ))
+    }
+  </div>
+</Section>

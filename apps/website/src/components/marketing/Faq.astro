@@ -1,0 +1,61 @@
+---
+import Section from "@/components/common/Section.astro";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/starwind/accordion";
+import { faqItems, faqSection } from "@/lib/content/faq";
+---
+
+<Section id={faqSection.id} aria-labelledby="faq-heading">
+  <div class="mx-auto mb-12 max-w-2xl text-center">
+    <p class="text-peach mb-3 text-sm font-medium tracking-wide uppercase">
+      <span aria-hidden="true">✦</span>
+      {" "}
+      {faqSection.eyebrow}
+    </p>
+    <h2
+      id="faq-heading"
+      class="font-display text-3xl tracking-tight text-balance sm:text-4xl"
+    >
+      {faqSection.title}
+    </h2>
+    <p class="text-muted-foreground mt-4 text-lg leading-relaxed">
+      {faqSection.description}
+    </p>
+  </div>
+
+  <Accordion type="single" class="mx-auto max-w-2xl">
+    {
+      faqItems.map((item) => (
+        <AccordionItem value={item.value}>
+          <AccordionTrigger class="text-left text-base sm:text-lg">
+            {item.question}
+          </AccordionTrigger>
+          <AccordionContent>
+            <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+              {item.answer}
+            </p>
+          </AccordionContent>
+        </AccordionItem>
+      ))
+    }
+  </Accordion>
+
+  {/* FAQPage structured data for rich results. */}
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer },
+      })),
+    })}
+  />
+</Section>

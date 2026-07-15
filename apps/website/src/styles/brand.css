@@ -1,0 +1,18 @@
+/* Brand motif utilities mapped from packages/cli/src/brand.ts */
+
+.text-peach {
+  color: var(--peach);
+}
+
+.bg-peach {
+  background-color: var(--peach);
+  color: var(--peach-foreground);
+}
+
+.border-peach {
+  border-color: var(--peach);
+}
+
+.ring-peach {
+  --tw-ring-color: var(--peach);
+}

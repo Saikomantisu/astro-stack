@@ -1,0 +1,47 @@
+---
+title: Content
+description: Add a small Astro content collection with a Markdown or MDX starter entry.
+section: Guide
+order: 4
+---
+
+import Note from "@/components/docs/Note.astro";
+
+## Select a content setup
+
+Choose `markdown`, `mdx`, or `collections` in the wizard when the project needs local written content. Each option creates `src/content.config.ts` and one starter entry in `src/content/posts`.
+
+```text
+src/
+├── content.config.ts
+└── content/
+    └── posts/
+        └── getting-started.md
+```
+
+The MDX option creates `getting-started.mdx` instead and configures Astro's official MDX integration. Markdown and Content Collections use a `.md` entry.
+
+## Add an entry
+
+Create a file in `src/content/posts` with frontmatter followed by Markdown:
+
+```md
+---
+title: A new post
+description: A short summary for readers.
+---
+
+# A new post
+
+Write the post here.
+```
+
+The generated collection uses Astro's `glob()` loader to find Markdown and MDX files in that directory. When using MDX, you may also include supported JSX-style components and JavaScript expressions.
+
+## Build the reading experience
+
+The content selection deliberately creates the collection and starter content, not a blog index or post-detail route. Add those pages in `src/pages` when you are ready to decide your URLs, listing design, and metadata.
+
+<Note>
+  Select `none` when the project does not need local content yet. You can add Astro content files later without carrying an unused starter post.
+</Note>

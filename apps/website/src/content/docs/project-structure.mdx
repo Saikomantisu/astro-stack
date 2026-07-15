@@ -1,0 +1,81 @@
+---
+title: Project structure
+description: Explore the files Astro Stack generates and see which selections add to the base project.
+section: Reference
+order: 5
+---
+
+import Note from "@/components/docs/Note.astro";
+
+## Base project
+
+Every project starts with a small, conventional Astro structure. The exact project name replaces `my-project`.
+
+```text
+my-project/
+├── src/
+│   ├── pages/
+│   │   └── index.astro          # Home page and the / route
+│   ├── styles/
+│   │   └── global.css           # Vanilla CSS or Tailwind entry point
+│   └── layouts/
+│       └── BaseLayout.astro     # Included except for Blank projects
+├── .gitignore
+├── astro.config.mjs             # Astro and selected integration settings
+├── package.json                 # Scripts and selected dependencies
+├── README.md                    # Commands for this configuration
+└── tsconfig.json                # Astro TypeScript settings
+```
+
+The Blank project keeps the structure even smaller: its home page imports `global.css` directly, so it does not include `src/layouts/BaseLayout.astro`.
+
+## Files added by your selections
+
+Astro Stack adds only the files required by the options you select. A content setup adds a collection definition and starter entry:
+
+```text
+src/
+├── content.config.ts
+└── content/
+    └── posts/
+        └── getting-started.md   # .mdx when MDX is selected
+```
+
+Resend or webhook forms add a server route and an environment-variable template:
+
+```text
+my-project/
+├── .env.example
+└── src/
+    └── pages/
+        └── api/
+            └── contact.ts
+```
+
+Developer-experience choices add their files at the project root:
+
+```text
+my-project/
+├── .vscode/                     # VS Code or Cursor settings and extensions
+├── .zed/                        # Zed settings
+├── AGENTS.md                    # Codex instructions
+├── CLAUDE.md                    # Claude instructions
+├── biome.json                   # Biome configuration
+├── eslint.config.js             # ESLint configuration
+├── .prettierrc.json             # Prettier configuration
+└── .prettierignore
+```
+
+<Note>
+  Directories such as `node_modules`, `.astro`, and `dist` appear after installing, developing, or building the project. They are generated locally and are excluded from Git.
+</Note>
+
+## Where to make changes
+
+- Add routes in `src/pages`. Astro maps these files to URLs.
+- Reuse page shells in `src/layouts` and keep site-wide styles in `src/styles/global.css`.
+- Keep Markdown and MDX entries in `src/content/posts` when you selected a content setup.
+- Add server endpoints below `src/pages/api` when your deployment supports server output.
+- Update integrations and output settings in `astro.config.mjs`; use `package.json` for scripts and dependencies.
+
+Astro Stack does not retain control of these files after generation. They are ordinary project files for you to evolve as your application grows.

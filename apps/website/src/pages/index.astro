@@ -1,0 +1,23 @@
+---
+import CtaBand from "@/components/marketing/CtaBand.astro";
+import Faq from "@/components/marketing/Faq.astro";
+import FeatureGrid from "@/components/marketing/FeatureGrid.astro";
+import Hero from "@/components/marketing/Hero.astro";
+import ProjectTypes from "@/components/marketing/ProjectTypes.astro";
+import TerminalMock from "@/components/marketing/TerminalMock.astro";
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import { site } from "@/lib/site";
+---
+
+<MarketingLayout
+  title={`${site.name} · ${site.tagline}`}
+  description={site.description}
+  jsonLd
+>
+  <Hero />
+  <FeatureGrid />
+  <TerminalMock />
+  <ProjectTypes />
+  <Faq />
+  <CtaBand />
+</MarketingLayout>

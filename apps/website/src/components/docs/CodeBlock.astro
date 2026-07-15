@@ -1,0 +1,16 @@
+---
+import CopyButton from "@/components/common/CopyButton.astro";
+
+interface Props {
+  code: string;
+  label?: string;
+}
+const { code, label = "Terminal" } = Astro.props;
+---
+<div class="border-border/70 bg-black/25 my-5 overflow-hidden rounded-xl border">
+  <div class="border-border/70 flex items-center justify-between gap-4 border-b px-3 py-2">
+    <span class="text-muted-foreground text-xs font-semibold tracking-wide uppercase">{label}</span>
+    <CopyButton value={code} iconOnly variant="ghost" label={`Copy ${label.toLowerCase()}`} />
+  </div>
+  <pre class="overflow-x-auto p-4 text-sm leading-relaxed"><code class="text-foreground font-mono">{code}</code></pre>
+</div>

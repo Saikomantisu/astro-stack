@@ -1,0 +1,80 @@
+---
+import { withBase } from "@/lib/paths";
+import {
+  absoluteUrl,
+  defaultJsonLd,
+  defaultOgImage,
+  pageTitle as formatTitle,
+} from "@/lib/seo";
+import { site as siteConfig } from "@/lib/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Site-relative path (no leading slash) or absolute URL. */
+  ogImage?: string;
+  /** Open Graph type: website for marketing pages. */
+  ogType?: "website" | "article";
+  /** When true, inject default SoftwareApplication / WebSite JSON-LD. */
+  jsonLd?: boolean;
+  /** Prevent indexing (e.g. 404). */
+  noindex?: boolean;
+}
+
+const {
+  title = siteConfig.name,
+  description = siteConfig.description,
+  ogImage = defaultOgImage,
+  ogType = "website",
+  jsonLd = false,
+  noindex = false,
+} = Astro.props;
+
+const pageTitle = formatTitle(title);
+const canonical = absoluteUrl(Astro.url.pathname);
+const ogImageUrl = absoluteUrl(ogImage);
+const siteName = siteConfig.name;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<meta name="description" content={description} />
+<meta name="theme-color" content="#0f0b14" />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<link rel="icon" type="image/svg+xml" href={withBase("favicon.svg")} />
+<link rel="icon" type="image/png" sizes="32x32" href={withBase("favicon-32.png")} />
+<link rel="apple-touch-icon" href={withBase("favicon-32.png")} />
+<link rel="canonical" href={canonical} />
+
+<title>{pageTitle}</title>
+
+<!-- Open Graph -->
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={`${siteName}: ${siteConfig.tagline}`} />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+<meta name="twitter:image:alt" content={`${siteName}: ${siteConfig.tagline}`} />
+
+{
+  jsonLd && (
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(defaultJsonLd())}
+    />
+  )
+}

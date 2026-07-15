@@ -1,0 +1,92 @@
+---
+import CopyButton from "@/components/common/CopyButton.astro";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/starwind/tabs";
+import {
+  defaultPackageManager,
+  installCommands,
+  type PackageManager,
+  packageManagers,
+} from "@/lib/install";
+
+interface Props {
+  class?: string;
+  /** Larger presentation for hero; denser for CTA band. */
+  size?: "default" | "compact";
+}
+
+const { class: className, size = "default" } = Astro.props;
+
+const managers = packageManagers as PackageManager[];
+
+/** Keep package-manager brand casing (pnpm is lowercase). */
+const labels: Record<PackageManager, string> = {
+  npm: "npm",
+  pnpm: "pnpm",
+  yarn: "Yarn",
+  bun: "Bun",
+};
+---
+
+{/*
+  Starwind Tabs resolves triggers/content via `:scope > [data-tabs-list]` and
+  `:scope > [data-tabs-content]`. Keep TabsList and TabsContent as direct
+  children of Tabs so the active install command is shown.
+*/}
+<div
+  class:list={[
+    "border-border bg-card/60 w-full max-w-xl overflow-hidden rounded-xl border shadow-sm",
+    className,
+  ]}
+  data-install-command
+>
+  <Tabs defaultValue={defaultPackageManager} class="w-full">
+    <TabsList
+      class:list={[
+        "border-border bg-transparent flex w-full items-center gap-0 rounded-none border-b p-0 px-3",
+        size === "compact" ? "py-2" : "py-2.5",
+      ]}
+    >
+      {
+        managers.map((pm) => (
+          <TabsTrigger value={pm} class="grow-0 px-2.5 text-sm sm:px-3">
+            {labels[pm]}
+          </TabsTrigger>
+        ))
+      }
+    </TabsList>
+    {
+      managers.map((pm) => (
+        <TabsContent value={pm} class="m-0 focus-visible:outline-none">
+          <div
+            class:list={[
+              "relative m-2 flex items-center gap-3 overflow-hidden rounded-lg border border-border/70 bg-black/20 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.04)]",
+              size === "compact" ? "px-3 py-2.5" : "px-3 py-3 sm:px-4",
+            ]}
+          >
+            <span class="text-primary shrink-0 font-mono text-sm" aria-hidden="true">$</span>
+            <code
+              class:list={[
+                "!bg-transparent !px-0 !py-0 text-foreground min-w-0 flex-1 truncate font-mono",
+                size === "compact" ? "text-xs sm:text-sm" : "text-sm sm:text-base",
+              ]}
+            >
+              {installCommands[pm]}
+            </code>
+            <CopyButton
+              value={installCommands[pm]}
+              iconOnly
+              variant="ghost"
+              label="Copy command"
+              class="shrink-0"
+            />
+          </div>
+        </TabsContent>
+      ))
+    }
+  </Tabs>
+</div>

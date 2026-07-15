@@ -1,0 +1,32 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Container from "@/components/common/Container.astro";
+
+type Props = HTMLAttributes<"section"> & {
+  containerClass?: string;
+  /** Visually tighter vertical rhythm for secondary bands. */
+  compact?: boolean;
+};
+
+const {
+  id,
+  class: className,
+  containerClass,
+  compact = false,
+  ...rest
+} = Astro.props;
+---
+
+<section
+  id={id}
+  class:list={[
+    "scroll-mt-24",
+    compact ? "py-12 sm:py-16" : "py-16 sm:py-24",
+    className,
+  ]}
+  {...rest}
+>
+  <Container class={containerClass}>
+    <slot />
+  </Container>
+</section>

@@ -1,0 +1,61 @@
+---
+import Section from "@/components/common/Section.astro";
+import InstallCommand from "@/components/marketing/InstallCommand.astro";
+import { Button } from "@/components/starwind/button";
+import { withBase } from "@/lib/paths";
+import { cta, links } from "@/lib/site";
+
+const gettingStartedHref = withBase(cta.href);
+---
+
+<Section
+  class="relative overflow-hidden"
+  compact
+  aria-labelledby="cta-heading"
+>
+  <div
+    class="border-border from-primary/15 via-card to-peach/10 relative overflow-hidden rounded-2xl border bg-linear-to-br px-6 py-12 text-center sm:px-10 sm:py-16"
+  >
+    <div
+      class="pointer-events-none absolute -top-16 -right-16 size-48 rounded-full bg-primary/20 blur-3xl"
+      aria-hidden="true"
+    >
+    </div>
+    <div
+      class="pointer-events-none absolute -bottom-20 -left-10 size-40 rounded-full bg-peach/15 blur-3xl"
+      aria-hidden="true"
+    >
+    </div>
+
+    <p class="text-peach relative text-sm font-medium tracking-wide uppercase">
+      <span aria-hidden="true">✦</span> Liftoff
+    </p>
+    <h2
+      id="cta-heading"
+      class="font-display relative mt-3 text-3xl tracking-tight text-balance sm:text-4xl"
+    >
+      Start your flight plan
+    </h2>
+    <p class="text-muted-foreground relative mx-auto mt-3 max-w-lg text-base leading-relaxed sm:text-lg">
+      Run the create command, walk through the configuration, and ship a project
+      that is ready for liftoff.
+    </p>
+
+    <div class="relative mx-auto mt-8 flex w-full max-w-xl flex-col items-center gap-4">
+      <InstallCommand class="w-full" size="compact" />
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <Button href={gettingStartedHref} variant="primary">
+          {cta.label}
+        </Button>
+        <Button
+          href={links.github}
+          variant="outline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Star on GitHub
+        </Button>
+      </div>
+    </div>
+  </div>
+</Section>

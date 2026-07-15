@@ -1,0 +1,36 @@
+---
+title: Project types
+description: Choose a focused Astro starting point without inheriting an oversized template.
+section: Guide
+order: 3
+---
+
+## Choose by intent
+
+Project type gives the generated home page an appropriate title and description. Pick the label that best describes the work you are beginning:
+
+| Type | Starting intent |
+| --- | --- |
+| `marketing` | A focused site for a product, service, or campaign. |
+| `client` | A polished starting point for client work. |
+| `blog` | A site intended for writing and publishing. |
+| `documentation` | A starting point for product or technical docs. |
+| `portfolio` | A lightweight canvas for your work and case studies. |
+| `saas-landing` | A landing page for a software product. |
+| `blank` | The smallest possible Astro project. |
+
+## What changes
+
+All named project types include a home page, `src/layouts/BaseLayout.astro`, and the selected global CSS setup. Their initial title and description are the only type-specific content; Astro Stack does not claim to ship a finished marketing site, blog, or documentation theme.
+
+The `blank` type is smaller still. It includes `src/pages/index.astro` and imports `src/styles/global.css` directly, without a layout.
+
+## Build from the starter
+
+Use the project type as a concise first commit, then shape the project around the work it needs:
+
+- Create routes in `src/pages`.
+- Add reusable page shells to `src/layouts`.
+- Add content, forms, deployment, and quality tooling only when you need them.
+
+See [Project structure](../project-structure/) for the complete generated file tree.

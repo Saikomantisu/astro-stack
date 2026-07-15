@@ -1,0 +1,45 @@
+---
+import BaseLink from "@/components/common/BaseLink.astro";
+import Container from "@/components/common/Container.astro";
+import Wordmark from "@/components/common/Wordmark.astro";
+import { Button } from "@/components/starwind/button";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { withBase } from "@/lib/paths";
+import { cta, site } from "@/lib/site";
+---
+
+<BaseLayout
+  title="Page not found"
+  description={`The page you requested was not found on the ${site.name} site.`}
+  noindex
+>
+  <main id="main-content" class="flex flex-1 flex-col">
+    <Container class="flex flex-1 flex-col items-center justify-center py-24 text-center">
+      <Wordmark size="sm" class="mb-8" />
+      <p class="text-peach text-sm font-medium tracking-wide uppercase">
+        <span aria-hidden="true">✦</span> 404
+      </p>
+      <h1 class="font-display mt-3 text-4xl tracking-tight text-balance sm:text-5xl">
+        Lost in space
+      </h1>
+      <p class="text-muted-foreground mt-4 max-w-md text-lg leading-relaxed">
+        That route is not on this flight plan. Head home or start a new project
+        with {site.name}.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <Button href={withBase("/")} variant="primary">
+          Back home
+        </Button>
+        <Button href={withBase(cta.href)} variant="secondary">
+          {cta.label}
+        </Button>
+      </div>
+      <p class="text-muted-foreground mt-10 text-sm">
+        Looking for docs?{" "}
+        <BaseLink href="docs/installation/" class="text-primary underline-offset-4 hover:underline">
+          Getting started
+        </BaseLink>
+      </p>
+    </Container>
+  </main>
+</BaseLayout>

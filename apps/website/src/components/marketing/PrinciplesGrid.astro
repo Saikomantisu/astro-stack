@@ -1,0 +1,36 @@
+---
+import Section from "@/components/common/Section.astro";
+import PrincipleCard from "@/components/marketing/PrincipleCard.astro";
+import { principles, principlesSection } from "@/lib/content/principles";
+---
+
+<Section id={principlesSection.id} aria-labelledby="principles-heading">
+  <div class="mx-auto mb-12 max-w-2xl text-center">
+    <p class="text-peach mb-3 text-sm font-medium tracking-wide uppercase">
+      <span aria-hidden="true">✦</span>
+      {" "}
+      {principlesSection.eyebrow}
+    </p>
+    <h2
+      id="principles-heading"
+      class="font-display text-3xl tracking-tight text-balance sm:text-4xl"
+    >
+      {principlesSection.title}
+    </h2>
+    <p class="text-muted-foreground mt-4 text-lg leading-relaxed">
+      {principlesSection.description}
+    </p>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      principles.map((principle, i) => (
+        <PrincipleCard
+          number={i + 1}
+          title={principle.title}
+          description={principle.description}
+        />
+      ))
+    }
+  </div>
+</Section>

@@ -1,0 +1,41 @@
+---
+title: Tooling
+description: Use the generated type checks, formatter, linter, and optional pre-commit hook.
+section: Reference
+order: 7
+---
+
+## Core commands
+
+Every generated project includes these scripts:
+
+| Script | Purpose |
+| --- | --- |
+| `dev` | Start the Astro development server. |
+| `build` | Create the production build. |
+| `preview` | Serve the production build locally. |
+| `typecheck` | Run Astro and TypeScript checks. |
+
+Run a script with your selected package manager, such as `pnpm typecheck` or `npm run typecheck`.
+
+## Selected quality tools
+
+Astro Stack enables ESLint, Prettier, and Biome by default, but each is independently optional. It only adds the scripts and configuration for tools you select.
+
+| Tool | Check command | Write command |
+| --- | --- | --- |
+| ESLint | `pnpm lint` | `pnpm lint:fix` |
+| Prettier | `pnpm format:check` | `pnpm format` |
+| Biome | `pnpm check` | `pnpm format:biome` |
+
+Replace `pnpm` where needed. Use the write commands intentionally: formatters and `lint:fix` can modify project files.
+
+## Pre-commit hooks
+
+Selecting a pre-commit hook initializes Git and writes a project-owned `.git/hooks/pre-commit` file. It runs the relevant selected formatting and lint-fix commands, followed by `typecheck`.
+
+The hook is ordinary shell code in your local repository. Edit or remove it as your workflow changes. Hooks require Git initialization, so Astro Stack rejects `--hooks --no-git` before it generates files.
+
+## A useful local check
+
+Before opening a pull request, run the project's type check and the checks for every selected tool. The generated README remains the source of truth because it reflects your exact configuration.

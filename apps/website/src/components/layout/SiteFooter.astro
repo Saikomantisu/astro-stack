@@ -1,0 +1,121 @@
+---
+import BaseLink from "@/components/common/BaseLink.astro";
+import Container from "@/components/common/Container.astro";
+import Wordmark from "@/components/common/Wordmark.astro";
+import { Separator } from "@/components/starwind/separator";
+import { author, footerNav, links, site } from "@/lib/site";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-border/60 mt-auto border-t bg-card/40">
+  <Container class="py-12">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="space-y-3 sm:col-span-2 lg:col-span-1">
+        <Wordmark size="md" />
+        <p class="text-muted-foreground max-w-xs text-sm leading-relaxed">
+          {site.tagline}
+        </p>
+        <p class="text-muted-foreground max-w-xs text-sm leading-relaxed">
+          Built by{" "}
+          <BaseLink
+            href={author.github}
+            external
+            class="text-foreground/90 hover:text-foreground underline-offset-4 hover:underline"
+          >
+            {author.name}
+          </BaseLink>
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-muted-foreground mb-3 text-xs font-semibold tracking-wider uppercase">
+          Product
+        </h2>
+        <ul class="space-y-2">
+          {
+            footerNav.product.map((item) => (
+              <li>
+                <BaseLink
+                  href={item.href}
+                  class="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                >
+                  {item.label}
+                </BaseLink>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="text-muted-foreground mb-3 text-xs font-semibold tracking-wider uppercase">
+          Resources
+        </h2>
+        <ul class="space-y-2">
+          {
+            footerNav.resources.map((item) => (
+              <li>
+                <BaseLink
+                  href={item.href}
+                  external={"external" in item ? item.external : false}
+                  class="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                >
+                  {item.label}
+                </BaseLink>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="text-muted-foreground mb-3 text-xs font-semibold tracking-wider uppercase">
+          Company
+        </h2>
+        <ul class="space-y-2">
+          {
+            footerNav.company.map((item) => (
+              <li>
+                <BaseLink
+                  href={item.href}
+                  class="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                >
+                  {item.label}
+                </BaseLink>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <Separator class="my-8" />
+
+    <div
+      class="text-muted-foreground flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>
+        © {year}
+        {" "}
+        {site.name}. MIT licensed.
+      </p>
+      <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <BaseLink
+          href={links.github}
+          external
+          class="hover:text-foreground transition-colors"
+        >
+          GitHub
+        </BaseLink>
+        <span class="text-border" aria-hidden="true">·</span>
+        <BaseLink
+          href={links.docs}
+          class="hover:text-foreground transition-colors"
+        >
+          Docs
+        </BaseLink>
+      </p>
+    </div>
+  </Container>
+</footer>

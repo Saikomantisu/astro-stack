@@ -1,0 +1,32 @@
+---
+title: Introduction
+description: Learn what Astro Stack creates and how it helps you start a project with only the tools you choose.
+section: Guide
+order: 1
+---
+
+import Note from "@/components/docs/Note.astro";
+
+## What is Astro Stack?
+
+Astro Stack is a guided CLI for creating production-ready Astro projects. Instead of beginning with a fixed template, you choose the project type, styling, content, forms, deployment target, and development tools that fit your work.
+
+The CLI groups these choices into a short set of configuration screens, validates them, shows a final summary, and only then generates the project.
+
+## Start with the stack you need
+
+Every selection has a direct effect on the files and dependencies in the generated project. Choose Tailwind, MDX, an adapter, a form integration, or quality tooling only when you need it. Leave a feature unselected and it is not added.
+
+This keeps the output close to Astro's own conventions and avoids a generic starter full of unused configuration.
+
+## Your project is independent
+
+The generated project is yours. Astro Stack runs only while creating it; the finished application does not import or depend on `@astro-stack/*` at runtime. You can edit, deploy, transfer, or maintain it like any other Astro project.
+
+<Note>
+  Astro Stack v0.1 creates new projects only. It does not add, remove, or synchronize configuration in an existing project.
+</Note>
+
+## Next step
+
+Continue to [Installation](./installation/) to run the CLI and create your first project. Once you have a project, use the [CLI reference](./cli-reference/) for the full list of choices and automation flags.

@@ -1,0 +1,43 @@
+---
+import "@fontsource-variable/dm-sans";
+import "@fontsource-variable/manrope";
+import BaseHead from "@/components/layout/BaseHead.astro";
+import SkipLink from "@/components/layout/SkipLink.astro";
+import "@/styles/starwind.css";
+import "@/styles/fonts.css";
+import "@/styles/brand.css";
+import { site as siteConfig } from "@/lib/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  jsonLd?: boolean;
+  noindex?: boolean;
+}
+
+const {
+  title = siteConfig.name,
+  description = siteConfig.description,
+  ogImage,
+  jsonLd = false,
+  noindex = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <BaseHead
+      title={title}
+      description={description}
+      ogImage={ogImage}
+      jsonLd={jsonLd}
+      noindex={noindex}
+    />
+  </head>
+  <body class="bg-background text-foreground flex min-h-dvh flex-col antialiased">
+    <SkipLink />
+    <slot />
+  </body>
+</html>

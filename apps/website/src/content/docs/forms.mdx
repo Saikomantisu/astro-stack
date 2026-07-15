@@ -1,0 +1,42 @@
+---
+title: Forms
+description: Configure server-side contact delivery through Resend or a private webhook.
+section: Guide
+order: 5
+---
+
+import Warning from "@/components/docs/Warning.astro";
+
+## Choose a delivery method
+
+Astro Stack supports two server-side contact handlers:
+
+| Selection | Generated endpoint | Required environment variables |
+| --- | --- | --- |
+| `resend` | `POST /api/contact` | `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `RESEND_TO_EMAIL` |
+| `webhooks` | `POST /api/contact` | `WEBHOOK_URL` |
+
+Both selections create `.env.example` with the names to configure and `src/pages/api/contact.ts` with the server endpoint. Copy the example to `.env` for local development, then provide the same values through your deployment host's environment-variable settings.
+
+<Warning title="Forms need server output">
+  Resend and webhook forwarding require Vercel, Netlify, or Cloudflare. They cannot be combined with static deployment.
+</Warning>
+
+## Add the form interface
+
+The generator creates the delivery endpoint, not a contact-form design. Add your own form in a page or component and submit `name`, `email`, and `message` to `/api/contact`.
+
+```html
+<form method="post" action="/api/contact">
+  <input name="name" autocomplete="name" />
+  <input name="email" type="email" autocomplete="email" required />
+  <textarea name="message" required></textarea>
+  <button type="submit">Send message</button>
+</form>
+```
+
+The endpoint returns JSON. For a polished browser experience, submit with client-side JavaScript and display its success or error response. The handler rejects requests missing an email or message; Resend also returns an error when delivery fails, and webhook forwarding returns an error when the destination does not accept the request.
+
+## Protect the configuration
+
+Never commit `.env`. It is ignored by default. Keep `WEBHOOK_URL` private, and use a sending-only Resend API key with a verified sender domain before enabling live email delivery.

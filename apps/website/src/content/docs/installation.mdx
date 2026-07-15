@@ -1,0 +1,63 @@
+---
+title: Installation
+description: Install Astro Stack, configure a project in the guided wizard, and begin developing.
+section: Guide
+order: 2
+---
+
+import InstallCommand from "@/components/marketing/InstallCommand.astro";
+import Note from "@/components/docs/Note.astro";
+
+## Requirements
+
+- Node.js 22.13 or later
+- npm, pnpm, Yarn, or Bun
+- A terminal
+
+You do not need to install Astro Stack globally. Run the create command with the package manager you already use.
+
+## Run the create command
+
+<InstallCommand />
+
+The CLI installs the dependencies for the project you choose and writes only that package manager's lockfile.
+
+## Choose your setup
+
+The wizard groups decisions so you configure a project rather than answer a long sequence of unrelated prompts:
+
+1. **Project:** enter a project name, choose a project type and package manager. The `my-astro-project` text is a hint, not a pre-filled value. Your output directory starts as `./<project-name>` and can be changed.
+2. **Agent instructions and editor integration:** optionally add Codex or Claude instruction files, plus VS Code, Cursor, or Zed workspace setup.
+3. **Styling and tooling:** choose vanilla CSS or Tailwind, TypeScript preference, and ESLint, Prettier, or Biome.
+4. **Content:** choose no content setup, Markdown, MDX, or Content Collections.
+5. **Forms and deployment:** optionally configure Resend or webhook forms, then select static, Vercel, Netlify, or Cloudflare deployment.
+6. **Summary:** review every selection before any files are written.
+
+Arrow keys navigate menus, Enter selects an option, and Space toggles a multi-select. Press `Ctrl+C` at any point to cancel without writing files.
+
+<Note>
+  Forms using Resend or webhooks need a server-capable deployment: Vercel, Netlify, or Cloudflare. The wizard validates incompatible choices before generation.
+</Note>
+
+## Confirm and generate
+
+Choose **Confirm** from the final summary. Astro Stack creates the project, installs dependencies, and initializes Git by default. Its completion message shows the exact commands for your selected package manager, including development and build commands.
+
+If dependency installation or Git setup fails, Astro Stack returns a non-zero status and keeps the generated directory so you can inspect it. It never reports that project as ready.
+
+## Your next commands
+
+Change into the generated directory, then use the commands shown at completion. For a pnpm project, that usually begins with:
+
+```sh
+cd your-project
+pnpm dev
+```
+
+The generated README is the source of truth for the scripts included by your chosen setup.
+
+## Continue learning
+
+- Read the [CLI reference](../cli-reference/) for defaults, flags, and repeatable automation.
+- Read [Configuration](../configuration/) to see what each selection creates.
+- Read [Generated projects](../generated-projects/) to understand the ownership boundary.

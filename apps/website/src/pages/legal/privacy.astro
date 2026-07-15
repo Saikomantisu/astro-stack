@@ -1,0 +1,94 @@
+---
+import BaseLink from "@/components/common/BaseLink.astro";
+import Prose from "@/components/common/Prose.astro";
+import SimplePageLayout from "@/layouts/SimplePageLayout.astro";
+import { links, site } from "@/lib/site";
+
+const updated = "2026-07-14";
+---
+
+<SimplePageLayout
+  title="Privacy"
+  eyebrow="Legal"
+  description={`How the ${site.name} marketing site handles data.`}
+>
+  <Prose>
+    <p class="text-muted-foreground text-sm">
+      Last updated: {updated}. This is a lightweight policy for a static marketing
+      site. It is not a substitute for counsel-reviewed legal advice.
+    </p>
+
+    <h2>Summary</h2>
+    <p>
+      The {site.name} marketing website is a <strong>static site</strong>. For
+      the current release (v1 of this site):
+    </p>
+    <ul>
+      <li>
+        We do <strong>not</strong> use analytics cookies or third-party tracking
+        scripts.
+      </li>
+      <li>
+        We do <strong>not</strong> run advertising pixels or session-replay tools.
+      </li>
+      <li>
+        We do <strong>not</strong> collect accounts, profiles, or form
+        submissions through this website.
+      </li>
+    </ul>
+
+    <h2>What this site is</h2>
+    <p>
+      This site describes the {site.name} CLI and links to the open-source
+      repository and documentation. It is hosted as static files (for example on
+      GitHub Pages). Visiting the site may cause your browser to request those
+      files from the host’s infrastructure.
+    </p>
+
+    <h2>Server and infrastructure logs</h2>
+    <p>
+      Hosting providers and CDNs (such as GitHub Pages) may automatically process
+      standard request data, including IP address, user agent, timestamps, and
+      requested URLs, for security, reliability, and abuse prevention. That processing is
+      controlled by the host’s policies, not by application-level trackers we
+      install.
+    </p>
+
+    <h2>External links</h2>
+    <p>
+      Links to GitHub, npm, or other third-party sites are subject to those
+      parties’ privacy practices. We do not control cookies or tracking on
+      external sites you choose to open.
+    </p>
+
+    <h2>The Astro Stack CLI</h2>
+    <p>
+      The CLI runs on <strong>your machine</strong>. Project generation writes
+      files to a directory you choose. The marketing site does not receive your
+      project configuration or source code through the website.
+    </p>
+
+    <h2>Changes</h2>
+    <p>
+      If we add analytics or other data collection later, we will update this
+      page before enabling it and describe what is collected and why.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      For project-related questions, use the{" "}
+      <BaseLink href={links.github} external>
+        GitHub repository
+      </BaseLink>
+      {" "}
+      (issues or discussions as available).
+    </p>
+
+    <hr />
+    <p>
+      <BaseLink href="legal/terms/">Terms of use</BaseLink>
+      {" · "}
+      <BaseLink href="/">Home</BaseLink>
+    </p>
+  </Prose>
+</SimplePageLayout>

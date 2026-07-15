@@ -1,0 +1,27 @@
+---
+import { Card } from "@/components/starwind/card";
+import { withBase } from "@/lib/paths";
+
+interface Props {
+  title: string;
+  description: string;
+  icon: string;
+  iconAlt: string;
+}
+
+const { title, description, icon, iconAlt } = Astro.props;
+---
+
+<Card class="border-border/70 bg-card/55 h-full gap-0 overflow-hidden py-0 transition-colors hover:border-primary/40">
+  <div class="border-border/70 flex min-h-24 items-center justify-between gap-5 border-b px-6 py-5">
+    <h3 class="font-display text-xl tracking-tight">{title}</h3>
+    <img
+      src={withBase(icon)}
+      alt={iconAlt}
+      class="size-9 shrink-0 object-contain"
+      width="36"
+      height="36"
+    />
+  </div>
+  <p class="text-muted-foreground px-6 py-6 text-base leading-relaxed">{description}</p>
+</Card>

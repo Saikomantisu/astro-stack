@@ -1,0 +1,40 @@
+---
+import BaseLink from "@/components/common/BaseLink.astro";
+import { site } from "@/lib/site";
+
+interface Props {
+  class?: string;
+  /** When true, render as a non-link (e.g. inside a heading). */
+  static?: boolean;
+  size?: "sm" | "md" | "lg";
+}
+
+const { class: className, static: isStatic = false, size = "md" } = Astro.props;
+
+const sizeClass =
+  size === "sm"
+    ? "text-sm gap-1.5"
+    : size === "lg"
+      ? "text-xl gap-2 sm:text-2xl"
+      : "text-base gap-1.5 sm:text-lg";
+
+const markClass = [
+  "font-display inline-flex items-baseline font-semibold tracking-tight",
+  sizeClass,
+  className,
+];
+---
+
+{
+  isStatic ? (
+    <span class:list={markClass}>{site.name}</span>
+  ) : (
+    <BaseLink
+      href="/"
+      class="inline-flex items-center rounded-md outline-none focus-visible:ring-3 focus-visible:ring-outline/50"
+      aria-label={`${site.name} home`}
+    >
+      <span class:list={markClass}>{site.name}</span>
+    </BaseLink>
+  )
+}

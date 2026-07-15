@@ -1,0 +1,43 @@
+---
+title: Troubleshooting
+description: Recover from validation, output directory, installation, Git, and hook setup problems.
+section: Reference
+order: 5
+---
+
+import Warning from "@/components/docs/Warning.astro";
+
+## A selection is rejected
+
+Astro Stack validates invalid, duplicate, and incompatible selections before it writes project files. Read the reported message and correct the named choice, then run the command again.
+
+Common compatibility rules:
+
+- Resend and webhook forms require Vercel, Netlify, or Cloudflare; they cannot use `static` deployment.
+- VS Code and Cursor cannot be selected together because both manage `.vscode` workspace files.
+- A pre-commit hook requires Git initialization. Do not combine `--hooks` with `--no-git`.
+- In non-interactive mode, pair `--non-interactive` with `--yes` so the command cannot pause at confirmation.
+
+## The output directory already exists
+
+Astro Stack never overwrites an existing project directory. Choose a new `--directory` value, change the directory in the interactive flow, or remove a prior generated directory only after confirming it contains nothing you need.
+
+## Dependency installation fails
+
+The generated directory remains available when installation fails. Inspect the package manager's error, confirm that you are using a supported Node.js release and package manager, then retry from the generated project directory if appropriate.
+
+For the Astro Stack CLI itself, use Node.js 22.13 or later. Generated projects require Node.js 22.12 or later on an even-numbered Node.js release.
+
+## Git or hook setup fails
+
+Git initialization and hook activation happen after files are rendered. If either fails, Astro Stack returns a non-zero status and does not report the project as ready. The project directory is retained for inspection.
+
+If you need to avoid Git setup, rerun with `--no-git`. If you enable hooks, ensure Git is installed and leave Git initialization enabled.
+
+<Warning title="Do not assume a failed run is ready">
+  A non-zero exit status means generation, dependency installation, Git initialization, or hook setup did not complete successfully. Resolve the reported failure before treating the project as ready to develop or deploy.
+</Warning>
+
+## Get more context
+
+Use `--help` to inspect the supported option names and values. For a successful generated project, consult its README for the scripts that were actually created. If you find a reproducible CLI issue, include the command, selected options, and error output when opening an issue in the Astro Stack repository.

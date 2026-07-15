@@ -1,0 +1,25 @@
+---
+import { Card } from "@/components/starwind/card";
+
+interface Props {
+  number: number;
+  title: string;
+  description: string;
+}
+
+const { number, title, description } = Astro.props;
+---
+
+<Card
+  class="border-border/70 bg-card/55 gap-0 overflow-hidden py-0 transition-colors hover:border-primary/40"
+>
+  <div class="border-border/70 flex items-center gap-4 border-b px-6 py-4">
+    <span class="text-peach font-display text-lg font-semibold">
+      {String(number).padStart(2, "0")}
+    </span>
+    <h3 class="font-display text-base tracking-tight">{title}</h3>
+  </div>
+  <p class="text-muted-foreground px-6 py-5 text-sm leading-relaxed">
+    {description}
+  </p>
+</Card>

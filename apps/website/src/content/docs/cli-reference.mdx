@@ -1,0 +1,91 @@
+---
+title: CLI reference
+description: Supported choices, defaults, automation flags, and command examples for create-astro-stack.
+section: Reference
+order: 2
+---
+
+import CodeBlock from "@/components/docs/CodeBlock.astro";
+import Warning from "@/components/docs/Warning.astro";
+
+## Installation commands
+
+Run Astro Stack with the package manager you use. No global installation is needed.
+
+<CodeBlock label="npm" code="npm create astro-stack@latest" />
+<CodeBlock label="pnpm" code="pnpm create astro-stack" />
+<CodeBlock label="Yarn" code="yarn create astro-stack" />
+<CodeBlock label="Bun" code="bun create astro-stack" />
+
+## Supported choices and defaults
+
+| Area | Choices | Default |
+| --- | --- | --- |
+| Project type | `marketing`, `client`, `blog`, `documentation`, `portfolio`, `saas-landing`, `blank` | `blank` |
+| Package manager | `npm`, `pnpm`, `yarn`, `bun` | `pnpm` |
+| CSS | `vanilla`, `tailwind` | `vanilla` |
+| TypeScript | `strict`, `relaxed` | `strict` |
+| Code quality | ESLint, Prettier, Biome | All selected |
+| Content | `none`, `markdown`, `mdx`, `collections` | `none` |
+| Forms | `none`, `resend`, `webhooks` | `none` |
+| Deployment | `static`, `vercel`, `netlify`, `cloudflare` | `static` |
+| Agent instructions | `codex`, `claude` | None |
+| Editor integration | `vscode`, `cursor`, `zed` | None |
+| Git repository | Initialize or skip | Initialize |
+| Pre-commit hook | Install or skip | Skip |
+
+## Non-interactive automation
+
+Use `--non-interactive --yes` together in scripts. Without `--yes`, a non-interactive run is rejected instead of pausing for confirmation.
+
+<CodeBlock label="Automated project" code={`create-astro-stack --non-interactive --yes \\
+  --name launch-site --directory ./launch-site --type marketing \\
+  --css tailwind --content mdx --deployment vercel \\
+  --agent codex --agent claude --editor vscode --hooks`} />
+
+| Option | Values or behavior |
+| --- | --- |
+| `--name <name>` | Lowercase letters, numbers, and hyphens. In automation, provide it explicitly. |
+| `--directory <path>` | Output directory. |
+| `--type <type>` | Any supported project type. |
+| `--package-manager <manager>` | `npm`, `pnpm`, `yarn`, or `bun`. |
+| `--css <framework>` | `vanilla` or `tailwind`. |
+| `--typescript <preference>` | `strict` or `relaxed`. |
+| `--content <setup>` | `none`, `markdown`, `mdx`, or `collections`. |
+| `--forms <integration>` | `none`, `resend`, or `webhooks`. |
+| `--deployment <target>` | `static`, `vercel`, `netlify`, or `cloudflare`. |
+| `--agent <target>` | Repeat for `codex` and/or `claude`. |
+| `--editor <target>` | Repeat for `vscode`, `cursor`, and/or `zed`. |
+| `--no-eslint`, `--no-prettier`, `--no-biome` | Remove one of the default code-quality tools. |
+| `--no-git` | Skip Git initialization. |
+| `--hooks`, `--no-hooks` | Explicitly enable or skip the pre-commit hook. |
+| `--yes` | Confirm generation. Required with `--non-interactive`. |
+| `--non-interactive` | Do not display prompts. |
+
+<Warning title="Validate combinations before automation">
+  Resend and webhooks cannot use `static` deployment. VS Code and Cursor cannot be selected together. Hooks require Git, so `--hooks --no-git` fails before files are written.
+</Warning>
+
+## Examples
+
+### Minimal marketing site
+
+<CodeBlock label="npm" code={`npm create astro-stack@latest -- --non-interactive --yes \\
+  --name launch-site --directory ./launch-site --type marketing \\
+  --no-eslint --no-prettier --no-biome`} />
+
+### Blog with MDX and Vercel
+
+<CodeBlock label="pnpm" code={`pnpm create astro-stack -- --non-interactive --yes \\
+  --name studio-journal --type blog --css tailwind --content mdx \\
+  --deployment vercel --agent codex`} />
+
+### Webhook form on Netlify
+
+<CodeBlock label="Yarn" code={`yarn create astro-stack --non-interactive --yes \\
+  --name contact-site --type client --forms webhooks --deployment netlify \\
+  --editor vscode --hooks`} />
+
+## Exit behavior
+
+Invalid values, duplicate selections, and incompatible choices return a non-zero exit status before the generator runs. Generator failures also return non-zero and are never reported as a ready project. Use `--help` for the command's complete built-in option list.

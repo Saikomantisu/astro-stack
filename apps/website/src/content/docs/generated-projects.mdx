@@ -1,0 +1,40 @@
+---
+title: Generated projects
+description: Understand what Astro Stack writes, what it never retains, and how to maintain the project after creation.
+section: Reference
+order: 4
+---
+
+import Note from "@/components/docs/Note.astro";
+
+## You own the result
+
+When generation finishes, your project is an ordinary independent Astro codebase. You can rename, edit, delete, deploy, transfer, or stop using it without involving Astro Stack.
+
+Astro Stack writes a minimal Astro application, the configuration and dependencies required by your selected options, and any selected developer-experience files. This can include source files, `package.json`, Astro configuration, integration configuration, documentation, and optional Git, editor, agent-instruction, and hook files.
+
+## No Astro Stack runtime dependency
+
+Generated projects do not import, execute, or list an `@astro-stack/*` package in `dependencies` or `devDependencies`. Astro Stack runs only while the project is being created.
+
+Afterward, development, builds, previews, and deployment use the generated project's scripts and the dependencies selected for it. A base project includes Astro, TypeScript, and Astro's type-checking tool as development dependencies. Tailwind, MDX, adapters, Resend, and quality tools add only their selected packages.
+
+<Note>
+  To verify the boundary yourself, inspect the generated `package.json` and source imports. Neither should reference `@astro-stack/*`.
+</Note>
+
+## Maintain the generated project
+
+Run installs, development, builds, and dependency upgrades from the generated project's directory with the package manager selected during setup. The generated README lists the commands available for that exact configuration.
+
+Astro Stack v0.1 does not provide a project-update or configuration-sync command. Upgrade Astro, integrations, and application code directly in your project on the schedule that suits your team.
+
+## What changes when you add options
+
+The generator adds the configuration each selected option needs, rather than a fixed bundle:
+
+- Tailwind adds its Vite plugin and development dependencies.
+- MDX adds Astro's MDX integration.
+- A deployment target adds its official adapter.
+- Resend adds its runtime dependency and required environment-variable guidance.
+- Editor, agent, and hook selections add only their chosen project-owned files.

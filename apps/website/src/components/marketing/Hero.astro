@@ -1,0 +1,95 @@
+---
+import Section from "@/components/common/Section.astro";
+import InstallCommand from "@/components/marketing/InstallCommand.astro";
+import { Badge } from "@/components/starwind/badge";
+import { Button } from "@/components/starwind/button";
+import { trustItems } from "@/lib/content/trust";
+import { withBase } from "@/lib/paths";
+import { cta, links, site } from "@/lib/site";
+
+const gettingStartedHref = withBase(cta.href);
+---
+
+<Section
+  class="relative isolate overflow-x-clip pt-10 sm:pt-16"
+  containerClass="relative"
+>
+  {
+    /*
+    Soft brand wash, decorative only. Give the layers room to bleed outside
+    the hero so their falloff merges with the page canvas instead of revealing
+    the section's rectangular bounds.
+  */
+  }
+  <div
+    class="pointer-events-none absolute -inset-x-24 -top-24 -bottom-32 -z-10"
+    aria-hidden="true"
+  >
+    <div
+      class="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_8%,color-mix(in_oklab,var(--primary)_38%,transparent),transparent_74%)]"
+    >
+    </div>
+    <div
+      class="absolute top-24 right-[-4rem] size-64 rounded-full bg-peach/15 blur-3xl"
+    >
+    </div>
+    <div
+      class="bg-primary/25 absolute top-8 left-1/2 h-56 w-[28rem] -translate-x-1/2 rounded-full blur-3xl"
+    >
+    </div>
+  </div>
+
+  <div class="relative mx-auto max-w-3xl text-center">
+    <Badge variant="secondary" class="mb-6">
+      <span class="text-peach" aria-hidden="true">✦</span>
+      &nbsp;v0.1 · ready for liftoff
+    </Badge>
+
+    <h1
+      class="font-display text-4xl tracking-tight text-balance sm:text-5xl lg:text-6xl"
+    >
+      {site.tagline}
+    </h1>
+
+    <p
+      class="text-muted-foreground mx-auto mt-5 max-w-2xl text-lg leading-relaxed sm:text-xl"
+    >
+      A guided CLI for production-ready Astro projects. Choose your stack in a
+      focused flight plan, then generate clean, project-owned code with only the
+      tools you need.
+    </p>
+
+    <div class="mx-auto mt-8 flex w-full max-w-xl flex-col items-center gap-4">
+      <InstallCommand class="w-full" />
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <Button href={gettingStartedHref} variant="primary">
+          {cta.label}
+        </Button>
+        <Button
+          href={links.github}
+          variant="secondary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View on GitHub
+        </Button>
+      </div>
+    </div>
+  </div>
+
+  <ul
+    class="border-border/60 mt-14 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t pt-8"
+    aria-label="Platform highlights"
+  >
+    {
+      trustItems.map((item) => (
+        <li class="text-muted-foreground flex items-center gap-2 text-sm">
+          <span class="text-peach" aria-hidden="true">
+            ✦
+          </span>
+          {item.label}
+        </li>
+      ))
+    }
+  </ul>
+</Section>

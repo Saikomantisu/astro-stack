@@ -1,0 +1,52 @@
+---
+import BaseLink from "@/components/common/BaseLink.astro";
+import { docsHref, docsNavigation } from "@/lib/docs";
+
+interface Props {
+  currentSlug?: string;
+  mobile?: boolean;
+}
+
+const { currentSlug, mobile = false } = Astro.props;
+const sections = ["Guide", "Reference"] as const;
+---
+
+<nav aria-label="Documentation" class:list={[mobile ? "" : "hidden lg:block"]}>
+  <div class="space-y-8">
+    {
+      sections.map((section) => {
+        const items = docsNavigation.filter((item) => item.section === section);
+        return (
+          <section aria-labelledby={`docs-nav-${section.replaceAll(" ", "-").toLowerCase()}`}>
+            <h2 id={`docs-nav-${section.replaceAll(" ", "-").toLowerCase()}`} class="text-foreground mb-3 px-3 text-sm font-bold tracking-tight">
+              {section}
+            </h2>
+            <ul class="border-border/60 space-y-1 border-l">
+              {
+                items.map((item) => {
+                  const active = item.slug === currentSlug;
+                  return (
+                    <li>
+                      <BaseLink
+                        href={docsHref(item.slug)}
+                        aria-current={active ? "page" : undefined}
+                        class:list={[
+                          "focus-visible:ring-outline/60 -ml-px block border-l-2 border-transparent px-4 py-2 text-sm font-medium transition-colors outline-none focus-visible:ring-2",
+                          active
+                            ? "border-primary bg-primary/15 text-foreground"
+                            : "text-muted-foreground hover:border-primary/50 hover:bg-muted/60 hover:text-foreground",
+                        ]}
+                      >
+                        {item.label}
+                      </BaseLink>
+                    </li>
+                  );
+                })
+              }
+            </ul>
+          </section>
+        );
+      })
+    }
+  </div>
+</nav>

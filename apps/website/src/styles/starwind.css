@@ -1,0 +1,213 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/forms";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--starwind-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--starwind-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-accent: var(--primary-accent);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-accent: var(--secondary-accent);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-outline: var(--outline);
+  --color-peach: var(--peach);
+  --color-cyan: var(--cyan);
+
+  --font-sans:
+    "DM Sans Variable", "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-xs: calc(var(--radius) - 0.375rem);
+  --radius-sm: calc(var(--radius) - 0.25rem);
+  --radius-md: calc(var(--radius) - 0.125rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+  --radius-2xl: calc(var(--radius) + 0.5rem);
+  --radius-3xl: calc(var(--radius) + 1rem);
+
+  --color-sidebar: var(--sidebar-background);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-outline: var(--sidebar-outline);
+}
+
+/* Light tokens retained for Starwind completeness; shell always uses .dark. */
+:root {
+  --background: var(--color-white);
+  --foreground: var(--color-neutral-950);
+  --card: var(--color-white);
+  --card-foreground: var(--color-neutral-950);
+  --popover: var(--color-white);
+  --popover-foreground: var(--color-neutral-950);
+  --primary: oklch(0.55 0.24 310);
+  --primary-foreground: oklch(0.98 0.01 300);
+  --primary-accent: oklch(0.45 0.22 310);
+  --secondary: var(--color-neutral-200);
+  --secondary-foreground: var(--color-neutral-950);
+  --secondary-accent: var(--color-neutral-950);
+  --muted: var(--color-neutral-100);
+  --muted-foreground: var(--color-neutral-600);
+  --accent: var(--color-neutral-100);
+  --accent-foreground: var(--color-neutral-900);
+  --info: oklch(0.78 0.12 210);
+  --info-foreground: oklch(0.22 0.04 230);
+  --success: oklch(0.78 0.14 150);
+  --success-foreground: oklch(0.22 0.04 150);
+  --warning: oklch(0.82 0.12 85);
+  --warning-foreground: oklch(0.25 0.04 70);
+  --error: oklch(0.55 0.2 25);
+  --error-foreground: oklch(0.98 0.01 300);
+  --border: var(--color-neutral-200);
+  --input: var(--color-neutral-200);
+  --outline: oklch(0.55 0.18 310);
+  --radius: 0.625rem;
+  --peach: oklch(0.82 0.12 75);
+  --peach-foreground: oklch(0.22 0.03 60);
+  --cyan: var(--info);
+
+  --sidebar-background: var(--color-neutral-50);
+  --sidebar-foreground: var(--color-neutral-950);
+  --sidebar-primary: oklch(0.55 0.24 310);
+  --sidebar-primary-foreground: oklch(0.98 0.01 300);
+  --sidebar-accent: var(--color-neutral-100);
+  --sidebar-accent-foreground: var(--color-neutral-900);
+  --sidebar-border: var(--color-neutral-200);
+  --sidebar-outline: var(--color-neutral-400);
+}
+
+/*
+ * Astro Stack dark brand tokens.
+ * Source of meaning: packages/cli/src/brand.ts (magenta primary, peach accent, cyan keys).
+ * --secondary stays muted chrome; peach is a separate brand token.
+ */
+html.dark {
+  color-scheme: dark;
+
+  /* Canvas: deep space */
+  --background: #0f0b14;
+  --foreground: oklch(0.97 0.01 300);
+
+  /* Surfaces */
+  --card: oklch(0.2 0.025 300);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.22 0.03 300);
+  --popover-foreground: var(--foreground);
+
+  /* Primary = CLI magenta / violet */
+  --primary: oklch(0.55 0.24 310);
+  --primary-foreground: oklch(0.98 0.01 300);
+  --primary-accent: oklch(0.72 0.16 310);
+
+  /* Secondary = muted chrome (NOT peach) */
+  --secondary: oklch(0.28 0.02 300);
+  --secondary-foreground: oklch(0.96 0.01 300);
+  --secondary-accent: oklch(0.4 0.03 300);
+
+  --muted: oklch(0.24 0.02 300);
+  --muted-foreground: oklch(0.72 0.02 300);
+
+  --accent: oklch(0.28 0.04 300);
+  --accent-foreground: oklch(0.96 0.01 300);
+
+  /* Info = CLI cyan for keys / informational chrome */
+  --info: oklch(0.78 0.12 210);
+  --info-foreground: oklch(0.22 0.04 230);
+
+  /* Status: complete so Starwind defaults do not leak */
+  --success: oklch(0.78 0.14 150);
+  --success-foreground: oklch(0.22 0.04 150);
+  --warning: oklch(0.82 0.12 85);
+  --warning-foreground: oklch(0.25 0.04 70);
+  --error: oklch(0.55 0.2 25);
+  --error-foreground: oklch(0.98 0.01 300);
+
+  --border: oklch(0.97 0.01 300 / 0.1);
+  --input: oklch(0.97 0.01 300 / 0.15);
+  --outline: oklch(0.7 0.18 310);
+
+  /* Sidebar tokens (unused in marketing shell; keep brand-consistent) */
+  --sidebar-background: oklch(0.18 0.025 300);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-outline: var(--outline);
+
+  /* Brand peach (CLI yellow accent), not Starwind --secondary */
+  --peach: oklch(0.82 0.12 75);
+  --peach-foreground: oklch(0.22 0.03 60);
+  --cyan: var(--info);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  * {
+    @apply border-border outline-outline/50;
+  }
+  body {
+    @apply bg-background text-foreground scheme-light dark:scheme-dark;
+  }
+  button {
+    @apply cursor-pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

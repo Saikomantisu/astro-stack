@@ -1,0 +1,43 @@
+---
+import Section from "@/components/common/Section.astro";
+---
+
+<Section
+  id="terminal"
+  compact
+  aria-labelledby="terminal-heading"
+  class="overflow-hidden"
+>
+  <div class="mx-auto mb-10 max-w-2xl text-center">
+    <p class="text-peach mb-3 text-sm font-medium tracking-wide uppercase">
+      <span aria-hidden="true">✦</span>
+      {" "}
+      In the terminal
+    </p>
+    <h2
+      id="terminal-heading"
+      class="font-display text-3xl tracking-tight text-balance sm:text-4xl"
+    >
+      A clear setup flow from prompt to project
+    </h2>
+    <p class="text-muted-foreground mt-4 text-lg leading-relaxed">
+      Make the choices that shape your project, review the complete plan, then
+      generate and install without deleting a pile of demo files afterward.
+    </p>
+  </div>
+
+  <div class="border-border bg-background/90 relative mx-auto max-w-5xl overflow-hidden rounded-xl border shadow-xl">
+    <video
+      class="aspect-video w-full bg-black object-cover"
+      src="/videos/astro-stack-cli-demo.mp4"
+      aria-label="Astro Stack CLI creating and configuring a marketing website in the terminal"
+      autoplay
+      loop
+      muted
+      playsinline
+      preload="metadata"
+    >
+      Your browser does not support embedded video.
+    </video>
+  </div>
+</Section>

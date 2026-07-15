@@ -1,0 +1,135 @@
+---
+import Check from "@tabler/icons/outline/check.svg";
+import Copy from "@tabler/icons/outline/copy.svg";
+import { Button } from "@/components/starwind/button";
+
+interface Props {
+  /** Exact string written to the clipboard. */
+  value: string;
+  class?: string;
+  size?: "sm" | "md" | "lg" | "icon" | "icon-sm" | "icon-lg";
+  variant?:
+    | "default"
+    | "primary"
+    | "secondary"
+    | "outline"
+    | "ghost"
+    | "info"
+    | "success"
+    | "warning"
+    | "error";
+  label?: string;
+  copiedLabel?: string;
+  /** Render a compact, accessible icon control instead of a text button. */
+  iconOnly?: boolean;
+}
+
+const {
+  value,
+  class: className,
+  size,
+  variant = "secondary",
+  label = "Copy",
+  copiedLabel = "Copied",
+  iconOnly = false,
+} = Astro.props;
+
+const buttonSize = size ?? (iconOnly ? "icon-sm" : "sm");
+---
+
+<span class:list={["inline-flex", className]} data-copy-root>
+  <Button
+    type="button"
+    size={buttonSize}
+    variant={variant}
+    class:list={["copy-button", !iconOnly && "min-w-20"]}
+    data-copy-button
+    data-copy-state="idle"
+    data-copy-value={value}
+    data-label={label}
+    data-copied-label={copiedLabel}
+    aria-label={`Copy ${value}`}
+  >
+    {
+      iconOnly ? (
+        <>
+          <Copy aria-hidden="true" data-copy-icon="copy" />
+          <Check aria-hidden="true" data-copy-icon="check" />
+          <span class="sr-only" data-copy-label>{label}</span>
+        </>
+      ) : (
+        <span data-copy-label>{label}</span>
+      )
+    }
+  </Button>
+  <span class="sr-only" data-copy-status aria-live="polite"></span>
+</span>
+
+<style is:global>
+  [data-copy-button][data-copy-state="copied"] [data-copy-icon="copy"],
+  [data-copy-button]:not([data-copy-state="copied"]) [data-copy-icon="check"] {
+    display: none;
+  }
+
+  [data-copy-button][data-copy-state="copied"] {
+    background-color: var(--color-success);
+    color: var(--color-success-foreground);
+  }
+
+  [data-copy-button][data-copy-state="copied"]:hover {
+    background-color: color-mix(in oklab, var(--color-success), transparent 10%);
+  }
+</style>
+
+<script>
+  const resetTimers = new WeakMap<HTMLElement, number>();
+
+  function setupCopyButtons(root: ParentNode = document) {
+    root.querySelectorAll<HTMLElement>("[data-copy-button]").forEach((button) => {
+      if (button.dataset.copyBound === "true") return;
+      button.dataset.copyBound = "true";
+
+      button.addEventListener("click", async () => {
+        const value = button.dataset.copyValue ?? "";
+        const label = button.dataset.label ?? "Copy";
+        const copiedLabel = button.dataset.copiedLabel ?? "Copied";
+        const labelEl = button.querySelector<HTMLElement>("[data-copy-label]");
+        const statusEl = button
+          .closest("[data-copy-root]")
+          ?.querySelector<HTMLElement>("[data-copy-status]");
+
+        const resetTimer = resetTimers.get(button);
+        if (resetTimer) window.clearTimeout(resetTimer);
+
+        try {
+          await navigator.clipboard.writeText(value);
+          button.dataset.copyState = "copied";
+          if (labelEl) labelEl.textContent = copiedLabel;
+          if (statusEl) statusEl.textContent = "Copied to clipboard";
+          button.setAttribute("aria-label", `${copiedLabel}: ${value}`);
+
+          const timer = window.setTimeout(() => {
+            button.dataset.copyState = "idle";
+            if (labelEl) labelEl.textContent = label;
+            if (statusEl) statusEl.textContent = "";
+            button.setAttribute("aria-label", `Copy ${value}`);
+          }, 2000);
+          resetTimers.set(button, timer);
+        } catch {
+          button.dataset.copyState = "failed";
+          if (statusEl) statusEl.textContent = "Copy failed";
+          if (labelEl) labelEl.textContent = "Failed";
+          const timer = window.setTimeout(() => {
+            button.dataset.copyState = "idle";
+            if (labelEl) labelEl.textContent = label;
+            if (statusEl) statusEl.textContent = "";
+          }, 2000);
+          resetTimers.set(button, timer);
+        }
+      });
+    });
+  }
+
+  setupCopyButtons();
+  document.addEventListener("astro:after-swap", () => setupCopyButtons());
+</script>

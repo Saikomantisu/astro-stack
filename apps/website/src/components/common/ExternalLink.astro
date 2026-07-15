@@ -1,0 +1,15 @@
+---
+import BaseLink from "@/components/common/BaseLink.astro";
+
+interface Props {
+  href: string;
+  class?: string;
+  "aria-label"?: string;
+}
+
+const { href, class: className, "aria-label": ariaLabel } = Astro.props;
+---
+
+<BaseLink href={href} external class={className} aria-label={ariaLabel}>
+  <slot />
+</BaseLink>

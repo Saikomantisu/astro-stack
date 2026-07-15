@@ -1,0 +1,125 @@
+---
+import ArrowUpRight from "@tabler/icons/outline/arrow-up-right.svg";
+import BrandGithub from "@tabler/icons/outline/brand-github.svg";
+import BrandNpm from "@tabler/icons/outline/brand-npm.svg";
+import BaseLink from "@/components/common/BaseLink.astro";
+import Wordmark from "@/components/common/Wordmark.astro";
+import { Button } from "@/components/starwind/button";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/starwind/sheet";
+import { withBase } from "@/lib/paths";
+import { cta, links, primaryNav } from "@/lib/site";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+const ctaHref = withBase(cta.href);
+---
+
+<div class:list={["md:hidden", className]}>
+  <Sheet>
+    <SheetTrigger asChild>
+      <Button
+        variant="outline"
+        size="icon"
+        class="size-10"
+        aria-label="Open navigation menu"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 6h16"></path>
+          <path d="M4 12h16"></path>
+          <path d="M4 18h16"></path>
+        </svg>
+      </Button>
+    </SheetTrigger>
+    <SheetContent side="right" class="w-[min(100%,22rem)]">
+      <SheetHeader class="border-border/70 flex-row items-center border-b px-5 py-4 pr-14">
+        <Wordmark static size="md" />
+        <SheetTitle class="sr-only">Navigation menu</SheetTitle>
+        <SheetDescription class="sr-only">Site navigation links</SheetDescription>
+      </SheetHeader>
+      <nav class="flex flex-1 flex-col px-5 py-5" aria-label="Mobile">
+        <div class="flex flex-col gap-1">
+        {
+          primaryNav.map((item) => (
+            <SheetClose asChild>
+              <BaseLink
+                href={item.href}
+                class="hover:bg-muted hover:text-foreground focus-visible:ring-outline/50 rounded-md px-3 py-3 text-lg font-medium transition-colors outline-none focus-visible:ring-3"
+              >
+                {item.label}
+              </BaseLink>
+            </SheetClose>
+          ))
+        }
+          <SheetClose asChild>
+            <BaseLink
+              href={links.docs}
+              class="hover:bg-muted hover:text-foreground focus-visible:ring-outline/50 rounded-md px-3 py-3 text-lg font-medium transition-colors outline-none focus-visible:ring-3"
+            >
+              Documentation
+            </BaseLink>
+          </SheetClose>
+        </div>
+
+        <div class="mt-6 border-t border-border pt-5">
+          <p class="text-muted-foreground mb-3 px-3 text-xs font-semibold tracking-[0.16em] uppercase">
+            Elsewhere
+          </p>
+          <div class="flex flex-col">
+            <BaseLink
+              href={links.github}
+              external
+              class="hover:bg-muted focus-visible:ring-outline/50 group flex items-center gap-3 rounded-md px-3 py-3 text-base font-medium transition-colors outline-none focus-visible:ring-3"
+            >
+              <span class="bg-card border-border/70 flex size-9 items-center justify-center rounded-md border">
+                <BrandGithub class="size-4" aria-hidden="true" />
+              </span>
+              <span class="flex-1">GitHub</span>
+              <ArrowUpRight class="text-muted-foreground group-hover:text-foreground size-4 transition-colors" aria-hidden="true" />
+            </BaseLink>
+            <BaseLink
+              href={links.npm}
+              external
+              class="hover:bg-muted focus-visible:ring-outline/50 group flex items-center gap-3 rounded-md px-3 py-3 text-base font-medium transition-colors outline-none focus-visible:ring-3"
+            >
+              <span class="bg-card border-border/70 flex size-9 items-center justify-center rounded-md border">
+                <BrandNpm class="size-4" aria-hidden="true" />
+              </span>
+              <span class="flex-1">npm</span>
+              <ArrowUpRight class="text-muted-foreground group-hover:text-foreground size-4 transition-colors" aria-hidden="true" />
+            </BaseLink>
+          </div>
+        </div>
+
+        <div class="mt-auto pt-6">
+          <SheetClose asChild>
+            <Button href={ctaHref} variant="primary" class="w-full">
+              {cta.label}
+            </Button>
+          </SheetClose>
+        </div>
+      </nav>
+    </SheetContent>
+  </Sheet>
+</div>

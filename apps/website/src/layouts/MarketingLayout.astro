@@ -1,0 +1,27 @@
+---
+import SiteFooter from "@/components/layout/SiteFooter.astro";
+import SiteHeader from "@/components/layout/SiteHeader.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site as siteConfig } from "@/lib/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Enable homepage SoftwareApplication / WebSite JSON-LD. */
+  jsonLd?: boolean;
+}
+
+const {
+  title = siteConfig.name,
+  description = siteConfig.description,
+  jsonLd = false,
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <SiteHeader />
+  <main id="main-content" class="flex-1">
+    <slot />
+  </main>
+  <SiteFooter />
+</BaseLayout>

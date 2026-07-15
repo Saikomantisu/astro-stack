@@ -1,0 +1,78 @@
+---
+import BaseLink from "@/components/common/BaseLink.astro";
+import Prose from "@/components/common/Prose.astro";
+import SimplePageLayout from "@/layouts/SimplePageLayout.astro";
+import { links, site } from "@/lib/site";
+
+const updated = "2026-07-14";
+---
+
+<SimplePageLayout
+  title="Terms of use"
+  eyebrow="Legal"
+  description={`Terms for using the ${site.name} website and open-source software.`}
+>
+  <Prose>
+    <p class="text-muted-foreground text-sm">
+      Last updated: {updated}. This is a lightweight, MIT-oriented stub for early
+      public use. It is not a substitute for counsel-reviewed legal terms.
+    </p>
+
+    <h2>Website</h2>
+    <p>
+      This marketing website is provided “as is” for informational purposes. We
+      aim to keep descriptions accurate, but features, docs, and release status
+      may change. Nothing on this site is a warranty or service-level commitment.
+    </p>
+
+    <h2>Open-source software</h2>
+    <p>
+      The {site.name} CLI and related packages in the{" "}
+      <BaseLink href={links.github} external>
+        public repository
+      </BaseLink>
+      {" "}
+      are released under the{" "}
+      <BaseLink href={`${links.github}/blob/main/LICENSE`} external>
+        MIT License
+      </BaseLink>
+      . That license governs use, modification, and redistribution of the
+      software. Generated projects are yours to use under the terms of the
+      licenses of the code and dependencies they contain.
+    </p>
+
+    <h2>No professional advice</h2>
+    <p>
+      Documentation and marketing copy are not legal, security, or compliance
+      advice. Evaluate generated projects for your own requirements before
+      production use.
+    </p>
+
+    <h2>Acceptable use of this site</h2>
+    <p>
+      Do not attempt to disrupt, scrape abusively, or misuse the hosting
+      infrastructure. Report security issues related to the project through
+      responsible channels on GitHub when available.
+    </p>
+
+    <h2>Limitation of liability</h2>
+    <p>
+      To the fullest extent permitted by law, the authors and copyright holders
+      are not liable for damages arising from use of this website or the
+      software, consistent with the MIT License disclaimer.
+    </p>
+
+    <h2>Changes</h2>
+    <p>
+      We may update these terms as the project and website evolve. Continued use
+      of the site after updates constitutes acceptance of the revised terms.
+    </p>
+
+    <hr />
+    <p>
+      <BaseLink href="legal/privacy/">Privacy</BaseLink>
+      {" · "}
+      <BaseLink href="/">Home</BaseLink>
+    </p>
+  </Prose>
+</SimplePageLayout>

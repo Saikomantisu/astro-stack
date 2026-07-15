@@ -1,0 +1,73 @@
+---
+import ChevronRight from "@tabler/icons/outline/chevron-right.svg";
+import Home from "@tabler/icons/outline/home.svg";
+import type { MarkdownHeading } from "astro";
+import BaseLink from "@/components/common/BaseLink.astro";
+import Container from "@/components/common/Container.astro";
+import DocsArticle from "@/components/docs/DocsArticle.astro";
+import DocsHeader from "@/components/docs/DocsHeader.astro";
+import DocsSidebar from "@/components/docs/DocsSidebar.astro";
+import TableOfContents from "@/components/docs/TableOfContents.astro";
+import SiteFooter from "@/components/layout/SiteFooter.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { docsHref, docsNeighbours } from "@/lib/docs";
+import { site } from "@/lib/site";
+
+interface Props {
+  title: string;
+  description: string;
+  slug: string;
+  headings: MarkdownHeading[];
+}
+
+const { title, description, slug, headings } = Astro.props;
+const { previous, next } = docsNeighbours(slug);
+---
+
+<BaseLayout title={`${title} · Docs · ${site.name}`} description={description}>
+  <DocsHeader />
+  <main id="main-content" class="flex-1">
+    <Container class="py-8 lg:py-10">
+      <div class="grid gap-10 lg:grid-cols-[12rem_minmax(0,1fr)] xl:grid-cols-[12rem_minmax(0,1fr)_11rem] xl:gap-x-8">
+        <aside class="lg:sticky lg:top-24 lg:self-start lg:border-r lg:border-border/60 lg:pr-5">
+          <DocsSidebar currentSlug={slug} />
+        </aside>
+
+        <div class="min-w-0">
+          <div class="border-border/70 bg-card/35 mb-8 rounded-xl border p-4 lg:hidden">
+            <details>
+              <summary class="cursor-pointer text-sm font-semibold">Documentation navigation</summary>
+              <div class="pt-4"><DocsSidebar currentSlug={slug} mobile /></div>
+            </details>
+          </div>
+          <header class="mb-9 border-b border-border/60 pb-8">
+            <nav aria-label="Breadcrumb" class="text-muted-foreground mb-6 flex items-center gap-2 text-sm">
+              <BaseLink href="docs/" class="hover:text-foreground focus-visible:ring-outline/60 rounded outline-none focus-visible:ring-2" aria-label="Documentation introduction"><Home class="size-4" aria-hidden="true" /></BaseLink>
+              <ChevronRight class="size-4" aria-hidden="true" />
+              <span class="bg-primary/15 text-foreground rounded-md px-2 py-1 font-medium">{title}</span>
+            </nav>
+            <p class="text-peach mb-3 text-xs font-bold tracking-[0.16em] uppercase"><span aria-hidden="true">✦</span> Astro Stack documentation</p>
+            <h1 class="font-display text-4xl tracking-tight text-balance sm:text-5xl">{title}</h1>
+            <p class="text-muted-foreground mt-3 max-w-2xl text-lg leading-relaxed">{description}</p>
+            <div class="mt-6 xl:hidden">
+              <details class="border-border/70 rounded-lg border px-3 py-2">
+                <summary class="cursor-pointer text-sm font-semibold">On this page</summary>
+                <div class="pt-4"><TableOfContents headings={headings} mobile /></div>
+              </details>
+            </div>
+          </header>
+
+          <DocsArticle><slot /></DocsArticle>
+
+          <nav aria-label="Documentation pagination" class="border-border/70 mt-12 grid gap-3 border-t pt-6 sm:grid-cols-2">
+            {previous ? <BaseLink href={docsHref(previous.slug)} class="border-border/70 hover:border-primary/60 hover:bg-muted/40 focus-visible:ring-outline/60 rounded-xl border p-4 outline-none focus-visible:ring-2"><span class="text-muted-foreground block text-xs font-semibold tracking-wide uppercase">Previous</span><span class="mt-1 block font-semibold">← {previous.label}</span></BaseLink> : <span />}
+            {next && <BaseLink href={docsHref(next.slug)} class="border-border/70 hover:border-primary/60 hover:bg-muted/40 focus-visible:ring-outline/60 rounded-xl border p-4 text-right outline-none focus-visible:ring-2"><span class="text-muted-foreground block text-xs font-semibold tracking-wide uppercase">Next</span><span class="mt-1 block font-semibold">{next.label} →</span></BaseLink>}
+          </nav>
+        </div>
+
+        <aside class="xl:sticky xl:top-24 xl:self-start xl:border-l xl:border-border/60 xl:pl-5"><TableOfContents headings={headings} /></aside>
+      </div>
+    </Container>
+  </main>
+  <SiteFooter />
+</BaseLayout>

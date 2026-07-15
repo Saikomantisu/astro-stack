@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Astro Stack">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#120a1c"/>
+      <stop offset="55%" stop-color="#1a1228"/>
+      <stop offset="100%" stop-color="#1e1030"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="30%" r="55%">
+      <stop offset="0%" stop-color="#9b5de5" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#9b5de5" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="80%" cy="70%" r="40%">
+      <stop offset="0%" stop-color="#e8b86d" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#e8b86d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- Subtle grid -->
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <path d="M0 126h1200M0 252h1200M0 378h1200M0 504h1200"/>
+    <path d="M200 0v630M400 0v630M600 0v630M800 0v630M1000 0v630"/>
+  </g>
+
+  <!-- Brand star -->
+  <g transform="translate(120 150)">
+    <path
+      fill="#e8b86d"
+      d="M40 0l12 36 38 1-30 23 11 37-31-22-31 22 11-37-30-23 38-1z"
+    />
+  </g>
+
+  <text x="120" y="300" fill="#c77dff" font-family="ui-sans-serif, system-ui, sans-serif" font-size="72" font-weight="700" letter-spacing="-1.5">astro</text>
+  <text x="320" y="300" fill="#a1a1aa" font-family="ui-sans-serif, system-ui, sans-serif" font-size="72" font-weight="500" letter-spacing="-1">stack</text>
+  <text x="560" y="300" fill="#e8b86d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="48">✦</text>
+
+  <text x="120" y="390" fill="#f4f4f5" font-family="ui-sans-serif, system-ui, sans-serif" font-size="42" font-weight="600" letter-spacing="-0.5">Your Astro project, ready for liftoff.</text>
+  <text x="120" y="450" fill="#a1a1aa" font-family="ui-sans-serif, system-ui, sans-serif" font-size="28">Guided CLI · production-ready · project-owned</text>
+
+  <rect x="120" y="520" width="220" height="40" rx="20" fill="#9b5de5" fill-opacity="0.25" stroke="#9b5de5" stroke-opacity="0.5"/>
+  <text x="230" y="547" text-anchor="middle" fill="#e9d5ff" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="600">v0.1 · open source</text>
+</svg>

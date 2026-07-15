@@ -1,0 +1,43 @@
+---
+import { isExternalHref, withBase } from "@/lib/paths";
+
+interface Props {
+  href: string;
+  class?: string;
+  /** Force external treatment (new tab + rel). Inferred from href when omitted. */
+  external?: boolean;
+  "aria-current"?: "page" | "true" | "false" | boolean;
+  "aria-label"?: string;
+}
+
+const {
+  href,
+  class: className,
+  external: externalProp,
+  "aria-current": ariaCurrent,
+  "aria-label": ariaLabel,
+  ...rest
+} = Astro.props;
+
+const external = externalProp ?? isExternalHref(href);
+const resolved = external ? href : withBase(href);
+---
+
+{
+  external ? (
+    <a
+      href={resolved}
+      class={className}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={ariaLabel}
+      {...rest}
+    >
+      <slot />
+    </a>
+  ) : (
+    <a href={resolved} class={className} aria-current={ariaCurrent} aria-label={ariaLabel} {...rest}>
+      <slot />
+    </a>
+  )
+}

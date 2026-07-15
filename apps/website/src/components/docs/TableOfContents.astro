@@ -1,0 +1,66 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+  mobile?: boolean;
+}
+
+const { headings, mobile = false } = Astro.props;
+const visibleHeadings = headings.filter(
+  (heading) => heading.depth === 2 || heading.depth === 3,
+);
+---
+
+{
+  visibleHeadings.length > 0 && (
+    <nav aria-label="On this page" class:list={[mobile ? "" : "hidden xl:block"]} data-docs-toc>
+      <p class="text-foreground mb-4 text-sm font-bold tracking-tight">On this page</p>
+      <ol class="border-border/70 space-y-1.5 border-l">
+        {
+          visibleHeadings.map((heading) => (
+            <li>
+              <a
+                href={`#${heading.slug}`}
+                data-toc-link
+                class:list={[
+                  "text-muted-foreground hover:text-foreground focus-visible:ring-outline/60 -ml-px block border-l-2 border-transparent py-1 text-sm leading-snug transition-colors outline-none focus-visible:ring-2",
+                  heading.depth === 3 ? "-ml-px pl-6" : "-ml-px pl-3",
+                ]}
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
+  )
+}
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-docs-toc]:not([data-toc-bound])").forEach((toc) => {
+    toc.dataset.tocBound = "true";
+    const links = [...toc.querySelectorAll<HTMLAnchorElement>("[data-toc-link]")];
+    const headings = links
+      .map((link) => document.getElementById(link.hash.slice(1)))
+      .filter((heading): heading is HTMLElement => heading !== null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const active = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (!active) return;
+        links.forEach((link) => {
+          const isActive = link.hash === `#${active.target.id}`;
+          link.classList.toggle("text-foreground", isActive);
+          link.classList.toggle("border-primary", isActive);
+          link.classList.toggle("font-medium", isActive);
+        });
+      },
+      { rootMargin: "-15% 0px -75% 0px" },
+    );
+    headings.forEach((heading) => observer.observe(heading));
+  });
+</script>

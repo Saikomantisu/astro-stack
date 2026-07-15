@@ -1,0 +1,44 @@
+---
+title: Contributing
+description: Set up the Astro Stack workspace and contribute changes at the right architectural boundary.
+section: Reference
+order: 8
+---
+
+## Local setup
+
+Astro Stack is a pnpm workspace. Use Node.js 22.13 or later and the repository's pinned pnpm release:
+
+```sh
+corepack enable
+pnpm install
+```
+
+Run workspace commands from the repository root:
+
+```sh
+pnpm check
+pnpm build
+pnpm test
+pnpm check:biome
+```
+
+Use `pnpm --filter <package> <script>` for focused package work. Before changes that affect generated projects, templates, feature resolution, dependencies, or release behavior, also run `pnpm test:generated`.
+
+## Workspace architecture
+
+| Package | Responsibility |
+| --- | --- |
+| `packages/cli` | Command-line entry point and configuration wizard. |
+| `packages/generator` | File creation, rendering, configuration merging, and project finishing. |
+| `packages/features` | Independent feature definitions, dependencies, templates, and validation. |
+| `packages/utils` | Shared framework-agnostic types, validation, and commands. |
+| `packages/templates` | Generation-time source templates. |
+
+Packages communicate through declared public exports. Do not import another package's `src` or build output directly.
+
+## Make focused changes
+
+Keep the CLI grouped around project, developer-experience, styling/tooling, content, features, deployment, and summary. Add generation behavior through a self-contained feature definition whenever possible, so its dependencies, templates, configuration changes, validation, and lifecycle hooks stay together.
+
+Generated projects must remain independent of Astro Stack: do not add an `@astro-stack/*` runtime dependency to their output. Every added file, package, and configuration option should be justified by a user selection.

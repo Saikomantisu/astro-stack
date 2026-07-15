@@ -1,0 +1,20 @@
+{
+  "$schema": "https://starwind.dev/config-schema.json",
+  "tailwind": {
+    "css": "src/styles/starwind.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "componentDir": "src/components",
+  "components": [
+    { "name": "button", "version": "2.3.3" },
+    { "name": "card", "version": "2.0.2" },
+    { "name": "badge", "version": "1.4.3" },
+    { "name": "accordion", "version": "1.3.5" },
+    { "name": "separator", "version": "1.0.2" },
+    { "name": "sheet", "version": "1.2.0" },
+    { "name": "tabs", "version": "1.4.3" },
+    { "name": "kbd", "version": "1.0.2" },
+    { "name": "dialog", "version": "1.5.0" }
+  ]
+}

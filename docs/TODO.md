@@ -134,7 +134,7 @@ For each completed feature:
   examples.
 - [x] Document generated-project ownership and the no-runtime-dependency
   guarantee.
-- [ ] Create and deploy an Astro website on GitHub Pages with a clear product
+- [x] Create and deploy an Astro website on GitHub Pages with a clear product
   overview, installation instructions, CLI walkthrough, and links to the
   documentation and repository.
 - [ ] Add a changelog and release process, including versioning and rollback.
