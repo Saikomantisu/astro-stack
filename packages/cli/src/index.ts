@@ -35,7 +35,7 @@ import {
   types,
 } from "./options.js";
 
-const version = "0.1.0";
+const version = "0.1.1";
 
 export type { CliOptions } from "./options.js";
 

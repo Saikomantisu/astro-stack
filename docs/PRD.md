@@ -199,12 +199,12 @@ choices must fail before files are written.
 - Prettier
 - Biome
 
-## v0.1.0 Scope Boundary
+## v0.1.1 Scope Boundary
 
 The initial release supports only the project types and selections listed in
 this document's **Initial Project Types** and **Initial Feature Set** sections.
 Authentication, analytics, search, community or team presets, and updates to
-existing generated projects are explicitly deferred beyond v0.1.0. They must
+existing generated projects are explicitly deferred beyond v0.1.1. They must
 not be presented as available CLI selections or implied by generated-project
 behavior until their requirements and support policies are defined.
 
@@ -215,7 +215,7 @@ documentation before final release validation begins.
 
 ## Generated-Project Support Policy
 
-Astro Stack v0.1.0 generates projects with `astro` `^7.0.7`. Generated
+Astro Stack v0.1.1 generates projects with `astro` `^7.0.7`. Generated
 projects require Node.js `>=22.12.0` and an even-numbered Node.js release. The
 CLI requires Node.js `>=22.13` because its pinned pnpm version has that runtime
 minimum.
@@ -230,7 +230,7 @@ The generator supports these package-manager versions for generated projects:
 | Bun | `>=1.3.0` |
 
 Each generated project uses exactly the package manager selected in the CLI and
-produces only that manager's lockfile. The v0.1.0 compatibility commitment is
+produces only that manager's lockfile. The v0.1.1 compatibility commitment is
 to install dependencies, type-check, and production-build every supported
 selection with the listed runtime and package-manager ranges. Compatibility
 with older Astro majors, older package-manager releases, or an unlisted package

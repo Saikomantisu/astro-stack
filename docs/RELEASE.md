@@ -2,7 +2,7 @@
 
 ## Ownership
 
-For the v0.1.0 release, **Ravinath Akalanka** is the release owner. The release
+For the v0.1.1 release, **Ravinath Akalanka** is the release owner. The release
 owner approves the release scope, verifies the production gate, publishes the
 package, and coordinates a rollback if one is needed. Until another maintainer
 is appointed, the release owner also performs the required technical review.
