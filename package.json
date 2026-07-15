@@ -29,7 +29,7 @@
     "test:generated": "ASTRO_STACK_RUN_GENERATED_TESTS=1 vitest run packages/generator/src/generated-projects.test.ts",
     "test:watch": "vitest",
     "changeset": "changeset",
-    "version:packages": "changeset version",
+    "version:packages": "changeset version && node scripts/update-release-changelog.mjs",
     "release:publish": "pnpm build && changeset publish"
   },
   "devDependencies": {

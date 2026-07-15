@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "apps/website/**"
+      - "CHANGELOG.md"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
       - "package.json"
