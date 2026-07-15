@@ -23,15 +23,17 @@ a changeset with the appropriate semver bump and a concise, user-facing
 description. Changesets keeps the CLI, generator, features, and utils packages
 on one version so their workspace dependency ranges remain compatible.
 
-The repository [changelog](../CHANGELOG.md) is the release index; Changesets
-generates the detailed package changelogs when a version is cut. Do not edit a
-generated package changelog by hand.
+The repository [changelog](../CHANGELOG.md) is the release index and the
+website's source of release notes. The version command adds the CLI's released
+Changeset notes to that index after Changesets generates detailed package
+changelogs. Do not edit a generated package changelog by hand.
 
 ## Release procedure
 
 1. Merge approved changesets to `main`. The **Prepare release** workflow opens
    or updates a `chore: release packages` pull request that consumes them,
-   updates versions, and generates package changelogs.
+   updates versions, generates package changelogs, and updates the repository
+   changelog that powers the website.
 2. The release owner reviews the version PR, confirms the intended semver bump
    and release notes, and completes the production definition of done below.
    Run `pnpm test:generated` for this release change as well as the standard
