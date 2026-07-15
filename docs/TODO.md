@@ -149,8 +149,8 @@ installation and documentation links have been verified.
 - [x] Run the required checks, tests, and builds from a clean checkout.
 - [x] Run the generated-project compatibility suite and verify every supported
   combination passes installation, type-checking, and production builds.
-- [ ] Validate a published-package installation in a fresh temporary directory.
-- [ ] Publish the initial release and verify the documented `npm create` flow.
+- [x] Validate a published-package installation in a fresh temporary directory.
+- [x] Publish the initial release and verify the documented `npm create` flow.
 
 ## 11. Developer Experience Expansion
 
