@@ -1,3 +1,8 @@
+import { readFileSync } from "node:fs";
+import { mkdtemp, rm, symlink } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { stripVTControlCharacters } from "node:util";
 
 import { describe, expect, it, vi } from "vitest";
@@ -5,6 +10,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   createCli,
   type InteractivePrompts,
+  isDirectExecution,
   runInteractive,
   runNonInteractive,
 } from "./index.js";
@@ -30,6 +36,26 @@ function interactivePrompts(
 }
 
 describe("CLI", () => {
+  it("reports the installed package version", () => {
+    const packageManifest = JSON.parse(
+      readFileSync(new URL("../package.json", import.meta.url), "utf8"),
+    ) as { version: string };
+
+    expect(createCli().version()).toBe(packageManifest.version);
+  });
+
+  it("runs when npm invokes its bin through a symlink", async () => {
+    const directory = await mkdtemp(join(tmpdir(), "astro-stack-cli-"));
+    const binPath = join(directory, "astro-stack");
+
+    try {
+      await symlink(fileURLToPath(import.meta.url), binPath);
+      expect(isDirectExecution(import.meta.url, binPath)).toBe(true);
+    } finally {
+      await rm(directory, { force: true, recursive: true });
+    }
+  });
+
   it("requires confirmation in non-interactive mode", async () => {
     const generate = vi.fn(async () => undefined);
     await expect(
