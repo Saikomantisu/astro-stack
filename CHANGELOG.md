@@ -11,6 +11,10 @@ Release notes are assembled from merged changesets when the release version PR
 is created. Do not add hand-written package entries here; add a changeset to
 the pull request that introduced the change instead.
 
+## 0.1.2
+
+- Fix `npm create astro-stack` so the installed CLI runs when npm invokes its bin through a symlink.
+
 ## 0.1.1
 
 - Prepare public npm package metadata and publishing configuration.

@@ -1,5 +1,11 @@
 # @astro-stack/features
 
+## 0.1.2
+
+### Patch Changes
+
+- @astro-stack/utils@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
