@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { readFileSync, realpathSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 import {
   editorTargetsConflict,
   mergeProjectConfiguration,
@@ -35,9 +37,21 @@ import {
   types,
 } from "./options.js";
 
-const version = "0.1.1";
+const { version } = JSON.parse(
+  readFileSync(new URL("../package.json", import.meta.url), "utf8"),
+) as { version: string };
 
 export type { CliOptions } from "./options.js";
+
+export function isDirectExecution(
+  moduleUrl: string,
+  entryPoint = process.argv[1],
+): boolean {
+  return (
+    entryPoint !== undefined &&
+    moduleUrl === pathToFileURL(realpathSync(entryPoint)).href
+  );
+}
 
 const cancelled = (value: unknown): value is symbol => isCancel(value);
 
@@ -379,5 +393,4 @@ export function createCli(generator: Generate = generateAndFinish): Command {
     });
   return cli;
 }
-if (import.meta.url === `file://${process.argv[1]}`)
-  void createCli().parseAsync();
+if (isDirectExecution(import.meta.url)) void createCli().parseAsync();
