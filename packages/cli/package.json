@@ -1,6 +1,6 @@
 {
   "name": "create-astro-stack",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create a production-ready Astro project with a guided setup.",
   "license": "MIT",
   "author": "Ravinath Akalanka",

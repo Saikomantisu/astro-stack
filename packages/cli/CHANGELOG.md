@@ -1,0 +1,10 @@
+# create-astro-stack
+
+## 0.1.1
+
+### Patch Changes
+
+- 3acf155: Prepare public npm package metadata and publishing configuration.
+- Updated dependencies [3acf155]
+  - @astro-stack/generator@0.1.1
+  - @astro-stack/utils@0.1.1
