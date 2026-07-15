@@ -137,7 +137,7 @@ For each completed feature:
 - [x] Create and deploy an Astro website on GitHub Pages with a clear product
   overview, installation instructions, CLI walkthrough, and links to the
   documentation and repository.
-- [ ] Add a changelog and release process, including versioning and rollback.
+- [x] Add a changelog and release process, including versioning and rollback.
 - [ ] Prepare package metadata, license, repository links, and npm publishing
   configuration.
 

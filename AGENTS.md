@@ -73,6 +73,13 @@ When a tradeoff is required, favor correctness and robust generated projects ove
 
 ## Before handing off changes
 
+- For every user-facing change to a published package, CLI behavior, or generated
+  project output, run `pnpm changeset` and include the generated changeset file
+  in the same change. Do this automatically; do not wait for a separate
+  release-note request. Choose the semver bump that matches the impact: patch
+  for backward-compatible fixes, minor for backward-compatible capabilities,
+  and major for breaking changes. Internal-only changes that cannot affect a
+  published package do not need a changeset.
 - Run `pnpm check` for TypeScript changes.
 - Run `pnpm build` when package output or exports change.
 - Run and verify `pnpm test:generated` for major generated-project or release

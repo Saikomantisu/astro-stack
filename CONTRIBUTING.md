@@ -27,6 +27,8 @@ the generated project.
 Before requesting review:
 
 - Run `pnpm test`, `pnpm check`, `pnpm check:biome`, and `pnpm build`.
+- Run `pnpm changeset` and commit its output when the change affects a
+  published package or user-facing behavior.
 - Update documentation for changed supported behavior or architecture.
 - Explain validation, compatibility, and generated-output changes in the pull
   request description.

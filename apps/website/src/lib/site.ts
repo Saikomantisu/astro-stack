@@ -35,6 +35,7 @@ export const primaryNav = [
 export const resourceNav = [
   { label: "Installation", href: "docs/installation/" },
   { label: "Documentation", href: links.docs },
+  { label: "Changelog", href: "changelog/" },
   { label: "GitHub", href: links.github, external: true },
 ] as const;
 

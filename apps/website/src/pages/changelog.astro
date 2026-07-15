@@ -1,0 +1,59 @@
+---
+import ArrowUpRight from "@tabler/icons/outline/arrow-up-right.svg";
+import BaseLink from "@/components/common/BaseLink.astro";
+import Container from "@/components/common/Container.astro";
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import { releases } from "@/lib/content/changelog";
+import { links, site } from "@/lib/site";
+
+const changelogUrl = `${links.github}/blob/main/CHANGELOG.md`;
+---
+
+<MarketingLayout
+  title={`Changelog · ${site.name}`}
+  description={`Every released improvement to ${site.name}, from launch milestones to the details that make generation more reliable.`}
+>
+  <Container class="py-14 sm:py-20">
+    <header class="max-w-2xl border-b border-border/60 pb-10">
+      <p class="text-peach text-xs font-bold tracking-[0.16em] uppercase">Release log</p>
+      <h1 class="font-display mt-3 text-4xl tracking-tight text-balance sm:text-5xl">Changelog</h1>
+      <p class="text-muted-foreground mt-4 max-w-xl text-base leading-relaxed sm:text-lg">
+        A concise record of what has changed in Astro Stack.
+      </p>
+    </header>
+
+    <div class="max-w-2xl">
+      {
+        releases.map((release, index) => (
+          <article class="border-border/60 py-10 first:pt-8 last:border-b">
+            <header class="flex items-baseline justify-between gap-4">
+              <div>
+                <p class="text-peach text-xs font-bold tracking-[0.16em] uppercase">{release.label}</p>
+                <h2 class="font-display mt-2 text-2xl tracking-tight">v{release.version}</h2>
+              </div>
+              {index === 0 && <span class="text-muted-foreground text-xs font-medium">Latest</span>}
+            </header>
+            <p class="text-muted-foreground mt-5 leading-relaxed">{release.summary}</p>
+            <ul class="mt-6 space-y-5">
+              {
+                release.entries.map((entry) => (
+                  <li>
+                    <h3 class="text-sm font-semibold">{entry.title}</h3>
+                    <p class="text-muted-foreground mt-1 text-sm leading-relaxed">{entry.detail}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          </article>
+        ))
+      }
+
+      <p class="text-muted-foreground py-8 text-sm leading-relaxed">
+        Detailed package notes and the complete history are available in the{" "}
+        <BaseLink href={changelogUrl} external class="text-foreground inline-flex items-center gap-1 font-medium underline underline-offset-4">
+          repository changelog <ArrowUpRight class="size-3.5" aria-hidden="true" />
+        </BaseLink>.
+      </p>
+    </div>
+  </Container>
+</MarketingLayout>
