@@ -76,7 +76,7 @@ Read the full [product principles](./docs/PRINCIPLES.md) and
 
 ## Release baseline
 
-The initial public release is **v0.1.0**. The CLI supports **Node.js >=22.13**
+The initial public release is **v0.1.1**. The CLI supports **Node.js >=22.13**
 and uses the pinned pnpm workspace version **pnpm@11.0.8**. Generated-project
 runtime and package-manager requirements are defined in the
 [support policy](./docs/PRD.md#generated-project-support-policy).

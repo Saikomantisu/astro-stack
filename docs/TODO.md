@@ -146,8 +146,8 @@ For each completed feature:
 Complete this stage only after the website in stage 9 is deployed and its
 installation and documentation links have been verified.
 
-- [ ] Run the required checks, tests, and builds from a clean checkout.
-- [ ] Run the generated-project compatibility suite and verify every supported
+- [x] Run the required checks, tests, and builds from a clean checkout.
+- [x] Run the generated-project compatibility suite and verify every supported
   combination passes installation, type-checking, and production builds.
 - [ ] Validate a published-package installation in a fresh temporary directory.
 - [ ] Publish the initial release and verify the documented `npm create` flow.
