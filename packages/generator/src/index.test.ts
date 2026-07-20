@@ -7,9 +7,8 @@ import {
   type ProjectType,
 } from "@astro-stack/utils";
 import { afterEach, describe, expect, it } from "vitest";
-
-import { createProject } from "./index.js";
 import { formatProjectTemplates } from "./formatter.js";
+import { createProject } from "./index.js";
 
 const directories: string[] = [];
 const stylingCombinations = (["vanilla", "tailwind"] as const).flatMap((css) =>
@@ -463,7 +462,9 @@ describe("createProject", () => {
     ).resolves.toBe("allowBuilds:\n  esbuild: true\n");
     await expect(
       readFile(join(cloudflareDirectory, "pnpm-workspace.yaml"), "utf8"),
-    ).resolves.toBe("allowBuilds:\n  esbuild: true\n  sharp: true\n  workerd: true\n");
+    ).resolves.toBe(
+      "allowBuilds:\n  esbuild: true\n  sharp: true\n  workerd: true\n",
+    );
     await expect(
       readFile(join(npmDirectory, "pnpm-workspace.yaml"), "utf8"),
     ).rejects.toMatchObject({ code: "ENOENT" });

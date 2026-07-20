@@ -51,9 +51,7 @@ function createContext(configuration: ProjectConfiguration): TemplateContext {
     projectDetails[configuration.project.type];
   return {
     contactForm:
-      configuration.features.forms === "none"
-        ? ""
-        : "<ContactForm />",
+      configuration.features.forms === "none" ? "" : "<ContactForm />",
     contactFormImport:
       configuration.features.forms === "none"
         ? ""
@@ -75,7 +73,9 @@ function manifest(configuration: ProjectConfiguration): string {
   return `${JSON.stringify({ name: configuration.project.name, version: "0.0.0", private: true, type: "module", engines: { node: ">=22.12.0" }, scripts: { dev: "astro dev", start: "astro dev", build: "astro build", preview: "astro preview", typecheck: "astro check" }, devDependencies: { "@astrojs/check": "^0.9.9", astro: "^7.0.7", typescript: "^5.8.3" } }, null, 2)}\n`;
 }
 
-function pnpmWorkspaceConfiguration(configuration: ProjectConfiguration): string {
+function pnpmWorkspaceConfiguration(
+  configuration: ProjectConfiguration,
+): string {
   const buildDependencies = [
     "esbuild",
     ...(configuration.deployment.target === "netlify"
@@ -349,6 +349,7 @@ function blogTemplates(context: TemplateContext): ProjectTemplate[] {
     {
       destination: "src/pages/blog/index.astro",
       content:
+        // biome-ignore lint/suspicious/noTemplateCurlyInString: Generated Astro route expressions are evaluated in the generated project.
         '---\nimport { getCollection } from "astro:content";\nimport BlogLayout from \'../../layouts/BlogLayout.astro\';\n\nconst posts = (await getCollection("blog")).sort(\n  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),\n);\n---\n\n<BlogLayout title="Blog" description="Latest writing.">\n  <h1>Blog</h1>\n  <ul>\n    {posts.map((post) => (\n      <li>\n        <article>\n          <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>\n          <p>{post.data.description}</p>\n          <time datetime={post.data.pubDate.toISOString()}>\n            {post.data.pubDate.toLocaleDateString()}\n          </time>\n        </article>\n      </li>\n    ))}\n  </ul>\n</BlogLayout>\n',
     },
     {
@@ -359,7 +360,7 @@ function blogTemplates(context: TemplateContext): ProjectTemplate[] {
   ];
 }
 
-function documentationTemplates(context: TemplateContext): ProjectTemplate[] {
+function documentationTemplates(): ProjectTemplate[] {
   const docsLayout = `---
 interface Props {
   title: string;
@@ -487,6 +488,7 @@ const { title, description } = Astro.props;
     {
       destination: "src/pages/docs/index.astro",
       content:
+        // biome-ignore lint/suspicious/noTemplateCurlyInString: Generated Astro route expressions are evaluated in the generated project.
         '---\nimport { getCollection } from "astro:content";\nimport DocsLayout from \'../../layouts/DocsLayout.astro\';\n\nconst pages = (await getCollection("docs")).sort(\n  (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0),\n);\n---\n\n<DocsLayout title="Documentation" description="Project documentation.">\n  <h1>Documentation</h1>\n  <p>Use these starter pages as the foundation for your docs.</p>\n  <ul>\n    {pages.map((page) => (\n      <li>\n        <a href={`/docs/${page.id}/`}>{page.data.title}</a> — {page.data.description}\n      </li>\n    ))}\n  </ul>\n</DocsLayout>\n',
     },
     {
@@ -547,7 +549,7 @@ function projectTemplates(
     case "blog":
       return blogTemplates(context);
     case "documentation":
-      return documentationTemplates(context);
+      return documentationTemplates();
     case "portfolio":
       return portfolioTemplates(context);
     case "blank":

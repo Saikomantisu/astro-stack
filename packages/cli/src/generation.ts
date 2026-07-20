@@ -39,7 +39,9 @@ export async function generateProject(
       // The install step has to run before `dev`, so slot it in after `cd`.
       steps.splice(1, 0, installCommand(configuration));
       note(projectReadyCard(steps, notes), "Project created — setup required");
-      outro("Project files were created. Install dependencies before starting.");
+      outro(
+        "Project files were created. Install dependencies before starting.",
+      );
       return 0;
     }
     log.success(projectReadyMessage(configuration.project.name));

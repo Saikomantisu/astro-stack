@@ -128,24 +128,24 @@ describe("validateProjectConfiguration", () => {
     );
   });
 
-  it.each(["blog", "documentation"] as const)(
-    "rejects an explicit Content setup for %s",
-    (type) => {
-      const result = validateProjectConfiguration(
-        mergeProjectConfiguration({
-          project: { type },
-          content: { setup: "collections" },
-        }),
-      );
+  it.each([
+    "blog",
+    "documentation",
+  ] as const)("rejects an explicit Content setup for %s", (type) => {
+    const result = validateProjectConfiguration(
+      mergeProjectConfiguration({
+        project: { type },
+        content: { setup: "collections" },
+      }),
+    );
 
-      expect(result.errors).toContainEqual(
-        expect.objectContaining({
-          code: "project-type-owns-content",
-          path: "content.setup",
-        }),
-      );
-    },
-  );
+    expect(result.errors).toContainEqual(
+      expect.objectContaining({
+        code: "project-type-owns-content",
+        path: "content.setup",
+      }),
+    );
+  });
 
   it("rejects webhook forwarding with static output", () => {
     const result = validateProjectConfiguration(

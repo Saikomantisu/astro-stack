@@ -12,7 +12,10 @@ export interface ProjectConfigurationSummary {
   projectType: ProjectType;
   packageManager: PackageManager;
   styling: string;
-  content: ContentSetup | "built-in blog collection" | "built-in docs collection";
+  content:
+    | ContentSetup
+    | "built-in blog collection"
+    | "built-in docs collection";
   forms: FormIntegration;
   deployment: DeploymentTarget;
   agents: string;
