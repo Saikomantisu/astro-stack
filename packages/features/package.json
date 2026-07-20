@@ -1,6 +1,6 @@
 {
   "name": "@astro-stack/features",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Composable feature definitions for Astro Stack projects.",
   "license": "MIT",
   "author": "Ravinath Akalanka",

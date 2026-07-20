@@ -1,6 +1,6 @@
 {
   "name": "@astro-stack/generator",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Project generation engine for Astro Stack.",
   "license": "MIT",
   "author": "Ravinath Akalanka",

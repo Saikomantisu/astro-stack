@@ -1,6 +1,6 @@
 {
   "name": "@astro-stack/utils",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Shared configuration types and utilities for Astro Stack.",
   "license": "MIT",
   "author": "Ravinath Akalanka",
