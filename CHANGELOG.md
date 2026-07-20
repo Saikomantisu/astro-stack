@@ -11,6 +11,11 @@ Release notes are assembled from merged changesets when the release version PR
 is created. Do not add hand-written package entries here; add a changeset to
 the pull request that introduced the change instead.
 
+## 1.0.0
+
+- Replace the shared project starter with distinct Marketing, Client Website,
+- Fix generated project installation, quality-tooling checks, contact forms, and documentation navigation.
+
 ## 0.1.2
 
 - Fix `npm create astro-stack` so the installed CLI runs when npm invokes its bin through a symlink.
