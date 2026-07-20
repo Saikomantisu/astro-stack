@@ -5,7 +5,7 @@ export const flightPlanSteps = [
     label: "Project",
     summary: "Name, type, package manager, directory, and Git",
     detail:
-      "Choose what you are building, such as a marketing site, blog, docs, portfolio, or SaaS landing page, plus how to scaffold the repo.",
+      "Choose what you are building, such as a marketing site, client site, blog, docs, or portfolio, plus how to scaffold the repo.",
   },
   {
     step: 2,
@@ -26,7 +26,7 @@ export const flightPlanSteps = [
     label: "Content",
     summary: "None, Markdown, MDX, or Content Collections",
     detail:
-      "Add only the content path you need so documentation and blog projects stay lean.",
+      "Add only the content path you need; Blog and Documentation include their native collections automatically.",
   },
   {
     step: 5,

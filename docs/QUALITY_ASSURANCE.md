@@ -19,9 +19,9 @@ documentation links have been verified. See the
 [release checklist](./TODO.md) for the complete ordering.
 
 `test:generated` creates disposable projects, installs their dependencies with
-pnpm (without running third-party install hooks), runs `astro check`, builds
-them, and starts an Astro preview server for a static project. It never writes
-to the repository.
+pnpm using the generated pnpm build approval, runs each selected project's
+type check, linter, formatter check, Biome check, and build, and starts an Astro
+preview server for a static project. It never writes to the repository.
 
 ## Compatibility matrix
 
@@ -30,7 +30,7 @@ the release contract and identifies the focused smoke-test representatives.
 
 | Area | Supported selections | Verification |
 | --- | --- | --- |
-| Project type | marketing, client, blog, documentation, portfolio, SaaS landing, blank | Each type generates its required page structure. |
+| Project type | marketing, client, blog, documentation, portfolio, blank | Each type generates its required page structure. |
 | Styling | vanilla, Tailwind | Each styling option and every TypeScript/tooling combination generates only selected configuration and dependencies. Tailwind + MDX is smoke-tested. |
 | TypeScript | strict, relaxed | Both preferences generate the matching `tsconfig` setting. |
 | Tooling | ESLint, Prettier, Biome independently enabled or disabled | All 8 tooling combinations are generation-tested. |
@@ -41,9 +41,9 @@ the release contract and identifies the focused smoke-test representatives.
 | Editor integration | none, VS Code, Cursor, Zed | Each selected target generates only its workspace files and tooling-specific recommendations. The VS Code/Cursor conflict is rejected. |
 | Finishing | npm, pnpm, Yarn, Bun; Git/hooks off/on | The lifecycle suite covers every package manager with each valid Git/hooks combination and verifies the matching install and hook commands. |
 
-The generated-project smoke representatives deliberately combine selections
-that exercise integration merging: static marketing, Tailwind + MDX + Vercel,
-Collections + webhooks + Netlify, and Resend + Cloudflare.
+The generated-project smoke suite exercises the default configuration for every
+project type, plus representative Tailwind, MDX, forms, and deployment
+combinations.
 
 The package-manager lifecycle tests do not install dependencies: they exercise
 the generated-project finishing contract with a command runner test double.

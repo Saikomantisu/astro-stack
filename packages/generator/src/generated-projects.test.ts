@@ -97,7 +97,12 @@ async function generate(
 }
 
 const smokeProjects = [
-  ["static marketing", { project: { type: "marketing" } }],
+  ["default marketing", { project: { type: "marketing" } }],
+  ["default client", { project: { type: "client" } }],
+  ["default blog", { project: { type: "blog" } }],
+  ["default documentation", { project: { type: "documentation" } }],
+  ["default portfolio", { project: { type: "portfolio" } }],
+  ["default blank", { project: { type: "blank" } }],
   [
     "Tailwind MDX Vercel",
     {
@@ -107,10 +112,9 @@ const smokeProjects = [
     },
   ],
   [
-    "collections and webhook forms on Netlify",
+    "documentation and webhook forms on Netlify",
     {
       project: { type: "documentation" },
-      content: { setup: "collections" },
       features: { forms: "webhooks" },
       deployment: { target: "netlify" },
     },
@@ -127,11 +131,14 @@ const smokeProjects = [
 
 describe.runIf(enabled)("generated-project quality assurance", () => {
   it.each(smokeProjects)(
-    "installs, type-checks, and builds %s",
+    "installs and runs every selected quality command for %s",
     async (_name, input) => {
       const directory = await generate(input);
-      await run("pnpm", ["install", "--ignore-scripts"], directory);
-      await run("pnpm", ["exec", "astro", "check"], directory);
+      await run("pnpm", ["install"], directory);
+      await run("pnpm", ["typecheck"], directory);
+      await run("pnpm", ["lint"], directory);
+      await run("pnpm", ["check"], directory);
+      await run("pnpm", ["format:check"], directory);
       await run("pnpm", ["build"], directory);
     },
     180_000,
@@ -139,7 +146,7 @@ describe.runIf(enabled)("generated-project quality assurance", () => {
 
   it("serves a built static project with Astro preview", async () => {
     const directory = await generate({ project: { type: "blank" } });
-    await run("pnpm", ["install", "--ignore-scripts"], directory);
+    await run("pnpm", ["install"], directory);
     await run("pnpm", ["build"], directory);
 
     const port = await availablePort();

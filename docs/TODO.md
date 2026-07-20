@@ -59,7 +59,7 @@ and the module boundaries in the [architecture](./ARCHITECTURE.md).
 ## 5. Base Project Generation
 
 - [x] Create the minimal Astro project structure for each initial project type:
-  marketing, client, blog, documentation, portfolio, SaaS landing page, and
+  marketing, client, blog, documentation, portfolio, and
   blank.
 - [x] Render templates safely with project variables and predictable naming.
 - [x] Generate only selected files, dependencies, and configuration.

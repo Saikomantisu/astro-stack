@@ -7,21 +7,20 @@ order: 3
 
 ## Choose by intent
 
-Project type gives the generated home page an appropriate title and description. Pick the label that best describes the work you are beginning:
+Project type selects a small, purpose-specific route structure. Pick the label that best describes the work you are beginning:
 
 | Type | Starting intent |
 | --- | --- |
-| `marketing` | A focused site for a product, service, or campaign. |
-| `client` | A polished starting point for client work. |
-| `blog` | A site intended for writing and publishing. |
-| `documentation` | A starting point for product or technical docs. |
-| `portfolio` | A lightweight canvas for your work and case studies. |
-| `saas-landing` | A landing page for a software product. |
+| `marketing` | A semantic one-page landing site with a hero, benefits, and CTA. |
+| `client` | A small client site with home, about, services, and contact routes. |
+| `blog` | A `blog` content collection, sample post, listing, and post route. |
+| `documentation` | An unstyled semantic docs shell, `docs` collection, and starter docs pages. |
+| `portfolio` | A work overview and sample case-study route. |
 | `blank` | The smallest possible Astro project. |
 
 ## What changes
 
-All named project types include a home page, `src/layouts/BaseLayout.astro`, and the selected global CSS setup. Their initial title and description are the only type-specific content; Astro Stack does not claim to ship a finished marketing site, blog, or documentation theme.
+Marketing, Client, Blog, and Portfolio use focused layouts that import the selected global CSS setup. Blog and Documentation own their required native collections, rather than using the generic Content setup. Documentation deliberately uses semantic HTML without importing starter CSS or applying a theme.
 
 The `blank` type is smaller still. It includes `src/pages/index.astro` and imports `src/styles/global.css` directly, without a layout.
 

@@ -14,12 +14,11 @@ Every project starts with a small, conventional Astro structure. The exact proje
 ```text
 my-project/
 ├── src/
-│   ├── pages/
+│   ├── pages/                   # Routes supplied by the selected project blueprint
 │   │   └── index.astro          # Home page and the / route
 │   ├── styles/
 │   │   └── global.css           # Vanilla CSS or Tailwind entry point
-│   └── layouts/
-│       └── BaseLayout.astro     # Included except for Blank projects
+│   └── layouts/                 # Type-specific layouts when required
 ├── .gitignore
 ├── astro.config.mjs             # Astro and selected integration settings
 ├── package.json                 # Scripts and selected dependencies
@@ -27,11 +26,11 @@ my-project/
 └── tsconfig.json                # Astro TypeScript settings
 ```
 
-The Blank project keeps the structure even smaller: its home page imports `global.css` directly, so it does not include `src/layouts/BaseLayout.astro`.
+Marketing, Client, Blog, and Portfolio include focused layouts and routes. Documentation includes an unstyled `DocsLayout.astro`, while Blank keeps the structure smallest by importing `global.css` directly from its home page.
 
 ## Files added by your selections
 
-Astro Stack adds only the files required by the options you select. A content setup adds a collection definition and starter entry:
+Astro Stack adds only the files required by the options you select. A generic content setup adds a collection definition and starter entry:
 
 ```text
 src/
@@ -40,6 +39,8 @@ src/
     └── posts/
         └── getting-started.md   # .mdx when MDX is selected
 ```
+
+Blog and Documentation own their content structures: Blog creates `src/content/blog/welcome.md` and its listing/detail routes; Documentation creates `src/content/docs/getting-started.md`, `src/content/docs/guides/authoring.md`, and docs routes.
 
 Resend or webhook forms add a server route and an environment-variable template:
 

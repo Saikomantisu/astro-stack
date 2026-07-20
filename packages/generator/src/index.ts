@@ -10,6 +10,7 @@ import {
   applyConfigurationChanges,
   applyDependencies,
 } from "./configuration.js";
+import { formatProjectTemplates } from "./formatter.js";
 import { createBaseTemplates } from "./templates.js";
 import { writeProject } from "./writer.js";
 
@@ -51,8 +52,7 @@ export async function createProject(
   const directory = resolve(configuration.project.directory);
   for (const { feature, hooks } of featureResolution.hooks)
     await hooks.beforeGenerate?.({ configuration, feature });
-  const files = await writeProject(
-    directory,
+  const templates = await formatProjectTemplates(
     applyConfigurationChanges(
       applyDependencies(
         [...createBaseTemplates(configuration), ...featureResolution.templates],
@@ -61,6 +61,7 @@ export async function createProject(
       featureResolution.configurationChanges,
     ),
   );
+  const files = await writeProject(directory, templates);
   for (const { feature, hooks } of featureResolution.hooks)
     await hooks.afterGenerate?.({ configuration, feature });
   return { directory, files };

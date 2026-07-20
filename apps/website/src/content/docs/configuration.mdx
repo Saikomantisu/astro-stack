@@ -28,13 +28,13 @@ Optional agent instructions add versioned `AGENTS.md` for Codex and `CLAUDE.md` 
 
 ## Styling and tooling
 
-Vanilla CSS and Tailwind each create `src/styles/global.css`. Tailwind also adds the Tailwind v4 Vite plugin and its required development dependencies.
+Vanilla CSS and Tailwind each create `src/styles/global.css` with the same starter visual baseline for typography, spacing, navigation, and a centered content width. The choice changes the authoring experience, not the initial design. Tailwind also adds the Tailwind v4 Vite plugin and its required development dependencies. Documentation pages deliberately do not import this stylesheet so they remain semantic and unthemed.
 
 ESLint, Prettier, and Biome each add only their own configuration, scripts, and development dependencies. Their commands stay separate: `lint` for ESLint, `format` and `format:check` for Prettier, and `check` and `format:biome` for Biome.
 
 ## Content
 
-Choosing `none` adds no starter content. Markdown, MDX, and Content Collections each create `src/content.config.ts` plus a starter post under `src/content/posts`, using Astro's built-in `glob()` loader. MDX additionally installs and configures Astro's official MDX integration.
+Choosing `none` adds no generic starter content. Markdown, MDX, and Content Collections each create `src/content.config.ts` plus a starter post under `src/content/posts`, using Astro's built-in `glob()` loader. MDX additionally installs and configures Astro's official MDX integration. Blog and Documentation instead generate their required `blog` or `docs` collection and reject an explicit Content setup to prevent conflicting content structures.
 
 ## Forms
 

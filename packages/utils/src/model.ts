@@ -4,7 +4,6 @@ export const projectTypes = [
   "blog",
   "documentation",
   "portfolio",
-  "saas-landing",
   "blank",
 ] as const;
 export const packageManagers = ["npm", "pnpm", "yarn", "bun"] as const;

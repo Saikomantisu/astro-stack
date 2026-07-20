@@ -9,7 +9,6 @@ export const types = [
   "blog",
   "documentation",
   "portfolio",
-  "saas-landing",
   "blank",
 ] as const;
 export const managers = ["npm", "pnpm", "yarn", "bun"] as const;
