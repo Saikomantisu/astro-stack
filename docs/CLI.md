@@ -47,7 +47,7 @@ otherwise.
 
 | Area | Supported choices | Default |
 | --- | --- | --- |
-| Project type | `marketing`, `client`, `blog`, `documentation`, `portfolio`, `saas-landing`, `blank` | `blank` |
+| Project type | `marketing`, `client`, `blog`, `documentation`, `portfolio`, `blank` | `blank` |
 | Package manager | `npm`, `pnpm`, `yarn`, `bun` | `pnpm` |
 | CSS | `vanilla`, `tailwind` | `vanilla` |
 | TypeScript | `strict`, `relaxed` | `strict` |
@@ -66,7 +66,11 @@ as `./<project-name>`. In non-interactive mode, omitted project fields use
 `my-astro-project` and `./my-astro-project`; explicitly pass `--name` and
 `--directory` for automation so the destination is unambiguous.
 
-Project types choose a minimal starting page structure. Styling, content,
+Project types choose a minimal starting page structure. Blog includes a `blog`
+content collection, sample post, post index, and post route. Documentation
+includes a semantic, unstyled `docs` collection with starter pages and docs
+routes. These two types own their content and cannot be combined with
+`--content`. Styling, content for the other project types,
 forms, deployment, tooling, agent, editor, and hook selections add only the
 files, configuration, and dependencies needed for those selections. See the
 [configuration reference](./CONFIGURATION.md) for the generated output owned

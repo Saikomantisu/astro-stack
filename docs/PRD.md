@@ -160,7 +160,6 @@ choices must fail before files are written.
 - Blog
 - Documentation
 - Portfolio
-- SaaS Landing Page
 - Blank Project
 
 ---

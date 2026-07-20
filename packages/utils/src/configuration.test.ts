@@ -128,6 +128,25 @@ describe("validateProjectConfiguration", () => {
     );
   });
 
+  it.each(["blog", "documentation"] as const)(
+    "rejects an explicit Content setup for %s",
+    (type) => {
+      const result = validateProjectConfiguration(
+        mergeProjectConfiguration({
+          project: { type },
+          content: { setup: "collections" },
+        }),
+      );
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "project-type-owns-content",
+          path: "content.setup",
+        }),
+      );
+    },
+  );
+
   it("rejects webhook forwarding with static output", () => {
     const result = validateProjectConfiguration(
       mergeProjectConfiguration({ features: { forms: "webhooks" } }),
@@ -204,5 +223,16 @@ describe("summarizeProjectConfiguration", () => {
       styling: "tailwind; TypeScript (strict), ESLint, Prettier, Biome",
       content: "mdx",
     });
+  });
+
+  it.each([
+    ["blog", "built-in blog collection"],
+    ["documentation", "built-in docs collection"],
+  ] as const)("summarizes %s native content", (type, content) => {
+    expect(
+      summarizeProjectConfiguration(
+        mergeProjectConfiguration({ project: { type } }),
+      ).content,
+    ).toBe(content);
   });
 });

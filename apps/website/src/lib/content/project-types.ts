@@ -13,6 +13,5 @@ export const projectTypes = [
   "Blog",
   "Documentation",
   "Portfolio",
-  "SaaS Landing Page",
   "Blank Project",
 ] as const;

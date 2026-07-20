@@ -100,7 +100,6 @@ const labels: Record<string, string> = {
   blog: "Blog",
   documentation: "Documentation",
   portfolio: "Portfolio",
-  "saas-landing": "SaaS landing page",
   blank: "Blank project",
   npm: "npm",
   pnpm: "pnpm",
@@ -276,11 +275,14 @@ export async function runInteractive(
     initialValues: ["eslint", "prettier", "biome"],
   });
   if (cancelled(tooling)) return 0;
-  const content = await prompts.select({
-    message: "Content setup",
-    options: promptOptions(contentOptions),
-    initialValue: defaults.content.setup,
-  });
+  const content =
+    projectType === "blog" || projectType === "documentation"
+      ? "none"
+      : await prompts.select({
+          message: "Content setup",
+          options: promptOptions(contentOptions),
+          initialValue: defaults.content.setup,
+        });
   if (cancelled(content)) return 0;
   const forms = await prompts.select({
     message: "Forms integration",

@@ -53,6 +53,12 @@ const contentConfigTemplate = {
     'import { defineCollection } from "astro:content";\nimport { glob } from "astro/loaders";\n\nconst posts = defineCollection({\n  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/posts" }),\n});\n\nexport const collections = { posts };\n',
 };
 
+const contactFormTemplate: FeatureTemplate = {
+  destination: "src/components/ContactForm.astro",
+  content:
+    '---\nconst endpoint = "/api/contact";\n---\n\n<form action={endpoint} method="post" data-contact-form>\n  <p>\n    <label>\n      Name (optional)\n      <input name="name" autocomplete="name" />\n    </label>\n  </p>\n  <p>\n    <label>\n      Email\n      <input name="email" type="email" autocomplete="email" required />\n    </label>\n  </p>\n  <p>\n    <label>\n      Message\n      <textarea name="message" rows="6" required></textarea>\n    </label>\n  </p>\n  <button type="submit">Send message</button>\n  <p aria-live="polite" data-contact-status></p>\n</form>\n\n<script>\n  const form = document.querySelector<HTMLFormElement>("[data-contact-form]");\n  const status = document.querySelector<HTMLElement>("[data-contact-status]");\n\n  form?.addEventListener("submit", async (event) => {\n    event.preventDefault();\n    if (!status) return;\n    status.textContent = "Sending…";\n\n    try {\n      const response = await fetch(form.action, {\n        method: "POST",\n        body: new FormData(form),\n        headers: { Accept: "application/json" },\n      });\n      if (!response.ok) throw new Error("Unable to send the message.");\n      form.reset();\n      status.textContent = "Thanks — your message has been sent.";\n    } catch {\n      status.textContent = "Unable to send your message. Please try again.";\n    }\n  });\n</script>\n',
+};
+
 const agentInstructionTemplates = (
   configuration: ProjectConfiguration,
 ): readonly FeatureTemplate[] => {
@@ -115,6 +121,119 @@ const editorTemplates = (
 };
 
 /**
+ * The framework-neutral visual baseline for generated sites. Styling choices
+ * change how a project is authored, not the appearance of its starter pages.
+ */
+const starterSiteStyles = `:root {
+  font-family: Georgia, "Times New Roman", serif;
+  color: #172033;
+  background: #f8fafc;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+h1,
+h2,
+h3,
+p,
+ul {
+  margin: 0;
+}
+
+body {
+  min-width: 20rem;
+  background: #f8fafc;
+}
+
+a {
+  color: #0f766e;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.16em;
+}
+
+h1,
+h2,
+h3 {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+header,
+nav,
+main,
+footer {
+  width: min(100% - 2rem, 72rem);
+  margin-inline: auto;
+}
+
+header {
+  padding-block: 1.5rem;
+  border-bottom: 1px solid color-mix(in srgb, #172033 15%, transparent);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-block: 1rem;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+main {
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+
+main > * + * {
+  margin-top: 3rem;
+}
+
+article,
+section {
+  max-width: 44rem;
+}
+
+article > * + *,
+section > * + * {
+  margin-top: 1rem;
+}
+
+h1 {
+  max-width: 12ch;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  line-height: 0.95;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  line-height: 1.1;
+}
+
+p,
+li {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+ul {
+  padding-left: 1.25rem;
+}
+
+footer {
+  padding-block: 2rem;
+  border-top: 1px solid color-mix(in srgb, #172033 15%, transparent);
+  color: color-mix(in srgb, #172033 65%, transparent);
+}
+`;
+
+/**
  * The complete initial registry. Each feature owns the files, dependencies,
  * and configuration it adds to a generated project.
  */
@@ -136,8 +255,7 @@ export const featureRegistry: readonly FeatureDefinition[] = [
       templates: [
         {
           destination: "src/styles/global.css",
-          content:
-            ":root {\n  font-family: system-ui, sans-serif;\n  color: #1f2937;\n  background: #ffffff;\n}\n\nbody {\n  margin: 0;\n}\n\nmain {\n  max-width: 72rem;\n  margin: 0 auto;\n  padding: 4rem 1.5rem;\n}\n",
+          content: starterSiteStyles,
         },
       ],
     },
@@ -153,7 +271,8 @@ export const featureRegistry: readonly FeatureDefinition[] = [
       templates: [
         {
           destination: "src/styles/global.css",
-          content: '@import "tailwindcss";\n',
+          content:
+            '@import "tailwindcss";\n\n@theme {\n  --color-ink: #172033;\n  --color-paper: #f8fafc;\n  --color-accent: #0f766e;\n}\n\n@layer base {\n  :root {\n    font-family: Georgia, "Times New Roman", serif;\n    color: var(--color-ink);\n    background: var(--color-paper);\n  }\n\n  body {\n    min-width: 20rem;\n    margin: 0;\n    background: var(--color-paper);\n  }\n\n  a {\n    color: var(--color-accent);\n    text-decoration-thickness: 0.08em;\n    text-underline-offset: 0.16em;\n  }\n\n  h1,\n  h2,\n  h3 {\n    font-family: ui-sans-serif, system-ui, sans-serif;\n    font-weight: 700;\n    letter-spacing: -0.03em;\n  }\n}\n\n@layer components {\n  header,\n  nav,\n  main,\n  footer {\n    width: min(100% - 2rem, 72rem);\n    margin-inline: auto;\n  }\n\n  header {\n    padding-block: 1.5rem;\n    border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);\n    font-family: ui-sans-serif, system-ui, sans-serif;\n    font-weight: 700;\n  }\n\n  nav {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 1rem;\n    padding-block: 1rem;\n    font-family: ui-sans-serif, system-ui, sans-serif;\n  }\n\n  main {\n    padding-block: clamp(3rem, 8vw, 6rem);\n  }\n\n  main > * + * {\n    margin-top: 3rem;\n  }\n\n  article,\n  section {\n    max-width: 44rem;\n  }\n\n  article > * + *,\n  section > * + * {\n    margin-top: 1rem;\n  }\n\n  h1 {\n    max-width: 12ch;\n    font-size: clamp(2.5rem, 7vw, 5rem);\n    line-height: 0.95;\n  }\n\n  h2 {\n    font-size: clamp(1.5rem, 4vw, 2.25rem);\n    line-height: 1.1;\n  }\n\n  p,\n  li {\n    font-size: 1.0625rem;\n    line-height: 1.7;\n  }\n\n  ul {\n    padding-left: 1.25rem;\n  }\n\n  footer {\n    padding-block: 2rem;\n    border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);\n    color: color-mix(in srgb, var(--color-ink) 65%, transparent);\n  }\n}\n',
         },
       ],
       configurationChanges: [
@@ -185,12 +304,17 @@ export const featureRegistry: readonly FeatureDefinition[] = [
           type: "devDependency",
         },
         { name: "globals", version: "^17.7.0", type: "devDependency" },
+        {
+          name: "typescript-eslint",
+          version: "^8.64.0",
+          type: "devDependency",
+        },
       ],
       templates: [
         {
           destination: "eslint.config.js",
           content:
-            'import js from "@eslint/js";\nimport astro from "eslint-plugin-astro";\nimport globals from "globals";\n\nexport default [\n  js.configs.recommended,\n  ...astro.configs.recommended,\n  {\n    languageOptions: {\n      globals: globals.browser,\n    },\n  },\n];\n',
+            'import js from "@eslint/js";\nimport astro from "eslint-plugin-astro";\nimport globals from "globals";\nimport tseslint from "typescript-eslint";\n\nexport default [\n  {\n    ignores: ["**/.astro/**", "**/dist/**", "**/.netlify/**", "**/.vercel/**", "**/.wrangler/**"],\n  },\n  js.configs.recommended,\n  ...tseslint.configs.recommended,\n  ...astro.configs.recommended,\n  {\n    files: ["**/*.{astro,js,mjs,cjs,ts,mts,cts}"],\n    languageOptions: {\n      globals: globals.browser,\n    },\n  },\n];\n',
         },
       ],
       configurationChanges: [
@@ -226,7 +350,8 @@ export const featureRegistry: readonly FeatureDefinition[] = [
         },
         {
           destination: ".prettierignore",
-          content: "node_modules/\ndist/\n.astro/\n",
+          content:
+            "node_modules/\ndist/\n.astro/\n.netlify/\n.vercel/\n.wrangler/\npnpm-lock.yaml\npackage-lock.json\nyarn.lock\nbun.lock\nbun.lockb\n",
         },
       ],
       configurationChanges: [
@@ -248,13 +373,13 @@ export const featureRegistry: readonly FeatureDefinition[] = [
     (configuration) => configuration.styling.biome,
     {
       dependencies: [
-        { name: "@biomejs/biome", version: "2.5.3", type: "devDependency" },
+        { name: "@biomejs/biome", version: "2.5.4", type: "devDependency" },
       ],
       templates: [
         {
           destination: "biome.json",
           content:
-            '{\n  "$schema": "https://biomejs.dev/schemas/2.5.3/schema.json",\n  "files": {\n    "includes": ["**", "!!**/dist"]\n  },\n  "formatter": {\n    "enabled": true,\n    "indentStyle": "tab"\n  },\n  "linter": {\n    "enabled": true,\n    "rules": {\n      "preset": "recommended"\n    }\n  }\n}\n',
+            '{\n  "$schema": "https://biomejs.dev/schemas/2.5.4/schema.json",\n  "files": {\n    "includes": [\n      "**",\n      "!!**/*.astro",\n      "!!**/.astro",\n      "!!**/dist",\n      "!!**/.netlify",\n      "!!**/.vercel",\n      "!!**/.wrangler"\n    ]\n  },\n  "css": {\n    "parser": {\n      "tailwindDirectives": true\n    }\n  },\n  "formatter": {\n    "enabled": true,\n    "indentStyle": "space"\n  },\n  "assist": {\n    "enabled": false\n  },\n  "linter": {\n    "enabled": true,\n    "rules": {\n      "preset": "recommended"\n    }\n  }\n}\n',
         },
       ],
       configurationChanges: [
@@ -347,6 +472,7 @@ export const featureRegistry: readonly FeatureDefinition[] = [
         { name: "resend", version: "^6.17.2", type: "dependency" },
       ],
       templates: [
+        contactFormTemplate,
         {
           destination: ".env.example",
           content:
@@ -378,6 +504,7 @@ export const featureRegistry: readonly FeatureDefinition[] = [
             ]
           : [],
       templates: [
+        contactFormTemplate,
         {
           destination: ".env.example",
           content:

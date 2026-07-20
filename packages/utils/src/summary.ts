@@ -12,7 +12,7 @@ export interface ProjectConfigurationSummary {
   projectType: ProjectType;
   packageManager: PackageManager;
   styling: string;
-  content: ContentSetup;
+  content: ContentSetup | "built-in blog collection" | "built-in docs collection";
   forms: FormIntegration;
   deployment: DeploymentTarget;
   agents: string;
@@ -35,7 +35,12 @@ export function summarizeProjectConfiguration(
     projectType: configuration.project.type,
     packageManager: configuration.project.packageManager,
     styling: `${configuration.styling.css}; ${tooling.join(", ")}`,
-    content: configuration.content.setup,
+    content:
+      configuration.project.type === "blog"
+        ? "built-in blog collection"
+        : configuration.project.type === "documentation"
+          ? "built-in docs collection"
+          : configuration.content.setup,
     forms: configuration.features.forms,
     deployment: configuration.deployment.target,
     agents: configuration.developerExperience.agents.join(", ") || "none",

@@ -35,8 +35,12 @@ describe("generateProject", () => {
     expect(clack.log.warn).toHaveBeenCalledWith(
       expect.stringContaining("network unavailable"),
     );
+    expect(clack.log.success).not.toHaveBeenCalled();
     const card = clack.note.mock.calls.at(-1)?.[0] as string;
     expect(card).toContain("npm install");
+    expect(clack.note.mock.calls.at(-1)?.[1]).toBe(
+      "Project created — setup required",
+    );
   });
 
   it("omits the install step when dependencies are installed", async () => {

@@ -59,8 +59,10 @@ with the selected package manager.
 ## Styling and tooling output
 
 The selected styling and tooling features own their generated output. Vanilla
-CSS and Tailwind each provide `src/styles/global.css`; Tailwind also adds the
-Tailwind v4 Vite plugin and its development dependencies. ESLint, Prettier,
+CSS and Tailwind each provide `src/styles/global.css` with the same starter
+visual baseline for typography, spacing, navigation, and a centered content
+width. The choice changes the authoring experience, not the initial design.
+Tailwind also adds the Tailwind v4 Vite plugin and its development dependencies. ESLint, Prettier,
 and Biome each add only their own configuration, scripts, and development
 dependencies. Selecting more than one tooling option keeps their commands
 separate: `lint` for ESLint, `format` and `format:check` for Prettier, and
@@ -68,19 +70,31 @@ separate: `lint` for ESLint, `format` and `format:check` for Prettier, and
 
 ## Content output
 
-`none` leaves the generated project without starter content. Every other
+`none` leaves the generated project without generic starter content. Every other
 content selection creates `src/content.config.ts` and a starter post under
 `src/content/posts`, using Astro's built-in `glob()` loader. MDX additionally
-installs and configures Astro's official MDX integration.
+installs and configures Astro's official MDX integration. Blog and Documentation
+instead own required native collections (`blog` and `docs` respectively), so
+they reject an explicit Content setup to avoid duplicate content structures.
+Their schemas use Astro's current `astro/zod` entry point, and the Documentation
+navigation is derived from its collection so it remains accurate as pages change.
 
 ## Forms output
 
-Resend and webhook forwarding each generate `src/pages/api/contact.ts` and
+Resend and webhook forwarding each generate `src/pages/api/contact.ts` and a
+reusable `ContactForm` component. Marketing and Client starters render that
+component automatically when a forms integration is selected.
 require a server-capable deployment target. Resend adds the `resend` runtime
 dependency and documents `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and
 `RESEND_TO_EMAIL` in `.env.example`. Webhook forwarding uses `WEBHOOK_URL` in
 `.env.example`; it is read only on the server so the destination remains
 private.
+
+## pnpm installation
+
+For pnpm projects, Astro Stack generates `pnpm-workspace.yaml` with the
+required `esbuild` build approval. This keeps the generated project's normal
+non-interactive `pnpm install` command working with pnpm's build-script policy.
 
 ## Deployment output
 

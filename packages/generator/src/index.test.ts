@@ -9,6 +9,7 @@ import {
 import { afterEach, describe, expect, it } from "vitest";
 
 import { createProject } from "./index.js";
+import { formatProjectTemplates } from "./formatter.js";
 
 const directories: string[] = [];
 const stylingCombinations = (["vanilla", "tailwind"] as const).flatMap((css) =>
@@ -60,6 +61,33 @@ async function generate(type: ProjectType): Promise<string> {
 }
 
 describe("createProject", () => {
+  it.each([
+    "marketing",
+    "client",
+    "blog",
+    "documentation",
+    "portfolio",
+    "blank",
+  ] as const)("formats every generated source file for %s", async (type) => {
+    const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
+    directories.push(parent);
+    const directory = join(parent, "project");
+    const project = await createProject(
+      mergeProjectConfiguration({ project: { type, directory } }),
+    );
+    const formattable = project.files.filter((file) =>
+      /\.(astro|css|js|json|md|mdx|mjs|ts)$/.test(file),
+    );
+
+    for (const destination of formattable) {
+      const content = await readFile(join(directory, destination), "utf8");
+      const [formatted] = await formatProjectTemplates([
+        { destination, content },
+      ]);
+      expect(content).toBe(formatted?.content);
+    }
+  });
+
   it("runs feature lifecycle hooks in deterministic generation order", async () => {
     const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
     directories.push(parent);
@@ -91,7 +119,6 @@ describe("createProject", () => {
     "blog",
     "documentation",
     "portfolio",
-    "saas-landing",
     "blank",
   ] as const)("creates a minimal %s project", async (type) => {
     const directory = await generate(type);
@@ -106,19 +133,146 @@ describe("createProject", () => {
     ).resolves.toContain("<h1>");
   });
 
+  it("creates the Blog collection and its index and post routes", async () => {
+    const directory = await generate("blog");
+    const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
+    directories.push(parent);
+    const tailwindDirectory = join(parent, "tailwind-blog");
+    await createProject(
+      mergeProjectConfiguration({
+        project: { type: "blog", directory: tailwindDirectory },
+        styling: { css: "tailwind" },
+      }),
+    );
+    await expect(
+      readFile(join(directory, "src/content.config.ts"), "utf8"),
+    ).resolves.toContain("const blog = defineCollection");
+    await expect(
+      readFile(join(directory, "src/content.config.ts"), "utf8"),
+    ).resolves.toContain('import { z } from "astro/zod"');
+    await expect(
+      readFile(join(directory, "src/content/blog/welcome.md"), "utf8"),
+    ).resolves.toContain("Welcome to your blog");
+    await expect(
+      readFile(join(directory, "src/content/blog/welcome.md"), "utf8"),
+    ).resolves.toContain("# Start writing here");
+    await expect(
+      readFile(join(directory, "src/content/blog/welcome.md"), "utf8"),
+    ).resolves.not.toContain("# Welcome to your blog");
+    await expect(
+      readFile(join(directory, "src/pages/blog/index.astro"), "utf8"),
+    ).resolves.toContain('getCollection("blog")');
+    await expect(
+      readFile(join(directory, "src/pages/blog/[...slug].astro"), "utf8"),
+    ).resolves.toContain("getStaticPaths");
+    await expect(
+      readFile(join(directory, "src/layouts/BlogLayout.astro"), "utf8"),
+    ).resolves.not.toContain("global.css");
+    await expect(
+      readFile(join(directory, "src/layouts/BlogLayout.astro"), "utf8"),
+    ).resolves.toContain("font-size: clamp(2.25rem, 8vw, 4rem);");
+    await expect(
+      readFile(join(tailwindDirectory, "src/layouts/BlogLayout.astro"), "utf8"),
+    ).resolves.toBe(
+      await readFile(join(directory, "src/layouts/BlogLayout.astro"), "utf8"),
+    );
+    await expect(
+      readFile(join(directory, "src/pages/blog/index.astro"), "utf8"),
+    ).resolves.toContain("\n  <ul>\n");
+    await expect(
+      readFile(join(directory, "src/content.config.ts"), "utf8"),
+    ).resolves.toContain("schema: z.object({\n");
+  });
+
+  it("creates unstyled documentation routes and starter pages", async () => {
+    const directory = await generate("documentation");
+    const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
+    directories.push(parent);
+    const tailwindDirectory = join(parent, "tailwind-documentation");
+    await createProject(
+      mergeProjectConfiguration({
+        project: { type: "documentation", directory: tailwindDirectory },
+        styling: { css: "tailwind" },
+      }),
+    );
+    await expect(
+      readFile(join(directory, "src/content.config.ts"), "utf8"),
+    ).resolves.toContain("const docs = defineCollection");
+    await expect(
+      readFile(join(directory, "src/content.config.ts"), "utf8"),
+    ).resolves.toContain('import { z } from "astro/zod"');
+    await expect(
+      readFile(join(directory, "src/content/docs/getting-started.md"), "utf8"),
+    ).resolves.toContain("Getting started");
+    await expect(
+      readFile(join(directory, "src/content/docs/guides/authoring.md"), "utf8"),
+    ).resolves.toContain("Authoring documentation");
+    await expect(
+      readFile(join(directory, "src/layouts/DocsLayout.astro"), "utf8"),
+    ).resolves.not.toContain("global.css");
+    await expect(
+      readFile(join(directory, "src/layouts/DocsLayout.astro"), "utf8"),
+    ).resolves.toContain('<!doctype html>\n<html lang="en">');
+    await expect(
+      readFile(join(directory, "src/layouts/DocsLayout.astro"), "utf8"),
+    ).resolves.toContain("font-size: clamp(2.25rem, 8vw, 4rem);");
+    await expect(
+      readFile(join(directory, "src/layouts/DocsLayout.astro"), "utf8"),
+    ).resolves.toContain('const pages = (await getCollection("docs")).sort(');
+    await expect(
+      readFile(join(tailwindDirectory, "src/layouts/DocsLayout.astro"), "utf8"),
+    ).resolves.toBe(
+      await readFile(join(directory, "src/layouts/DocsLayout.astro"), "utf8"),
+    );
+    await expect(
+      readFile(join(directory, "src/pages/docs/[...slug].astro"), "utf8"),
+    ).resolves.toContain("getStaticPaths");
+  });
+
+  it("creates the distinct client, marketing, and portfolio page structures", async () => {
+    const client = await generate("client");
+    const marketing = await generate("marketing");
+    const portfolio = await generate("portfolio");
+    await expect(
+      readFile(join(client, "src/pages/contact.astro"), "utf8"),
+    ).resolves.toContain("Contact");
+    await expect(
+      readFile(join(marketing, "src/pages/index.astro"), "utf8"),
+    ).resolves.toContain("Why it matters");
+    await expect(
+      readFile(join(portfolio, "src/pages/work/first-project.astro"), "utf8"),
+    ).resolves.toContain("First project");
+  });
+
   it("configures Tailwind with its Vite plugin and global stylesheet", async () => {
     const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
     directories.push(parent);
     const directory = join(parent, "tailwind-project");
+    const vanillaDirectory = join(parent, "vanilla-project");
     await createProject(
       mergeProjectConfiguration({
         project: { directory },
         styling: { css: "tailwind" },
       }),
     );
+    await createProject(
+      mergeProjectConfiguration({
+        project: { directory: vanillaDirectory },
+        styling: { css: "vanilla" },
+      }),
+    );
     await expect(
       readFile(join(directory, "src/styles/global.css"), "utf8"),
-    ).resolves.toBe('@import "tailwindcss";\n');
+    ).resolves.toContain('@import "tailwindcss";');
+    await expect(
+      readFile(join(directory, "src/styles/global.css"), "utf8"),
+    ).resolves.toContain("width: min(100% - 2rem, 72rem);");
+    await expect(
+      readFile(join(vanillaDirectory, "src/styles/global.css"), "utf8"),
+    ).resolves.toContain('font-family: Georgia, "Times New Roman", serif;');
+    await expect(
+      readFile(join(vanillaDirectory, "src/styles/global.css"), "utf8"),
+    ).resolves.toContain("font-size: clamp(2.5rem, 7vw, 5rem);");
     await expect(
       readFile(join(directory, "astro.config.mjs"), "utf8"),
     ).resolves.toContain('import tailwindcss from "@tailwindcss/vite";');
@@ -210,11 +364,11 @@ describe("createProject", () => {
       }),
     );
 
-    await expect(
-      readFile(join(directory, "astro.config.mjs"), "utf8"),
-    ).resolves.toBe(
-      'import { defineConfig } from \'astro/config\';\nimport mdx from "@astrojs/mdx";\nimport tailwindcss from "@tailwindcss/vite";\n\nexport default defineConfig({\n  "integrations": [mdx()],\n  "output": "static",\n  "vite": {\n    "plugins": [tailwindcss()]\n  }\n});\n',
-    );
+    const astro = await readFile(join(directory, "astro.config.mjs"), "utf8");
+    expect(astro).toContain('import mdx from "@astrojs/mdx";');
+    expect(astro).toContain('import tailwindcss from "@tailwindcss/vite";');
+    expect(astro).toContain("integrations: [mdx()]");
+    expect(astro).toContain("plugins: [tailwindcss()]");
   });
 
   it.each(
@@ -244,6 +398,10 @@ describe("createProject", () => {
       return;
     }
 
+    await expect(
+      readFile(join(directory, "src/components/ContactForm.astro"), "utf8"),
+    ).resolves.toContain('action={endpoint} method="post" data-contact-form');
+
     const endpoint = await readFile(
       join(directory, "src/pages/api/contact.ts"),
       "utf8",
@@ -251,7 +409,7 @@ describe("createProject", () => {
     const environment = await readFile(join(directory, ".env.example"), "utf8");
     await expect(
       readFile(join(directory, "astro.config.mjs"), "utf8"),
-    ).resolves.toContain('"output": "server"');
+    ).resolves.toContain('output: "server"');
 
     if (forms === "resend") {
       expect(manifest.dependencies?.resend).toBe("^6.17.2");
@@ -262,6 +420,53 @@ describe("createProject", () => {
     expect(manifest.dependencies?.resend).toBeUndefined();
     expect(endpoint).toContain("fetch(webhookUrl");
     expect(environment).toContain("WEBHOOK_URL=");
+  });
+
+  it("wires selected forms into client contact pages", async () => {
+    const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
+    directories.push(parent);
+    const directory = join(parent, "client");
+    await createProject(
+      mergeProjectConfiguration({
+        project: { type: "client", directory },
+        features: { forms: "webhooks" },
+        deployment: { target: "netlify" },
+      }),
+    );
+    await expect(
+      readFile(join(directory, "src/pages/contact.astro"), "utf8"),
+    ).resolves.toContain("<ContactForm />");
+  });
+
+  it("adds pnpm build approvals only to pnpm projects", async () => {
+    const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
+    directories.push(parent);
+    const pnpmDirectory = join(parent, "pnpm");
+    const cloudflareDirectory = join(parent, "cloudflare");
+    const npmDirectory = join(parent, "npm");
+    await createProject(
+      mergeProjectConfiguration({ project: { directory: pnpmDirectory } }),
+    );
+    await createProject(
+      mergeProjectConfiguration({
+        project: { directory: npmDirectory, packageManager: "npm" },
+      }),
+    );
+    await createProject(
+      mergeProjectConfiguration({
+        project: { directory: cloudflareDirectory },
+        deployment: { target: "cloudflare" },
+      }),
+    );
+    await expect(
+      readFile(join(pnpmDirectory, "pnpm-workspace.yaml"), "utf8"),
+    ).resolves.toBe("allowBuilds:\n  esbuild: true\n");
+    await expect(
+      readFile(join(cloudflareDirectory, "pnpm-workspace.yaml"), "utf8"),
+    ).resolves.toBe("allowBuilds:\n  esbuild: true\n  sharp: true\n  workerd: true\n");
+    await expect(
+      readFile(join(npmDirectory, "pnpm-workspace.yaml"), "utf8"),
+    ).rejects.toMatchObject({ code: "ENOENT" });
   });
 
   it.each(
@@ -302,28 +507,27 @@ describe("createProject", () => {
     const astro = await readFile(join(directory, "astro.config.mjs"), "utf8");
 
     if (target === "static") {
-      expect(astro).toBe(
-        'import { defineConfig } from \'astro/config\';\n\nexport default defineConfig({\n  "output": "static"\n});\n',
-      );
+      expect(astro).toContain('import { defineConfig } from "astro/config";');
+      expect(astro).toContain('output: "static"');
       expect(manifest.devDependencies["@astrojs/vercel"]).toBeUndefined();
       return;
     }
 
-    expect(astro).toContain('"output": "server"');
+    expect(astro).toContain('output: "server"');
     if (target === "vercel") {
       expect(astro).toContain('import vercel from "@astrojs/vercel";');
-      expect(astro).toContain('"adapter": vercel()');
+      expect(astro).toContain("adapter: vercel()");
       expect(manifest.devDependencies["@astrojs/vercel"]).toBe("^11.0.2");
       return;
     }
     if (target === "netlify") {
       expect(astro).toContain('import netlify from "@astrojs/netlify";');
-      expect(astro).toContain('"adapter": netlify()');
+      expect(astro).toContain("adapter: netlify()");
       expect(manifest.devDependencies["@astrojs/netlify"]).toBe("^8.1.1");
       return;
     }
     expect(astro).toContain('import cloudflare from "@astrojs/cloudflare";');
-    expect(astro).toContain('"adapter": cloudflare()');
+    expect(astro).toContain("adapter: cloudflare()");
     expect(manifest.devDependencies["@astrojs/cloudflare"]).toBe("^14.1.2");
     expect(manifest.devDependencies.wrangler).toBe("^4.110.0");
   });
@@ -465,14 +669,26 @@ describe("createProject", () => {
 
     await expect(
       readFile(join(selectedDirectory, "package.json"), "utf8"),
-    ).resolves.toContain('"@biomejs/biome": "2.5.3"');
+    ).resolves.toContain('"@biomejs/biome": "2.5.4"');
     const biomeConfiguration = JSON.parse(
       await readFile(join(selectedDirectory, "biome.json"), "utf8"),
     );
     expect(biomeConfiguration).toMatchObject({
-      $schema: "https://biomejs.dev/schemas/2.5.3/schema.json",
-      files: { includes: ["**", "!!**/dist"] },
-      formatter: { enabled: true, indentStyle: "tab" },
+      $schema: "https://biomejs.dev/schemas/2.5.4/schema.json",
+      files: {
+        includes: [
+          "**",
+          "!!**/*.astro",
+          "!!**/.astro",
+          "!!**/dist",
+          "!!**/.netlify",
+          "!!**/.vercel",
+          "!!**/.wrangler",
+        ],
+      },
+      css: { parser: { tailwindDirectives: true } },
+      formatter: { enabled: true, indentStyle: "space" },
+      assist: { enabled: false },
       linter: { enabled: true, rules: { preset: "recommended" } },
     });
     await expect(

@@ -75,6 +75,14 @@ describe("CLI", () => {
     ).toThrow();
   });
 
+  it("does not accept the retired saas-landing project type", () => {
+    const cli = createCli();
+    cli.exitOverride();
+    expect(() =>
+      cli.parse(["node", "astro-stack", "--type", "saas-landing"]),
+    ).toThrow();
+  });
+
   it("maps the Biome option into the generated-project configuration", () => {
     expect(
       configurationFrom({
@@ -259,7 +267,6 @@ describe("CLI", () => {
         "no",
         "tailwind",
         "relaxed",
-        "collections",
         "webhooks",
         "cloudflare",
         "launch",
@@ -279,7 +286,7 @@ describe("CLI", () => {
         "projectType: documentation",
         "packageManager: bun",
         "styling: tailwind; TypeScript (relaxed), Biome",
-        "content: collections",
+        "content: built-in docs collection",
         "forms: webhooks",
         "deployment: cloudflare",
         "agents: none",
