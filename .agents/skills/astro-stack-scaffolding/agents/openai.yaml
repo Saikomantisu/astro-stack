@@ -1,0 +1,4 @@
+interface:
+  display_name: "Astro Stack Scaffolding"
+  short_description: "Scaffold Astro projects with Astro Stack"
+  default_prompt: "Use $astro-stack-scaffolding to scaffold an Astro project for my requirements."

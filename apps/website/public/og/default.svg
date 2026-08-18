@@ -41,5 +41,5 @@
   <text x="120" y="450" fill="#a1a1aa" font-family="ui-sans-serif, system-ui, sans-serif" font-size="28">Guided CLI · production-ready · project-owned</text>
 
   <rect x="120" y="520" width="220" height="40" rx="20" fill="#9b5de5" fill-opacity="0.25" stroke="#9b5de5" stroke-opacity="0.5"/>
-  <text x="230" y="547" text-anchor="middle" fill="#e9d5ff" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="600">v0.1 · open source</text>
+  <text x="230" y="547" text-anchor="middle" fill="#e9d5ff" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="600">v1.0.0 · open source</text>
 </svg>
