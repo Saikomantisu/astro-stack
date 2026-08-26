@@ -1,5 +1,18 @@
 # @astro-stack/features
 
+## 1.1.0
+
+### Minor Changes
+
+- 8b7475e: Add a Pages CMS option that generates collection-aware `.pages.yml` configuration and repository-backed media setup.
+- 8d653f1: Add a declarative feature catalog with composable typed generator contributions and catalog-driven CLI choices.
+
+### Patch Changes
+
+- Updated dependencies [8b7475e]
+- Updated dependencies [8d653f1]
+  - @astro-stack/utils@1.1.0
+
 ## 1.0.0
 
 ### Patch Changes
