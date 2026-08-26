@@ -6,6 +6,7 @@ import { Button } from "@/components/starwind/button";
 import { trustItems } from "@/lib/content/trust";
 import { withBase } from "@/lib/paths";
 import { cta, links, site } from "@/lib/site";
+import websitePackage from "../../../package.json";
 
 const gettingStartedHref = withBase(cta.href);
 ---
@@ -42,7 +43,7 @@ const gettingStartedHref = withBase(cta.href);
   <div class="relative mx-auto max-w-3xl text-center">
     <Badge variant="secondary" class="mb-6">
       <span class="text-peach" aria-hidden="true">✦</span>
-      &nbsp;v1.0.0 · ready for liftoff
+      &nbsp;v{websitePackage.version} · ready for liftoff
     </Badge>
 
     <h1
