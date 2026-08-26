@@ -4,7 +4,24 @@ import {
 } from "@astro-stack/utils";
 import { describe, expect, it } from "vitest";
 
-import { type FeatureDefinition, resolveFeatures } from "./index.js";
+import {
+  defineFeatureCatalog,
+  type FeatureDefinition,
+  featureRegistry,
+  featureSelectionGroups,
+  getFeatureSelectionOptions,
+  resolveFeatures,
+} from "./index.js";
+
+describe("featureCatalog", () => {
+  it.each(
+    featureSelectionGroups,
+  )("defines exactly one labeled option for every $id value", (group) => {
+    expect(
+      getFeatureSelectionOptions(group.id).map(({ value }) => value),
+    ).toEqual(group.values);
+  });
+});
 
 describe("resolveFeatures", () => {
   const selectionCases: readonly [string, ProjectConfigurationInput][] = [
@@ -37,6 +54,23 @@ describe("resolveFeatures", () => {
     expect(resolveFeatures(mergeProjectConfiguration(input)).features).toEqual(
       expect.arrayContaining([expect.objectContaining({ id })]),
     );
+  });
+
+  it("uses typed contributions for every built-in generator change", () => {
+    expect(
+      featureRegistry.every(
+        ({ dependencies, templates, configurationChanges }) =>
+          dependencies === undefined &&
+          templates === undefined &&
+          configurationChanges === undefined,
+      ),
+    ).toBe(true);
+  });
+
+  it("rejects an incomplete catalog", () => {
+    expect(() =>
+      defineFeatureCatalog({ groups: featureSelectionGroups, features: [] }),
+    ).toThrow("must have exactly one definition");
   });
 
   it("resolves every supported selection into a stable feature plan", () => {
@@ -113,5 +147,114 @@ describe("resolveFeatures", () => {
       ["configuration", "astro.config.mjs:output"],
       ["dependency", "astro"],
     ]);
+  });
+
+  it("composes independent typed contributions", () => {
+    const alwaysSelected = () => true;
+    const registry: readonly FeatureDefinition[] = [
+      {
+        id: "first",
+        isSelected: alwaysSelected,
+        contributions: {
+          packageScripts: { inspect: "first" },
+          astroConfig: {
+            integrations: [
+              {
+                id: "first",
+                expression: "first()",
+                imports: ['import first from "first";'],
+              },
+            ],
+          },
+        },
+      },
+      {
+        id: "second",
+        isSelected: alwaysSelected,
+        contributions: {
+          packageScripts: { validate: "second" },
+          astroConfig: {
+            integrations: [
+              {
+                id: "second",
+                expression: "second()",
+                imports: ['import second from "second";'],
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const resolution = resolveFeatures(mergeProjectConfiguration(), registry);
+
+    expect(resolution.valid).toBe(true);
+    expect(resolution.packageScripts).toEqual({
+      inspect: "first",
+      validate: "second",
+    });
+    expect(resolution.astroConfig.integrations.map(({ id }) => id)).toEqual([
+      "first",
+      "second",
+    ]);
+  });
+
+  it("detects conflicts between typed singleton contributions", () => {
+    const registry: readonly FeatureDefinition[] = [
+      {
+        id: "first",
+        isSelected: () => true,
+        contributions: { astroConfig: { output: "static" } },
+      },
+      {
+        id: "second",
+        isSelected: () => true,
+        contributions: { astroConfig: { output: "server" } },
+      },
+    ];
+
+    const resolution = resolveFeatures(mergeProjectConfiguration(), registry);
+
+    expect(resolution.valid).toBe(false);
+    expect(resolution.conflicts).toContainEqual(
+      expect.objectContaining({
+        kind: "configuration",
+        target: "astro.config.mjs:output",
+      }),
+    );
+  });
+
+  it("rejects legacy and typed changes to the same configuration value", () => {
+    const registry: readonly FeatureDefinition[] = [
+      {
+        id: "legacy",
+        isSelected: () => true,
+        configurationChanges: [
+          {
+            file: "astro.config.mjs",
+            path: "integrations",
+            value: { type: "astro-config-expression", code: "[legacy()]" },
+          },
+        ],
+      },
+      {
+        id: "typed",
+        isSelected: () => true,
+        contributions: {
+          astroConfig: {
+            integrations: [{ id: "typed", expression: "typed()" }],
+          },
+        },
+      },
+    ];
+
+    const resolution = resolveFeatures(mergeProjectConfiguration(), registry);
+
+    expect(resolution.valid).toBe(false);
+    expect(resolution.conflicts).toContainEqual(
+      expect.objectContaining({
+        target: "astro.config.mjs:integrations",
+      }),
+    );
   });
 });

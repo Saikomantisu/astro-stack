@@ -1,3 +1,4 @@
+import type { FeatureStarterPageContribution } from "@astro-stack/features";
 import {
   generatedProjectCommands,
   type ProjectConfiguration,
@@ -46,16 +47,23 @@ function render(template: string, context: TemplateContext): string {
   );
 }
 
-function createContext(configuration: ProjectConfiguration): TemplateContext {
+function createContext(
+  configuration: ProjectConfiguration,
+  starterPage: readonly FeatureStarterPageContribution[],
+): TemplateContext {
   const [projectTitle, projectDescription] =
     projectDetails[configuration.project.type];
+  const contributions = starterPage.filter((contribution) =>
+    contribution.projectTypes.includes(configuration.project.type),
+  );
   return {
-    contactForm:
-      configuration.features.forms === "none" ? "" : "<ContactForm />",
-    contactFormImport:
-      configuration.features.forms === "none"
-        ? ""
-        : "import ContactForm from '../components/ContactForm.astro';",
+    contactForm: contributions
+      .filter(({ slot }) => slot === "contact")
+      .map(({ content }) => content)
+      .join("\n"),
+    contactFormImport: [
+      ...new Set(contributions.flatMap(({ imports }) => imports ?? [])),
+    ].join("\n"),
     installCommand: `${configuration.project.packageManager} install`,
     projectName: configuration.project.name,
     projectTitle,
@@ -74,15 +82,10 @@ function manifest(configuration: ProjectConfiguration): string {
 }
 
 function pnpmWorkspaceConfiguration(
-  configuration: ProjectConfiguration,
+  featureBuildDependencies: readonly string[],
 ): string {
   const buildDependencies = [
-    "esbuild",
-    ...(configuration.deployment.target === "netlify"
-      ? ["@parcel/watcher", "sharp"]
-      : configuration.deployment.target === "cloudflare"
-        ? ["sharp", "workerd"]
-        : []),
+    ...new Set(["esbuild", ...featureBuildDependencies]),
   ].sort();
   return `allowBuilds:\n${buildDependencies
     .map(
@@ -560,8 +563,12 @@ function projectTemplates(
 /** Returns only the base assets and selected project blueprint. */
 export function createBaseTemplates(
   configuration: ProjectConfiguration,
+  options: {
+    pnpmBuildDependencies?: readonly string[];
+    starterPage?: readonly FeatureStarterPageContribution[];
+  } = {},
 ): ProjectTemplate[] {
-  const context = createContext(configuration);
+  const context = createContext(configuration, options.starterPage ?? []);
   return [
     { destination: "package.json", content: manifest(configuration) },
     {
@@ -581,7 +588,9 @@ export function createBaseTemplates(
       ? [
           {
             destination: "pnpm-workspace.yaml",
-            content: pnpmWorkspaceConfiguration(configuration),
+            content: pnpmWorkspaceConfiguration(
+              options.pnpmBuildDependencies ?? [],
+            ),
           },
         ]
       : []),

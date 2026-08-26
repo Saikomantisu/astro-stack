@@ -27,10 +27,19 @@ confirmation.
 
 The initial cross-section rule is that Resend and webhook forwarding cannot use
 the static deployment target because they require a server-capable runtime.
-Feature-specific validation and pre-write conflict detection are performed by
-`resolveFeatures()` in `@astro-stack/features`; its deterministic plan is the
-input to project generation. `summarizeProjectConfiguration()` produces the
-stable, display-ready values required by the CLI's final summary screen.
+Feature-specific capability validation and pre-write conflict detection are
+performed by `resolveFeatures()` in `@astro-stack/features`. Its deterministic
+plan contains the selected dependencies, files, package scripts, Astro
+configuration, environment variables, starter-page additions, completion notes,
+and lifecycle hooks. That plan is the input to project generation.
+`summarizeProjectConfiguration()` produces the stable, display-ready values
+required by the CLI's final summary screen.
+
+The CLI reads feature labels, supported choices, prompt copy, and automation
+metadata from the selection catalog. The public configuration value arrays in
+`@astro-stack/utils` define the accepted values, and catalog verification
+requires exactly one feature definition for each value. See
+[Feature catalog](./FEATURES.md) for the extension workflow.
 
 ## Agent and editor output
 

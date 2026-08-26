@@ -1,3 +1,4 @@
+import { resolveFeatures } from "@astro-stack/features";
 import { createProject, finishProject } from "@astro-stack/generator";
 import {
   type ProjectConfiguration,
@@ -37,10 +38,5 @@ export function nextSteps(
 export function projectNotes(
   configuration: ProjectConfiguration,
 ): readonly string[] {
-  const notes: string[] = [];
-  if (configuration.features.forms === "resend")
-    notes.push("Set RESEND_API_KEY in .env before the contact form will work.");
-  if (configuration.features.forms === "webhooks")
-    notes.push("Set WEBHOOK_URL in .env before the contact form will work.");
-  return notes;
+  return resolveFeatures(configuration).projectNotes;
 }

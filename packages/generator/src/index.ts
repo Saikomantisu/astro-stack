@@ -9,6 +9,8 @@ import {
 import {
   applyConfigurationChanges,
   applyDependencies,
+  applyEnvironmentVariables,
+  configurationChangesFromContributions,
 } from "./configuration.js";
 import { formatProjectTemplates } from "./formatter.js";
 import { createBaseTemplates } from "./templates.js";
@@ -55,10 +57,25 @@ export async function createProject(
   const templates = await formatProjectTemplates(
     applyConfigurationChanges(
       applyDependencies(
-        [...createBaseTemplates(configuration), ...featureResolution.templates],
+        applyEnvironmentVariables(
+          [
+            ...createBaseTemplates(configuration, {
+              pnpmBuildDependencies: featureResolution.pnpmBuildDependencies,
+              starterPage: featureResolution.starterPage,
+            }),
+            ...featureResolution.templates,
+          ],
+          featureResolution.environmentVariables,
+        ),
         featureResolution.dependencies,
       ),
-      featureResolution.configurationChanges,
+      [
+        ...featureResolution.configurationChanges,
+        ...configurationChangesFromContributions(
+          featureResolution.packageScripts,
+          featureResolution.astroConfig,
+        ),
+      ],
     ),
   );
   const files = await writeProject(directory, templates);

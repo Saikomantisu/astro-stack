@@ -1,34 +1,28 @@
 import {
+  agentInstructionTargets,
+  codeQualityTools,
+  contentSetups,
+  cssFrameworks,
+  deploymentTargets,
+  editorTargets,
+  formIntegrations,
   mergeProjectConfiguration,
   type ProjectConfiguration,
+  packageManagers,
+  projectTypes,
+  typeScriptPreferences,
 } from "@astro-stack/utils";
 
-export const types = [
-  "marketing",
-  "client",
-  "blog",
-  "documentation",
-  "portfolio",
-  "blank",
-] as const;
-export const managers = ["npm", "pnpm", "yarn", "bun"] as const;
-export const cssOptions = ["vanilla", "tailwind"] as const;
-export const tsOptions = ["strict", "relaxed"] as const;
-export const contentOptions = [
-  "none",
-  "markdown",
-  "mdx",
-  "collections",
-] as const;
-export const formOptions = ["none", "resend", "webhooks"] as const;
-export const deploymentOptions = [
-  "static",
-  "vercel",
-  "netlify",
-  "cloudflare",
-] as const;
-export const agentOptions = ["codex", "claude"] as const;
-export const editorOptions = ["vscode", "cursor", "zed"] as const;
+export const types = projectTypes;
+export const managers = packageManagers;
+export const cssOptions = cssFrameworks;
+export const tsOptions = typeScriptPreferences;
+export const toolingOptions = codeQualityTools;
+export const contentOptions = contentSetups;
+export const formOptions = formIntegrations;
+export const deploymentOptions = deploymentTargets;
+export const agentOptions = agentInstructionTargets;
+export const editorOptions = editorTargets;
 export interface CliOptions {
   name?: string;
   directory?: string;

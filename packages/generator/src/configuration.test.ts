@@ -1,7 +1,14 @@
-import type { FeatureConfigurationChange } from "@astro-stack/features";
+import type {
+  FeatureConfigurationChange,
+  ResolvedFeatureAstroConfig,
+} from "@astro-stack/features";
 import { describe, expect, it } from "vitest";
 
-import { applyConfigurationChanges } from "./configuration.js";
+import {
+  applyConfigurationChanges,
+  applyEnvironmentVariables,
+  configurationChangesFromContributions,
+} from "./configuration.js";
 import type { ProjectTemplate } from "./templates.js";
 
 const templates: readonly ProjectTemplate[] = [
@@ -98,5 +105,54 @@ describe("applyConfigurationChanges", () => {
     expect(astro?.content).toBe(
       'import { defineConfig } from \'astro/config\';\nimport tailwindcss from "@tailwindcss/vite";\n\nexport default defineConfig({\n  "vite": {\n    "plugins": [tailwindcss()]\n  }\n});\n',
     );
+  });
+});
+
+describe("typed feature contributions", () => {
+  it("renders multiple Astro integrations in one array", () => {
+    const astroConfig: ResolvedFeatureAstroConfig = {
+      integrations: [
+        {
+          id: "mdx",
+          expression: "mdx()",
+          imports: ['import mdx from "@astrojs/mdx";'],
+        },
+        {
+          id: "sitemap",
+          expression: "sitemap()",
+          imports: ['import sitemap from "@astrojs/sitemap";'],
+        },
+      ],
+      vitePlugins: [],
+    };
+    const merged = applyConfigurationChanges(
+      templates,
+      configurationChangesFromContributions({}, astroConfig),
+    );
+    const astro = merged.find(
+      ({ destination }) => destination === "astro.config.mjs",
+    );
+
+    expect(astro?.content).toContain("integrations");
+    expect(astro?.content).toContain("[mdx(), sitemap()]");
+    expect(astro?.content).toContain('import mdx from "@astrojs/mdx";');
+    expect(astro?.content).toContain('import sitemap from "@astrojs/sitemap";');
+  });
+
+  it("composes one environment example from selected variables", () => {
+    const withEnvironment = applyEnvironmentVariables(templates, [
+      {
+        name: "FIRST_TOKEN",
+        example: "first",
+        comment: "First service token.",
+      },
+      { name: "SECOND_TOKEN", example: "second" },
+    ]);
+
+    expect(withEnvironment.at(-1)).toEqual({
+      destination: ".env.example",
+      content:
+        "# First service token.\nFIRST_TOKEN=first\nSECOND_TOKEN=second\n",
+    });
   });
 });
