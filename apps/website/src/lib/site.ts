@@ -33,6 +33,7 @@ export const primaryNav = [
 
 /** The small, high-value set of destinations surfaced from the Resources menu. */
 export const resourceNav = [
+  { label: "News", href: "news/" },
   { label: "Installation", href: "docs/installation/" },
   { label: "Documentation", href: links.docs },
   { label: "Changelog", href: "changelog/" },

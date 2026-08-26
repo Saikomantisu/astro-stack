@@ -1,0 +1,115 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import ArrowLeft from "@tabler/icons/outline/arrow-left.svg";
+import ArrowRight from "@tabler/icons/outline/arrow-right.svg";
+import ArrowUpRight from "@tabler/icons/outline/arrow-up-right.svg";
+import BaseLink from "@/components/common/BaseLink.astro";
+import Container from "@/components/common/Container.astro";
+import Prose from "@/components/common/Prose.astro";
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import { formatNewsDate, sortNews } from "@/lib/news";
+
+export async function getStaticPaths() {
+  const entries = sortNews(await getCollection("news"));
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"news">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const newsItems = sortNews(await getCollection("news"));
+const storyIndex = newsItems.findIndex((item) => item.id === entry.id);
+const nextStory = newsItems[storyIndex + 1];
+const story = entry.data;
+---
+
+<MarketingLayout
+  title={story.title}
+  description={story.description}
+  ogImage={false}
+  ogType="article"
+>
+  <article>
+    <header class="relative overflow-hidden border-b border-border/60">
+      <div
+        class="pointer-events-none absolute inset-0 opacity-50"
+        style="background: radial-gradient(circle at 72% 20%, color-mix(in oklab, var(--primary) 24%, transparent), transparent 30rem);"
+        aria-hidden="true"
+      ></div>
+      <Container class="relative py-14 sm:py-20">
+        <BaseLink
+          href="news/"
+          class="text-muted-foreground hover:text-foreground focus-visible:ring-outline/50 inline-flex items-center gap-2 rounded-md text-sm font-medium outline-none transition-colors focus-visible:ring-3"
+        >
+          <ArrowLeft class="size-4" aria-hidden="true" />
+          All news
+        </BaseLink>
+        <div class="mt-12 max-w-4xl">
+          <div class="flex flex-wrap items-center gap-3 text-xs font-semibold tracking-[0.12em] uppercase">
+            <span class="text-peach">{story.category}</span>
+            <span class="text-border" aria-hidden="true">/</span>
+            <time class="text-muted-foreground" datetime={story.publishedAt.toISOString()}>
+              {formatNewsDate(story.publishedAt)}
+            </time>
+            {story.readingTime && <span class="text-muted-foreground">{story.readingTime}</span>}
+          </div>
+          <h1 class="font-display mt-6 text-4xl leading-[1.05] font-semibold tracking-[-0.04em] text-balance sm:text-6xl">
+            {story.title}
+          </h1>
+          <p class="text-muted-foreground mt-7 max-w-3xl text-lg leading-relaxed sm:text-xl">
+            {story.description}
+          </p>
+        </div>
+      </Container>
+    </header>
+
+    <Container class="py-12 sm:py-16">
+      <Prose class="max-w-3xl">
+        <Content />
+      </Prose>
+
+      <aside class="mt-14 max-w-3xl border-t border-border/60 pt-8" aria-labelledby="related-reading">
+        <h2 id="related-reading" class="font-display text-lg tracking-tight">Related reading</h2>
+        <ul class="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-6">
+          {
+            story.relatedLinks.map((link) => (
+              <li>
+                <BaseLink
+                  href={link.href}
+                  class="text-muted-foreground hover:text-foreground focus-visible:ring-outline/50 inline-flex items-center gap-1.5 rounded-md text-sm font-medium outline-none transition-colors focus-visible:ring-3"
+                >
+                  {link.label}
+                  <ArrowUpRight class="size-3.5" aria-hidden="true" />
+                </BaseLink>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+
+      {
+        nextStory && (
+          <aside class="mt-12 max-w-3xl rounded-2xl border border-border bg-card/60 p-7 sm:p-9" aria-labelledby="next-story">
+            <p class="text-peach text-xs font-bold tracking-[0.14em] uppercase">Next story</p>
+            <h2 id="next-story" class="font-display mt-3 text-2xl leading-tight tracking-[-0.025em] text-balance">
+              {nextStory.data.title}
+            </h2>
+            <BaseLink
+              href={`news/${nextStory.id}/`}
+              class="focus-visible:ring-outline/50 mt-6 inline-flex items-center gap-2 rounded-md text-sm font-semibold outline-none transition-colors hover:text-peach focus-visible:ring-3"
+            >
+              Keep reading
+              <ArrowRight class="size-4" aria-hidden="true" />
+            </BaseLink>
+          </aside>
+        )
+      }
+    </Container>
+  </article>
+</MarketingLayout>

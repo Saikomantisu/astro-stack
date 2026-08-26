@@ -17,4 +17,26 @@ const docs = defineCollection({
   }),
 });
 
-export const collections = { docs };
+const news = defineCollection({
+  loader: glob({
+    base: "./src/content/news",
+    pattern: "**/*.{md,mdx}",
+  }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    category: z.enum(["Release", "Product", "Engineering"]),
+    publishedAt: z.coerce.date(),
+    readingTime: z.string(),
+    order: z.number().int().nonnegative(),
+    featured: z.boolean().default(false),
+    relatedLinks: z.array(
+      z.object({
+        label: z.string(),
+        href: z.string(),
+      }),
+    ),
+  }),
+});
+
+export const collections = { docs, news };
