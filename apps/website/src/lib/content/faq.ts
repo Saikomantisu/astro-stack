@@ -42,7 +42,7 @@ export const faqItems = [
     value: "not-a",
     question: "Is Astro Stack a CMS, host, or website builder?",
     answer:
-      "No. It is not a CMS, visual editor, low-code platform, or hosting service. It generates project-owned Astro codebases you develop and deploy yourself.",
+      "No. It generates project-owned Astro codebases you develop and deploy yourself. It can configure Pages CMS for selected content, but it does not host the editor or store your content.",
   },
   {
     value: "agents",

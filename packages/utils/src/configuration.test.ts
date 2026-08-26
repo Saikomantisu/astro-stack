@@ -60,6 +60,7 @@ describe("mergeProjectConfiguration", () => {
         packageManager: "pnpm",
       },
       styling: { css: "tailwind", typescript: "strict", prettier: false },
+      content: { setup: "none", cms: "none" },
       deployment: { target: "vercel" },
     });
     expect(configuration.project).not.toBe(defaultProjectConfiguration.project);
@@ -83,6 +84,7 @@ describe("validateProjectConfiguration", () => {
   it("reports invalid selections and incompatible combinations as displayable errors", () => {
     const configuration = mergeProjectConfiguration({
       project: { name: "Invalid Name" },
+      content: { cms: "unsupported" as never },
       features: { forms: "resend" },
       deployment: { target: "static" },
     });
@@ -99,6 +101,10 @@ describe("validateProjectConfiguration", () => {
         expect.objectContaining({
           code: "resend-requires-server-runtime",
           level: "error",
+        }),
+        expect.objectContaining({
+          code: "invalid-cms-integration",
+          path: "content.cms",
         }),
       ]),
     );
@@ -214,7 +220,7 @@ describe("summarizeProjectConfiguration", () => {
     const summary = summarizeProjectConfiguration(
       mergeProjectConfiguration({
         styling: { css: "tailwind" },
-        content: { setup: "mdx" },
+        content: { setup: "mdx", cms: "pages" },
       }),
     );
 
@@ -222,6 +228,7 @@ describe("summarizeProjectConfiguration", () => {
       project: "my-astro-project",
       styling: "tailwind; TypeScript (strict), ESLint, Prettier, Biome",
       content: "mdx",
+      cms: "pages",
     });
   });
 

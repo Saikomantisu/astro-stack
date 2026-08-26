@@ -40,6 +40,7 @@ corresponding files, dependencies, and configuration.
 | Project | Marketing site, client site, blog, documentation, portfolio, SaaS landing page, or blank project |
 | Styling | Tailwind CSS or vanilla CSS |
 | Content | None, Markdown, MDX, or Content Collections |
+| CMS | None or Pages CMS |
 | Forms | None, Resend, or webhooks |
 | Deployment | Static hosting, Vercel, Netlify, or Cloudflare |
 | Tooling | Strict or relaxed TypeScript, ESLint, Prettier, Biome, Codex/Claude instructions, VS Code/Cursor/Zed integration, and optional Git hooks |

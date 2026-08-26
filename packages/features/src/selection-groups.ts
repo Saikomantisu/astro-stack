@@ -1,5 +1,6 @@
 import {
   agentInstructionTargets,
+  cmsIntegrations,
   codeQualityTools,
   contentSetups,
   cssFrameworks,
@@ -16,6 +17,7 @@ export const featureSelectionGroupIds = [
   "styling.typescript",
   "styling.tooling",
   "content.setup",
+  "content.cms",
   "features.forms",
   "deployment.target",
 ] as const;
@@ -92,6 +94,13 @@ export const featureSelectionGroups = [
     values: contentSetups,
     prompt: { message: "Content setup" },
     cli: { flag: "--content <setup>", description: "Content setup" },
+  },
+  {
+    id: "content.cms",
+    kind: "single",
+    values: cmsIntegrations,
+    prompt: { message: "CMS integration" },
+    cli: { flag: "--cms <integration>", description: "CMS integration" },
   },
   {
     id: "features.forms",

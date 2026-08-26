@@ -27,6 +27,7 @@ Run Astro Stack with the package manager you use. No global installation is need
 | TypeScript | `strict`, `relaxed` | `strict` |
 | Code quality | ESLint, Prettier, Biome | All selected |
 | Content | `none`, `markdown`, `mdx`, `collections` | `none` |
+| CMS | `none`, `pages` | `none` |
 | Forms | `none`, `resend`, `webhooks` | `none` |
 | Deployment | `static`, `vercel`, `netlify`, `cloudflare` | `static` |
 | Agent instructions | `codex`, `claude` | None |
@@ -40,7 +41,7 @@ Use `--non-interactive --yes` together in scripts. Without `--yes`, a non-intera
 
 <CodeBlock label="Automated project" code={`create-astro-stack --non-interactive --yes \\
   --name launch-site --directory ./launch-site --type marketing \\
-  --css tailwind --content mdx --deployment vercel \\
+  --css tailwind --content mdx --cms pages --deployment vercel \\
   --agent codex --agent claude --editor vscode --hooks`} />
 
 | Option | Values or behavior |
@@ -52,6 +53,7 @@ Use `--non-interactive --yes` together in scripts. Without `--yes`, a non-intera
 | `--css <framework>` | `vanilla` or `tailwind`. |
 | `--typescript <preference>` | `strict` or `relaxed`. |
 | `--content <setup>` | `none`, `markdown`, `mdx`, or `collections`; omit it for Blog and Documentation. |
+| `--cms <integration>` | `none` or `pages`; Pages CMS requires file-backed content. |
 | `--forms <integration>` | `none`, `resend`, or `webhooks`. |
 | `--deployment <target>` | `static`, `vercel`, `netlify`, or `cloudflare`. |
 | `--agent <target>` | Repeat for `codex` and/or `claude`. |
@@ -63,7 +65,7 @@ Use `--non-interactive --yes` together in scripts. Without `--yes`, a non-intera
 | `--non-interactive` | Do not display prompts. |
 
 <Warning title="Validate combinations before automation">
-  Resend and webhooks cannot use `static` deployment. VS Code and Cursor cannot be selected together. Hooks require Git, so `--hooks --no-git` fails before files are written.
+  Pages CMS requires Markdown, MDX, Content Collections, or a Blog or Documentation project. Resend and webhooks cannot use `static` deployment. VS Code and Cursor cannot be selected together. Hooks require Git, so `--hooks --no-git` fails before files are written.
 </Warning>
 
 ## Examples
@@ -74,10 +76,10 @@ Use `--non-interactive --yes` together in scripts. Without `--yes`, a non-intera
   --name launch-site --directory ./launch-site --type marketing \\
   --no-eslint --no-prettier --no-biome`} />
 
-### Blog with MDX and Vercel
+### Blog with Pages CMS and Vercel
 
 <CodeBlock label="pnpm" code={`pnpm create astro-stack -- --non-interactive --yes \\
-  --name studio-journal --type blog --css tailwind --content mdx \\
+  --name studio-journal --type blog --css tailwind --cms pages \\
   --deployment vercel --agent codex`} />
 
 ### Webhook form on Netlify

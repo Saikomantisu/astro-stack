@@ -29,6 +29,7 @@ import { generateProject, validateForGeneration } from "./generation.js";
 import {
   agentOptions,
   type CliOptions,
+  cmsOptions,
   configurationFrom,
   contentOptions,
   cssOptions,
@@ -326,6 +327,17 @@ export async function runInteractive(
           initialValue: defaults.content.setup,
         });
   if (cancelled(content)) return 0;
+  const cms =
+    projectType === "blog" ||
+    projectType === "documentation" ||
+    content !== "none"
+      ? await prompts.select({
+          message: featurePromptMessage("content.cms"),
+          options: featurePromptOptions("content.cms", cmsOptions),
+          initialValue: defaults.content.cms,
+        })
+      : defaults.content.cms;
+  if (cancelled(cms)) return 0;
   const forms = await prompts.select({
     message: featurePromptMessage("features.forms"),
     options: featurePromptOptions("features.forms", formOptions),
@@ -347,7 +359,7 @@ export async function runInteractive(
       prettier: tooling.includes("prettier"),
       biome: tooling.includes("biome"),
     },
-    content: { setup: content },
+    content: { setup: content, cms },
     features: { forms },
     deployment: { target: deployment },
     developerExperience: { agents, editors, hooks: hooks === "yes" },
@@ -392,6 +404,7 @@ export function createCli(generator: Generate = generateAndFinish): Command {
     .addOption(featureChoiceOption(cli, "styling.css"))
     .addOption(featureChoiceOption(cli, "styling.typescript"))
     .addOption(featureChoiceOption(cli, "content.setup"))
+    .addOption(featureChoiceOption(cli, "content.cms"))
     .addOption(featureChoiceOption(cli, "features.forms"))
     .addOption(featureChoiceOption(cli, "deployment.target"))
     .option(

@@ -31,7 +31,7 @@ export const docsNavigation: DocsNavItem[] = [
   {
     slug: "content",
     label: "Content",
-    description: "Work with the Markdown and MDX content setup.",
+    description: "Work with Markdown, MDX, and Pages CMS.",
     section: "Guide",
     order: 4,
   },

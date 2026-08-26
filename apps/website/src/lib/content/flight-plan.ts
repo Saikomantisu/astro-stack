@@ -24,9 +24,9 @@ export const flightPlanSteps = [
   {
     step: 4,
     label: "Content",
-    summary: "None, Markdown, MDX, or Content Collections",
+    summary: "Markdown, MDX, Content Collections, and Pages CMS",
     detail:
-      "Add only the content path you need; Blog and Documentation include their native collections automatically.",
+      "Add only the content path you need. Blog and Documentation include native collections, and Pages CMS can manage any file-backed choice.",
   },
   {
     step: 5,
