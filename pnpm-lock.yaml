@@ -124,6 +124,9 @@ importers:
 
   packages/cli:
     dependencies:
+      '@astro-stack/features':
+        specifier: workspace:*
+        version: link:../features
       '@astro-stack/generator':
         specifier: workspace:*
         version: link:../generator

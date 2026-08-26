@@ -9,6 +9,7 @@ export const projectTypes = [
 export const packageManagers = ["npm", "pnpm", "yarn", "bun"] as const;
 export const cssFrameworks = ["vanilla", "tailwind"] as const;
 export const typeScriptPreferences = ["strict", "relaxed"] as const;
+export const codeQualityTools = ["eslint", "prettier", "biome"] as const;
 export const contentSetups = [
   "none",
   "markdown",
@@ -28,6 +29,7 @@ export type ProjectType = (typeof projectTypes)[number];
 export type PackageManager = (typeof packageManagers)[number];
 export type CssFramework = (typeof cssFrameworks)[number];
 export type TypeScriptPreference = (typeof typeScriptPreferences)[number];
+export type CodeQualityTool = (typeof codeQualityTools)[number];
 export type ContentSetup = (typeof contentSetups)[number];
 export type FormIntegration = (typeof formIntegrations)[number];
 export type DeploymentTarget = (typeof deploymentTargets)[number];

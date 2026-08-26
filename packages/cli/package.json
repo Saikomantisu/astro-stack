@@ -49,6 +49,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@astro-stack/features": "workspace:*",
     "@astro-stack/generator": "workspace:*",
     "@astro-stack/utils": "workspace:*",
     "@clack/prompts": "^1.7.0",

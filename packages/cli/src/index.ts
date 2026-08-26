@@ -3,9 +3,13 @@
 import { readFileSync, realpathSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import {
-  editorTargetsConflict,
+  type FeatureSelectionGroupId,
+  getFeatureSelectionGroup,
+  getFeatureSelectionOptions,
+  resolveFeatures,
+} from "@astro-stack/features";
+import {
   mergeProjectConfiguration,
-  serverRuntimeFormsConflict,
   summarizeProjectConfiguration,
 } from "@astro-stack/utils";
 import {
@@ -33,6 +37,7 @@ import {
   formOptions,
   type Generate,
   managers,
+  toolingOptions,
   tsOptions,
   types,
 } from "./options.js";
@@ -105,25 +110,6 @@ const labels: Record<string, string> = {
   pnpm: "pnpm",
   yarn: "Yarn",
   bun: "Bun",
-  vanilla: "Vanilla CSS",
-  tailwind: "Tailwind CSS",
-  strict: "Strict (recommended)",
-  relaxed: "Relaxed",
-  none: "None",
-  markdown: "Markdown",
-  mdx: "MDX",
-  collections: "Content Collections",
-  resend: "Resend",
-  webhooks: "Webhooks",
-  static: "Static site",
-  vercel: "Vercel",
-  netlify: "Netlify",
-  cloudflare: "Cloudflare",
-  codex: "Codex (AGENTS.md)",
-  claude: "Claude Code (CLAUDE.md)",
-  vscode: "VS Code",
-  cursor: "Cursor",
-  zed: "Zed",
 };
 
 function promptOptions<Value extends string>(
@@ -132,9 +118,58 @@ function promptOptions<Value extends string>(
   return values.map((value) => ({ value, label: labels[value] ?? value }));
 }
 
+function featurePromptOptions<Value extends string>(
+  groupId: FeatureSelectionGroupId,
+  values: readonly Value[],
+): PromptOption<Value>[] {
+  const options = getFeatureSelectionOptions<Value>(groupId);
+  if (
+    options.length !== values.length ||
+    options.some(({ value }, index) => value !== values[index])
+  )
+    throw new Error(`CLI values do not match the ${groupId} feature catalog.`);
+  return options.map(({ value, label, hint }) => ({
+    value,
+    label,
+    ...(hint ? { hint } : {}),
+  }));
+}
+
+function featurePromptMessage(groupId: FeatureSelectionGroupId): string {
+  return getFeatureSelectionGroup(groupId).prompt.message;
+}
+
+function featureCliMetadata(groupId: FeatureSelectionGroupId): {
+  flag: string;
+  description: string;
+} {
+  const metadata = getFeatureSelectionGroup(groupId).cli;
+  if (!metadata)
+    throw new Error(`Feature selection group ${groupId} has no CLI option.`);
+  return metadata;
+}
+
+function featureChoiceOption(cli: Command, groupId: FeatureSelectionGroupId) {
+  const metadata = featureCliMetadata(groupId);
+  return cli
+    .createOption(metadata.flag, metadata.description)
+    .choices(getFeatureSelectionOptions(groupId).map(({ value }) => value));
+}
+
+function featureProblem(
+  groupId: FeatureSelectionGroupId,
+  configuration: ReturnType<typeof mergeProjectConfiguration>,
+): { message: string; suggestion?: string } | undefined {
+  const resolution = resolveFeatures(configuration);
+  return (
+    resolution.errors.find(({ path }) => path === groupId) ??
+    resolution.conflicts.find(({ path }) => path === groupId)
+  );
+}
+
 /** Renders a conflict's message and its suggested fix as a single note body. */
-const conflictNote = (conflict: { message: string; suggestion: string }) =>
-  `${conflict.message} ${conflict.suggestion}`;
+const conflictNote = (conflict: { message: string; suggestion?: string }) =>
+  `${conflict.message}${conflict.suggestion ? ` ${conflict.suggestion}` : ""}`;
 
 /**
  * Prompts for editor integrations, re-asking immediately if the selection is
@@ -145,15 +180,19 @@ async function promptEditors(
   prompts: InteractivePrompts,
   initialValues: (typeof editorOptions)[number][],
 ): Promise<(typeof editorOptions)[number][] | symbol> {
+  const group = getFeatureSelectionGroup("developerExperience.editors");
   while (true) {
     const editors = await prompts.multiselect({
-      message: "Editor integration (optional — Enter to skip)",
-      options: promptOptions(editorOptions),
+      message: group.prompt.message,
+      options: featurePromptOptions(group.id, editorOptions),
       initialValues,
       required: false,
     });
     if (cancelled(editors)) return editors;
-    const conflict = editorTargetsConflict(editors);
+    const conflict = featureProblem(
+      group.id,
+      mergeProjectConfiguration({ developerExperience: { editors } }),
+    );
     if (conflict) {
       prompts.note(conflictNote(conflict), "Incompatible editors");
       continue;
@@ -169,17 +208,24 @@ async function promptEditors(
  */
 async function promptDeployment(
   prompts: InteractivePrompts,
-  forms: string,
+  forms: (typeof formOptions)[number],
   initialValue: (typeof deploymentOptions)[number],
 ): Promise<(typeof deploymentOptions)[number] | symbol> {
+  const group = getFeatureSelectionGroup("deployment.target");
   while (true) {
     const deployment = await prompts.select({
-      message: "Deployment target",
-      options: promptOptions(deploymentOptions),
+      message: group.prompt.message,
+      options: featurePromptOptions(group.id, deploymentOptions),
       initialValue,
     });
     if (cancelled(deployment)) return deployment;
-    const conflict = serverRuntimeFormsConflict(forms, deployment);
+    const conflict = featureProblem(
+      "features.forms",
+      mergeProjectConfiguration({
+        features: { forms },
+        deployment: { target: deployment },
+      }),
+    );
     if (conflict) {
       prompts.note(conflictNote(conflict), "Incompatible deployment target");
       continue;
@@ -233,8 +279,8 @@ export async function runInteractive(
   });
   if (cancelled(packageManager)) return 0;
   const agents = await prompts.multiselect({
-    message: "Agent instructions (optional — Enter to skip)",
-    options: promptOptions(agentOptions),
+    message: featurePromptMessage("developerExperience.agents"),
+    options: featurePromptOptions("developerExperience.agents", agentOptions),
     initialValues: defaults.developerExperience.agents,
     required: false,
   });
@@ -254,39 +300,35 @@ export async function runInteractive(
   });
   if (cancelled(hooks)) return 0;
   const css = await prompts.select({
-    message: "Styling: CSS",
-    options: promptOptions(cssOptions),
+    message: featurePromptMessage("styling.css"),
+    options: featurePromptOptions("styling.css", cssOptions),
     initialValue: defaults.styling.css,
   });
   if (cancelled(css)) return 0;
   const typescript = await prompts.select({
-    message: "Styling: TypeScript",
-    options: promptOptions(tsOptions),
+    message: featurePromptMessage("styling.typescript"),
+    options: featurePromptOptions("styling.typescript", tsOptions),
     initialValue: defaults.styling.typescript,
   });
   if (cancelled(typescript)) return 0;
   const tooling = await prompts.multiselect({
-    message: "Styling: code-quality tools (Space toggles)",
-    options: [
-      { value: "eslint", label: "ESLint" },
-      { value: "prettier", label: "Prettier" },
-      { value: "biome", label: "Biome" },
-    ],
-    initialValues: ["eslint", "prettier", "biome"],
+    message: featurePromptMessage("styling.tooling"),
+    options: featurePromptOptions("styling.tooling", toolingOptions),
+    initialValues: [...toolingOptions],
   });
   if (cancelled(tooling)) return 0;
   const content =
     projectType === "blog" || projectType === "documentation"
       ? "none"
       : await prompts.select({
-          message: "Content setup",
-          options: promptOptions(contentOptions),
+          message: featurePromptMessage("content.setup"),
+          options: featurePromptOptions("content.setup", contentOptions),
           initialValue: defaults.content.setup,
         });
   if (cancelled(content)) return 0;
   const forms = await prompts.select({
-    message: "Forms integration",
-    options: promptOptions(formOptions),
+    message: featurePromptMessage("features.forms"),
+    options: featurePromptOptions("features.forms", formOptions),
     initialValue: defaults.features.forms,
   });
   if (cancelled(forms)) return 0;
@@ -331,6 +373,8 @@ export async function runInteractive(
 }
 export function createCli(generator: Generate = generateAndFinish): Command {
   const cli = new Command();
+  const agentOption = featureCliMetadata("developerExperience.agents");
+  const editorOption = featureCliMetadata("developerExperience.editors");
   cli
     .name("create-astro-stack")
     .description("Generate a production-ready Astro project.")
@@ -345,40 +389,20 @@ export function createCli(generator: Generate = generateAndFinish): Command {
         .createOption("--package-manager <manager>", "Package manager")
         .choices(managers),
     )
-    .addOption(
-      cli
-        .createOption("--css <framework>", "CSS framework")
-        .choices(cssOptions),
-    )
-    .addOption(
-      cli
-        .createOption("--typescript <preference>", "TypeScript preference")
-        .choices(tsOptions),
-    )
-    .addOption(
-      cli
-        .createOption("--content <setup>", "Content setup")
-        .choices(contentOptions),
-    )
-    .addOption(
-      cli
-        .createOption("--forms <integration>", "Forms integration")
-        .choices(formOptions),
-    )
-    .addOption(
-      cli
-        .createOption("--deployment <target>", "Deployment target")
-        .choices(deploymentOptions),
-    )
+    .addOption(featureChoiceOption(cli, "styling.css"))
+    .addOption(featureChoiceOption(cli, "styling.typescript"))
+    .addOption(featureChoiceOption(cli, "content.setup"))
+    .addOption(featureChoiceOption(cli, "features.forms"))
+    .addOption(featureChoiceOption(cli, "deployment.target"))
     .option(
-      "--agent <target>",
-      "Agent instruction target (repeatable)",
+      agentOption.flag,
+      agentOption.description,
       (value: string, previous: string[] = []) => [...previous, value],
       [],
     )
     .option(
-      "--editor <target>",
-      "Editor integration target (repeatable)",
+      editorOption.flag,
+      editorOption.description,
       (value: string, previous: string[] = []) => [...previous, value],
       [],
     )

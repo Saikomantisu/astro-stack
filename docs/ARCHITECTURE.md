@@ -89,8 +89,8 @@ editor configuration, and the pre-commit-hook choice. It is not folded into
 styling or project configuration because these selections have distinct output,
 validation, and lifecycle behavior.
 
-Feature definitions for these integrations own their templates and
-configuration changes. The generator must apply them through the same
+Feature definitions for these integrations own their templates and typed
+contributions. The generator must apply them through the same
 deterministic resolution and conflict detection used for other selected
 features. The installer will own Git-hook activation after Git initialization;
 it must not install or modify hooks when Git is unavailable or unselected.
@@ -123,7 +123,7 @@ Warnings are displayed before generation begins.
 
 ## Feature Registry
 
-Each feature is completely self-contained.
+Each feature definition is self-contained and belongs to one selection group.
 
 Example:
 
@@ -136,13 +136,21 @@ features/
     vercel/
 ```
 
-Each feature contains:
+Each feature can contain:
 
 - dependencies
 - templates
-- configuration
+- package scripts and structured Astro configuration
+- environment variables and completion notes
+- provided, required, and incompatible capabilities
 - install hooks
 - post-generation hooks
+
+Selection groups own prompt and automation metadata. The CLI derives feature
+labels and choices from the catalog instead of maintaining another list. The
+resolver composes list contributions and rejects conflicting singleton values
+before generation. See [Feature catalog](./FEATURES.md) for the extension
+contract.
 
 ---
 
@@ -182,9 +190,11 @@ packages/
 docs/
 ```
 
-`packages/features` is the public registry boundary. Individual feature
-definitions are added beneath it only when their dependencies, templates,
-configuration changes, validation, and lifecycle behavior are specified.
+`packages/features` is the public catalog and registry boundary. Built-in
+definitions live under `packages/features/src/features`, and the explicit
+registry combines them for the CLI and generator. Individual definitions are
+added only when their selection metadata, dependencies, templates,
+contributions, validation, and lifecycle behavior are specified.
 
 ---
 

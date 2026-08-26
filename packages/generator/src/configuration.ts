@@ -2,6 +2,8 @@ import type {
   AstroConfigExpression,
   FeatureConfigurationChange,
   FeatureDependency,
+  FeatureEnvironmentVariable,
+  ResolvedFeatureAstroConfig,
 } from "@astro-stack/features";
 
 import type { ProjectTemplate } from "./templates.js";
@@ -143,6 +145,81 @@ export function applyDependencies(
     }
     return { ...template, content: `${JSON.stringify(manifest, null, 2)}\n` };
   });
+}
+
+/** Converts typed feature contributions into the generator's merge inputs. */
+export function configurationChangesFromContributions(
+  packageScripts: Readonly<Record<string, string>>,
+  astroConfig: ResolvedFeatureAstroConfig,
+): FeatureConfigurationChange[] {
+  const changes: FeatureConfigurationChange[] = Object.entries(
+    packageScripts,
+  ).map(([script, value]) => ({
+    file: "package.json",
+    path: `scripts.${script}`,
+    value,
+  }));
+  if (astroConfig.adapter)
+    changes.push({
+      file: "astro.config.mjs",
+      path: "adapter",
+      value: {
+        type: "astro-config-expression",
+        code: astroConfig.adapter.expression,
+      },
+      imports: astroConfig.adapter.imports,
+    });
+  if (astroConfig.integrations.length > 0)
+    changes.push({
+      file: "astro.config.mjs",
+      path: "integrations",
+      value: {
+        type: "astro-config-expression",
+        code: `[${astroConfig.integrations
+          .map(({ expression }) => expression)
+          .join(", ")}]`,
+      },
+      imports: astroConfig.integrations.flatMap(({ imports }) => imports ?? []),
+    });
+  if (astroConfig.output)
+    changes.push({
+      file: "astro.config.mjs",
+      path: "output",
+      value: astroConfig.output,
+    });
+  if (astroConfig.vitePlugins.length > 0)
+    changes.push({
+      file: "astro.config.mjs",
+      path: "vite.plugins",
+      value: {
+        type: "astro-config-expression",
+        code: `[${astroConfig.vitePlugins
+          .map(({ expression }) => expression)
+          .join(", ")}]`,
+      },
+      imports: astroConfig.vitePlugins.flatMap(({ imports }) => imports ?? []),
+    });
+  return changes;
+}
+
+/** Adds one composed environment example for every selected feature variable. */
+export function applyEnvironmentVariables(
+  templates: readonly ProjectTemplate[],
+  variables: readonly FeatureEnvironmentVariable[],
+): ProjectTemplate[] {
+  if (variables.length === 0) return [...templates];
+  if (templates.some(({ destination }) => destination === ".env.example"))
+    throw new Error(
+      "Feature environment variables conflict with a generated .env.example file.",
+    );
+  const lines = variables.flatMap((variable) => [
+    ...(variable.comment ? [`# ${variable.comment}`] : []),
+    `${variable.name}=${variable.example}`,
+  ]);
+  return [
+    ...templates,
+    { destination: ".env.example", content: `${lines.join("\n")}\n` },
+  ];
 }
 
 /**

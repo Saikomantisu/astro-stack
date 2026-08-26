@@ -1,3 +1,4 @@
+import { resolveFeatures } from "@astro-stack/features";
 import {
   type ProjectConfiguration,
   validateProjectConfiguration,
@@ -11,15 +12,32 @@ export function validateForGeneration(
   configuration: ProjectConfiguration,
 ): boolean {
   const result = validateProjectConfiguration(configuration);
+  const featureResult = resolveFeatures(configuration);
   result.warnings.forEach((entry) => {
     log.warn(entry.message);
   });
-  result.errors.forEach((entry) => {
+  const seen = new Set<string>();
+  const errors = [...result.errors, ...featureResult.errors].filter((entry) => {
+    const key = `${entry.code}:${entry.path}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  errors.forEach((entry) => {
     log.error(
       `${entry.message}${entry.suggestion ? ` ${entry.suggestion}` : ""}`,
     );
   });
-  return result.valid;
+  featureResult.conflicts
+    .filter(
+      (entry) => !entry.path || !errors.some(({ path }) => path === entry.path),
+    )
+    .forEach((entry) => {
+      log.error(
+        `${entry.message}${entry.suggestion ? ` ${entry.suggestion}` : ""}`,
+      );
+    });
+  return result.valid && featureResult.valid;
 }
 /** Runs generation with consistent CLI progress and recovery messaging. */
 export async function generateProject(
