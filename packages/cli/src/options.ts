@@ -1,5 +1,6 @@
 import {
   agentInstructionTargets,
+  cmsIntegrations,
   codeQualityTools,
   contentSetups,
   cssFrameworks,
@@ -19,6 +20,7 @@ export const cssOptions = cssFrameworks;
 export const tsOptions = typeScriptPreferences;
 export const toolingOptions = codeQualityTools;
 export const contentOptions = contentSetups;
+export const cmsOptions = cmsIntegrations;
 export const formOptions = formIntegrations;
 export const deploymentOptions = deploymentTargets;
 export const agentOptions = agentInstructionTargets;
@@ -31,6 +33,7 @@ export interface CliOptions {
   css?: ProjectConfiguration["styling"]["css"];
   typescript?: ProjectConfiguration["styling"]["typescript"];
   content?: ProjectConfiguration["content"]["setup"];
+  cms?: ProjectConfiguration["content"]["cms"];
   forms?: ProjectConfiguration["features"]["forms"];
   deployment?: ProjectConfiguration["deployment"]["target"];
   agent?: string[];
@@ -70,7 +73,14 @@ export function configurationFrom(options: CliOptions): ProjectConfiguration {
       prettier: options.prettier,
       biome: options.biome,
     },
-    ...(options.content ? { content: { setup: options.content } } : {}),
+    ...(options.content || options.cms
+      ? {
+          content: {
+            ...(options.content ? { setup: options.content } : {}),
+            ...(options.cms ? { cms: options.cms } : {}),
+          },
+        }
+      : {}),
     ...(options.forms ? { features: { forms: options.forms } } : {}),
     ...(options.deployment
       ? { deployment: { target: options.deployment } }

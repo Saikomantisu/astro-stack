@@ -1,6 +1,6 @@
 ---
 title: Content
-description: Add a small Astro content collection with a Markdown or MDX starter entry.
+description: Add an Astro content collection and optionally configure Pages CMS.
 section: Guide
 order: 4
 ---
@@ -37,6 +37,20 @@ Write the post here.
 ```
 
 The generated collection uses Astro's `glob()` loader to find Markdown and MDX files in that directory. When using MDX, you may also include supported JSX-style components and JavaScript expressions.
+
+## Edit content with Pages CMS
+
+Choose `pages` at the CMS prompt to generate a root `.pages.yml` and a repository-backed media directory at `public/images`. The CMS schema follows the content selected for the project:
+
+- Generic Markdown and Content Collections edit `src/content/posts` as `.md` files.
+- MDX uses `.mdx` files and a code editor for the body so component syntax and expressions remain intact.
+- Blog and Documentation use their built-in `src/content/blog` and `src/content/docs` collections.
+
+Pages CMS adds no package dependency. Push the generated project to GitHub, then connect the repository at [app.pagescms.org](https://app.pagescms.org/).
+
+<Note>
+  Pages CMS requires file-backed content. For Marketing, Client, Portfolio, and Blank projects, choose Markdown, MDX, or Content Collections first. Blog and Documentation already qualify through their built-in collections.
+</Note>
 
 ## Build the reading experience
 

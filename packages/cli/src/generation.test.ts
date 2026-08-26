@@ -21,6 +21,17 @@ describe("generateProject", () => {
     expect(generate).not.toHaveBeenCalled();
   });
 
+  it("does not generate Pages CMS without file-backed content", async () => {
+    const generate = vi.fn(async () => undefined);
+    const code = await generateProject(
+      mergeProjectConfiguration({ content: { cms: "pages" } }),
+      generate,
+    );
+
+    expect(code).toBe(2);
+    expect(generate).not.toHaveBeenCalled();
+  });
+
   it("keeps the project and shows a recovery step when install fails", async () => {
     clack.note.mockClear();
     const generate = vi.fn(async () => ({

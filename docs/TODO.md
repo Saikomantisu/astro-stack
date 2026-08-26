@@ -84,6 +84,7 @@ and the module boundaries in the [architecture](./ARCHITECTURE.md).
 - [x] Markdown
 - [x] MDX
 - [x] Content Collections
+- [x] Pages CMS integration
 
 ### Forms
 

@@ -7,7 +7,7 @@ the following independently collected sections:
 - `project`: name, output directory, project type, package manager, and Git.
 - `styling`: CSS choice, TypeScript preference, and tooling selections for
   ESLint, Prettier, and Biome.
-- `content`: none, Markdown, MDX, or Content Collections.
+- `content`: none, Markdown, MDX, or Content Collections, plus an optional CMS.
 - `features`: forms integration.
 - `deployment`: static, Vercel, Netlify, or Cloudflare.
 - `developerExperience`: optional agent instructions, editor integration, and
@@ -87,6 +87,25 @@ instead own required native collections (`blog` and `docs` respectively), so
 they reject an explicit Content setup to avoid duplicate content structures.
 Their schemas use Astro's current `astro/zod` entry point, and the Documentation
 navigation is derived from its collection so it remains accurate as pages change.
+
+## CMS output
+
+`content.cms` supports `none` and `pages`. Pages CMS requires a generic
+Markdown, MDX, or Content Collections setup, unless the Blog or Documentation
+project type supplies its built-in collection. Invalid combinations fail before
+the generator writes files.
+
+Selecting Pages CMS creates a root `.pages.yml` matched to the active Astro
+collection and `public/images/.gitkeep` for repository-backed media. Blog fields
+include `title`, `description`, `pubDate`, and `body`; Documentation adds its
+optional `order` field and nested-folder support. Generic collections use
+`title`, `description`, and `body`. The MDX body uses the Pages CMS code editor
+so component syntax and expressions remain editable.
+
+The generated CMS configuration preserves frontmatter keys outside the managed
+field list and stores uploaded images under `public/images` with `/images`
+public URLs. Pages CMS adds no generated dependency. After pushing the project
+to GitHub, connect the repository at `https://app.pagescms.org`.
 
 ## Forms output
 

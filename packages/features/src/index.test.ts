@@ -36,6 +36,8 @@ describe("resolveFeatures", () => {
     ["content:markdown", { content: { setup: "markdown" } }],
     ["content:mdx", { content: { setup: "mdx" } }],
     ["content:collections", { content: { setup: "collections" } }],
+    ["cms:none", { content: { cms: "none" } }],
+    ["cms:pages", { content: { setup: "markdown", cms: "pages" } }],
     ["forms:none", { features: { forms: "none" } }],
     [
       "forms:resend",
@@ -82,7 +84,7 @@ describe("resolveFeatures", () => {
         prettier: true,
         biome: true,
       },
-      content: { setup: "mdx" },
+      content: { setup: "mdx", cms: "pages" },
       features: { forms: "webhooks" },
       deployment: { target: "cloudflare" },
     });
@@ -91,6 +93,7 @@ describe("resolveFeatures", () => {
 
     expect(resolution.valid).toBe(true);
     expect(resolution.features.map(({ id }) => id)).toEqual([
+      "cms:pages",
       "content:mdx",
       "deployment:cloudflare",
       "forms:webhooks",
@@ -112,6 +115,43 @@ describe("resolveFeatures", () => {
         expect.objectContaining({ code: "resend-requires-server-runtime" }),
       ]),
     );
+  });
+
+  it("requires file-backed content for Pages CMS", () => {
+    const resolution = resolveFeatures(
+      mergeProjectConfiguration({ content: { cms: "pages" } }),
+    );
+
+    expect(resolution).toMatchObject({ valid: false });
+    expect(resolution.errors).toContainEqual(
+      expect.objectContaining({
+        code: "pages-cms-requires-content",
+        path: "content.cms",
+      }),
+    );
+  });
+
+  it.each([
+    "blog",
+    "documentation",
+  ] as const)("accepts Pages CMS with the built-in %s content collection", (type) => {
+    const resolution = resolveFeatures(
+      mergeProjectConfiguration({
+        project: { type },
+        content: { cms: "pages" },
+      }),
+    );
+
+    expect(resolution.valid).toBe(true);
+    expect(resolution.templates).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ destination: ".pages.yml" }),
+        expect.objectContaining({ destination: "public/images/.gitkeep" }),
+      ]),
+    );
+    expect(
+      resolution.dependencies.some(({ name }) => name.includes("pages")),
+    ).toBe(false);
   });
 
   it("detects file, configuration, and dependency conflicts before generation", () => {

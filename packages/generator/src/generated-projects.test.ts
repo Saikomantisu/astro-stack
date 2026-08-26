@@ -112,6 +112,12 @@ const smokeProjects = [
     },
   ],
   [
+    "Markdown with Pages CMS",
+    {
+      content: { setup: "markdown", cms: "pages" },
+    },
+  ],
+  [
     "documentation and webhook forms on Netlify",
     {
       project: { type: "documentation" },

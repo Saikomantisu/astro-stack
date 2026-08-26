@@ -38,6 +38,18 @@ describe("projectNotes", () => {
   it("returns nothing when no feature needs setup", () => {
     expect(projectNotes(mergeProjectConfiguration())).toEqual([]);
   });
+
+  it("explains how to connect a selected Pages CMS project", () => {
+    expect(
+      projectNotes(
+        mergeProjectConfiguration({
+          content: { setup: "markdown", cms: "pages" },
+        }),
+      ),
+    ).toEqual([
+      "Push this project to GitHub, then connect the repository at https://app.pagescms.org.",
+    ]);
+  });
 });
 
 describe("installCommand", () => {

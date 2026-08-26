@@ -40,6 +40,9 @@ Astro Stack is NOT:
 - A hosting service
 - A template marketplace
 
+Astro Stack may configure a selected third-party CMS, but it does not host the
+editor, store content, or mediate the generated project's publishing workflow.
+
 ---
 
 # Target Users
@@ -90,6 +93,7 @@ Instead of asking one question at a time, Astro Stack groups related settings in
 - Content Collections
 - Markdown
 - MDX
+- CMS integration
 
 ### 4. Features
 
@@ -177,6 +181,11 @@ choices must fail before files are written.
 - Markdown
 - MDX
 - Content Collections
+
+## CMS
+
+- None
+- Pages CMS
 
 ## Forms
 

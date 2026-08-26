@@ -1,5 +1,6 @@
 import {
   agentInstructionTargets,
+  cmsIntegrations,
   contentSetups,
   cssFrameworks,
   deploymentTargets,
@@ -149,6 +150,13 @@ export function validateProjectConfiguration(
       "invalid-content-setup",
       "content.setup",
       "The selected content setup is not supported.",
+    ],
+    [
+      content.cms ?? "none",
+      cmsIntegrations,
+      "invalid-cms-integration",
+      "content.cms",
+      "The selected CMS integration is not supported.",
     ],
     [
       features.forms,

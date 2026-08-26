@@ -34,7 +34,7 @@ export const features = [
     icon: "icons/markdown-dark.svg",
     iconAlt: "Markdown logo",
     description:
-      "Start without content, or choose Markdown, MDX, or Astro Content Collections for a structured publishing path.",
+      "Choose Markdown, MDX, or Astro Content Collections, then add Pages CMS when editors need a Git-backed content UI.",
   },
   {
     title: "Forms",

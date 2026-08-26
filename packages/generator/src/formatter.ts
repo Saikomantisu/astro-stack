@@ -14,6 +14,8 @@ const formattableExtensions = new Set([
   ".mdx",
   ".mjs",
   ".ts",
+  ".yaml",
+  ".yml",
 ]);
 
 /** Formats generated source files before they are written to the new project. */

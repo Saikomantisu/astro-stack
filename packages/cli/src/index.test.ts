@@ -119,6 +119,7 @@ describe("CLI", () => {
         "tailwind",
         "strict",
         "mdx",
+        "pages",
         "none",
         "vercel",
         "launch",
@@ -147,6 +148,7 @@ describe("CLI", () => {
     expect(generate).toHaveBeenCalledWith(
       expect.objectContaining({
         project: expect.objectContaining({ name: "launch-site" }),
+        content: { setup: "mdx", cms: "pages" },
         developerExperience: { agents: [], editors: [], hooks: false },
       }),
     );
@@ -267,6 +269,7 @@ describe("CLI", () => {
         "no",
         "tailwind",
         "relaxed",
+        "pages",
         "webhooks",
         "cloudflare",
         "launch",
@@ -287,6 +290,7 @@ describe("CLI", () => {
         "packageManager: bun",
         "styling: tailwind; TypeScript (relaxed), Biome",
         "content: built-in docs collection",
+        "cms: pages",
         "forms: webhooks",
         "deployment: cloudflare",
         "agents: none",
@@ -310,5 +314,18 @@ describe("CLI", () => {
         prettier: true,
       }),
     ).toMatchObject({ developerExperience: { hooks: true } });
+  });
+
+  it("maps --cms into the generated-project configuration", () => {
+    expect(
+      configurationFrom({
+        biome: true,
+        cms: "pages",
+        content: "markdown",
+        eslint: true,
+        git: true,
+        prettier: true,
+      }),
+    ).toMatchObject({ content: { setup: "markdown", cms: "pages" } });
   });
 });

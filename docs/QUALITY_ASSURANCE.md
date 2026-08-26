@@ -35,6 +35,7 @@ the release contract and identifies the focused smoke-test representatives.
 | TypeScript | strict, relaxed | Both preferences generate the matching `tsconfig` setting. |
 | Tooling | ESLint, Prettier, Biome independently enabled or disabled | All 8 tooling combinations are generation-tested. |
 | Content | none, Markdown, MDX, Content Collections | Each content setup is generation-tested; MDX and Collections are smoke-tested. |
+| CMS | none, Pages CMS | Generic Markdown and MDX plus built-in Blog and Documentation mappings are generation-tested. Markdown with Pages CMS is smoke-tested; selection without file-backed content is rejected. |
 | Forms | none, Resend, webhooks | Valid server-target combinations are generation-tested; Resend and webhooks are smoke-tested. Static forms are rejected. |
 | Deployment | static, Vercel, Netlify, Cloudflare | Each adapter is generation-tested. Static preview, Vercel build, Netlify build, and Cloudflare build are smoke-tested. |
 | Agent instructions | none, Codex, Claude | Each selected target generates only its versioned instruction file; unselected targets generate no agent file. |
@@ -42,7 +43,7 @@ the release contract and identifies the focused smoke-test representatives.
 | Finishing | npm, pnpm, Yarn, Bun; Git/hooks off/on | The lifecycle suite covers every package manager with each valid Git/hooks combination and verifies the matching install and hook commands. |
 
 The generated-project smoke suite exercises the default configuration for every
-project type, plus representative Tailwind, MDX, forms, and deployment
+project type, plus representative Tailwind, MDX, Pages CMS, forms, and deployment
 combinations.
 
 The package-manager lifecycle tests do not install dependencies: they exercise
@@ -53,7 +54,7 @@ package manager during release validation.
 
 ## Failure-path coverage
 
-The automated suite verifies invalid selections, incompatible static forms,
+The automated suite verifies invalid selections, Pages CMS without content, incompatible static forms,
 invalid or existing target directories, unavailable package-manager commands,
 dependency-install failures, and the non-interactive confirmation guard. The
 interactive flow returns before invoking generation when the user cancels any

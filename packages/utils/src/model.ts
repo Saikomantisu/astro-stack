@@ -16,6 +16,7 @@ export const contentSetups = [
   "mdx",
   "collections",
 ] as const;
+export const cmsIntegrations = ["none", "pages"] as const;
 export const formIntegrations = ["none", "resend", "webhooks"] as const;
 export const deploymentTargets = [
   "static",
@@ -31,6 +32,7 @@ export type CssFramework = (typeof cssFrameworks)[number];
 export type TypeScriptPreference = (typeof typeScriptPreferences)[number];
 export type CodeQualityTool = (typeof codeQualityTools)[number];
 export type ContentSetup = (typeof contentSetups)[number];
+export type CmsIntegration = (typeof cmsIntegrations)[number];
 export type FormIntegration = (typeof formIntegrations)[number];
 export type DeploymentTarget = (typeof deploymentTargets)[number];
 export type AgentInstructionTarget = (typeof agentInstructionTargets)[number];
@@ -50,7 +52,7 @@ export interface ProjectConfiguration {
     prettier: boolean;
     biome: boolean;
   };
-  content: { setup: ContentSetup };
+  content: { setup: ContentSetup; cms?: CmsIntegration };
   features: { forms: FormIntegration };
   deployment: { target: DeploymentTarget };
   developerExperience: {
@@ -60,36 +62,43 @@ export interface ProjectConfiguration {
   };
   summary: { confirmBeforeWrite: boolean };
 }
+export type CompleteProjectConfiguration = Omit<
+  ProjectConfiguration,
+  "content"
+> & {
+  content: { setup: ContentSetup; cms: CmsIntegration };
+};
 export type ProjectConfigurationInput = {
   [Section in keyof ProjectConfiguration]?: Partial<
     ProjectConfiguration[Section]
   >;
 };
-export const defaultProjectConfiguration: Readonly<ProjectConfiguration> = {
-  project: {
-    name: "my-astro-project",
-    directory: "./my-astro-project",
-    type: "blank",
-    packageManager: "pnpm",
-    initializeGit: true,
-  },
-  styling: {
-    css: "vanilla",
-    typescript: "strict",
-    eslint: true,
-    prettier: true,
-    biome: true,
-  },
-  content: { setup: "none" },
-  features: { forms: "none" },
-  deployment: { target: "static" },
-  developerExperience: { agents: [], editors: [], hooks: false },
-  summary: { confirmBeforeWrite: true },
-};
+export const defaultProjectConfiguration: Readonly<CompleteProjectConfiguration> =
+  {
+    project: {
+      name: "my-astro-project",
+      directory: "./my-astro-project",
+      type: "blank",
+      packageManager: "pnpm",
+      initializeGit: true,
+    },
+    styling: {
+      css: "vanilla",
+      typescript: "strict",
+      eslint: true,
+      prettier: true,
+      biome: true,
+    },
+    content: { setup: "none", cms: "none" },
+    features: { forms: "none" },
+    deployment: { target: "static" },
+    developerExperience: { agents: [], editors: [], hooks: false },
+    summary: { confirmBeforeWrite: true },
+  };
 /** Combines independently collected wizard sections with detached defaults. */
 export function mergeProjectConfiguration(
   input: ProjectConfigurationInput = {},
-): ProjectConfiguration {
+): CompleteProjectConfiguration {
   return {
     project: { ...defaultProjectConfiguration.project, ...input.project },
     styling: { ...defaultProjectConfiguration.styling, ...input.styling },

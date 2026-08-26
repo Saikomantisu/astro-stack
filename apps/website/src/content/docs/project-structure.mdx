@@ -42,6 +42,16 @@ src/
 
 Blog and Documentation own their content structures: Blog creates `src/content/blog/welcome.md` and its listing/detail routes; Documentation creates `src/content/docs/getting-started.md`, `src/content/docs/guides/authoring.md`, and docs routes.
 
+Pages CMS adds its repository configuration and media folder without adding a package:
+
+```text
+my-project/
+├── .pages.yml
+└── public/
+    └── images/
+        └── .gitkeep
+```
+
 Resend or webhook forms add a server route and an environment-variable template:
 
 ```text
@@ -76,6 +86,7 @@ my-project/
 - Add routes in `src/pages`. Astro maps these files to URLs.
 - Reuse page shells in `src/layouts` and keep site-wide styles in `src/styles/global.css`.
 - Keep Markdown and MDX entries in `src/content/posts` when you selected a content setup.
+- Update `.pages.yml` when the Astro content schema and Pages CMS editor fields need to change together.
 - Add server endpoints below `src/pages/api` when your deployment supports server output.
 - Update integrations and output settings in `astro.config.mjs`; use `package.json` for scripts and dependencies.
 

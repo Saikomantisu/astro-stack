@@ -4,6 +4,7 @@ import { join } from "node:path";
 
 import {
   mergeProjectConfiguration,
+  type ProjectConfigurationInput,
   type ProjectType,
 } from "@astro-stack/utils";
 import { afterEach, describe, expect, it } from "vitest";
@@ -59,6 +60,19 @@ async function generate(type: ProjectType): Promise<string> {
   return directory;
 }
 
+async function generateFrom(input: ProjectConfigurationInput): Promise<string> {
+  const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
+  directories.push(parent);
+  const directory = join(parent, "project");
+  await createProject(
+    mergeProjectConfiguration({
+      ...input,
+      project: { ...input.project, directory },
+    }),
+  );
+  return directory;
+}
+
 describe("createProject", () => {
   it.each([
     "marketing",
@@ -75,7 +89,7 @@ describe("createProject", () => {
       mergeProjectConfiguration({ project: { type, directory } }),
     );
     const formattable = project.files.filter((file) =>
-      /\.(astro|css|js|json|md|mdx|mjs|ts)$/.test(file),
+      /\.(astro|css|js|json|md|mdx|mjs|ts|ya?ml)$/.test(file),
     );
 
     for (const destination of formattable) {
@@ -368,6 +382,69 @@ describe("createProject", () => {
     expect(astro).toContain('import tailwindcss from "@tailwindcss/vite";');
     expect(astro).toContain("integrations: [mdx()]");
     expect(astro).toContain("plugins: [tailwindcss()]");
+  });
+
+  it("omits Pages CMS files when no CMS is selected", async () => {
+    const directory = await generate("blank");
+
+    await expect(
+      readFile(join(directory, ".pages.yml"), "utf8"),
+    ).rejects.toMatchObject({ code: "ENOENT" });
+    await expect(
+      readFile(join(directory, "public/images/.gitkeep"), "utf8"),
+    ).rejects.toMatchObject({ code: "ENOENT" });
+  });
+
+  it("configures Pages CMS for generic Markdown and MDX collections", async () => {
+    const markdownDirectory = await generateFrom({
+      content: { setup: "markdown", cms: "pages" },
+    });
+    const mdxDirectory = await generateFrom({
+      content: { setup: "mdx", cms: "pages" },
+    });
+    const markdown = await readFile(
+      join(markdownDirectory, ".pages.yml"),
+      "utf8",
+    );
+    const mdx = await readFile(join(mdxDirectory, ".pages.yml"), "utf8");
+
+    expect(markdown).toContain("path: src/content/posts");
+    expect(markdown).toContain('filename: "{primary}.md"');
+    expect(markdown).toContain("type: rich-text");
+    expect(mdx).toContain('filename: "{primary}.mdx"');
+    expect(mdx).toContain("type: code");
+    expect(mdx).toContain("format: mdx");
+    await expect(
+      readFile(join(markdownDirectory, "public/images/.gitkeep"), "utf8"),
+    ).resolves.toBe("");
+    expect(markdown).toContain("input: public/images");
+    expect(markdown).toContain("merge: true");
+
+    const manifest = await readFile(
+      join(markdownDirectory, "package.json"),
+      "utf8",
+    );
+    expect(manifest).not.toContain("pagescms");
+  });
+
+  it.each([
+    ["blog", "path: src/content/blog", "name: pubDate", "sort: pubDate"],
+    [
+      "documentation",
+      "path: src/content/docs",
+      "name: order",
+      "subfolders: true",
+    ],
+  ] as const)("configures Pages CMS for the built-in %s collection", async (type, path, field, view) => {
+    const directory = await generateFrom({
+      project: { type },
+      content: { cms: "pages" },
+    });
+    const pages = await readFile(join(directory, ".pages.yml"), "utf8");
+
+    expect(pages).toContain(path);
+    expect(pages).toContain(field);
+    expect(pages).toContain(view);
   });
 
   it.each(

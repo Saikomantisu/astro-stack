@@ -29,7 +29,7 @@ project is independent of Astro Stack after creation. See the
 means in practice.
 
 The guided flow covers Project, optional Agent Instructions and Editor
-Integration, Styling & Tooling, Content, Forms, Deployment, and a final
+Integration, Styling & Tooling, Content and CMS, Forms, Deployment, and a final
 Summary. Prompts use concise human-readable labels while retaining safe
 defaults. Arrow keys navigate menus, Enter selects an option, and Space toggles
 selections in the multi-selects. The final review lets you launch or cancel;
@@ -53,6 +53,7 @@ otherwise.
 | TypeScript | `strict`, `relaxed` | `strict` |
 | Code quality | ESLint, Prettier, Biome | All selected |
 | Content | `none`, `markdown`, `mdx`, `collections` | `none` |
+| CMS | `none`, `pages` | `none` |
 | Forms | `none`, `resend`, `webhooks` | `none` |
 | Deployment | `static`, `vercel`, `netlify`, `cloudflare` | `static` |
 | Agent instructions | `codex`, `claude` | None |
@@ -70,9 +71,11 @@ Project types choose a minimal starting page structure. Blog includes a `blog`
 content collection, sample post, post index, and post route. Documentation
 includes a semantic, unstyled `docs` collection with starter pages and docs
 routes. These two types own their content and cannot be combined with
-`--content`. Styling, content for the other project types,
-forms, deployment, tooling, agent, editor, and hook selections add only the
-files, configuration, and dependencies needed for those selections. See the
+`--content`. Pages CMS can edit either built-in collection or a selected
+Markdown, MDX, or Content Collections setup. It cannot be selected when the
+project has no file-backed content. Styling, content for the other project
+types, forms, deployment, tooling, agent, editor, and hook selections add only
+the files, configuration, and dependencies needed for those selections. See the
 [configuration reference](./CONFIGURATION.md) for the generated output owned
 by each choice.
 
@@ -109,7 +112,7 @@ applied for omitted selections; use `--yes` to skip the final confirmation.
 ```sh
 create-astro-stack --non-interactive --yes \
   --name launch-site --directory ./launch-site --type marketing \
-  --css tailwind --content mdx --deployment vercel \
+  --css tailwind --content mdx --cms pages --deployment vercel \
   --agent codex --agent claude --editor vscode --hooks
 ```
 
@@ -127,6 +130,7 @@ are rejected so a script cannot pause waiting for confirmation.
 | `--css <framework>` | `vanilla` or `tailwind`. |
 | `--typescript <preference>` | `strict` or `relaxed`. |
 | `--content <setup>` | `none`, `markdown`, `mdx`, or `collections`. |
+| `--cms <integration>` | `none` or `pages`; Pages CMS requires file-backed content. |
 | `--forms <integration>` | `none`, `resend`, or `webhooks`. |
 | `--deployment <target>` | `static`, `vercel`, `netlify`, or `cloudflare`. |
 | `--agent <target>` | Repeat for `codex` and/or `claude`. |
@@ -148,12 +152,12 @@ npm create astro-stack@latest -- --non-interactive --yes \
   --no-eslint --no-prettier --no-biome
 ```
 
-Create a blog with MDX, Tailwind, Vercel deployment, and a Codex instruction
-file:
+Create a blog with Pages CMS, Tailwind, Vercel deployment, and a Codex
+instruction file:
 
 ```sh
 pnpm create astro-stack -- --non-interactive --yes \
-  --name studio-journal --type blog --css tailwind --content mdx \
+  --name studio-journal --type blog --css tailwind --cms pages \
   --deployment vercel --agent codex
 ```
 
@@ -184,4 +188,4 @@ project as ready.
 
 The completion message includes the selected package manager's exact development,
 build, preview, and project-health commands, followed by any required form
-environment variables and deployment guidance.
+environment variables, Pages CMS connection steps, and deployment guidance.

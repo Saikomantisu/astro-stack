@@ -1,4 +1,5 @@
 import type {
+  CmsIntegration,
   ContentSetup,
   DeploymentTarget,
   FormIntegration,
@@ -16,6 +17,7 @@ export interface ProjectConfigurationSummary {
     | ContentSetup
     | "built-in blog collection"
     | "built-in docs collection";
+  cms?: CmsIntegration;
   forms: FormIntegration;
   deployment: DeploymentTarget;
   agents: string;
@@ -44,6 +46,7 @@ export function summarizeProjectConfiguration(
         : configuration.project.type === "documentation"
           ? "built-in docs collection"
           : configuration.content.setup,
+    cms: configuration.content.cms ?? "none",
     forms: configuration.features.forms,
     deployment: configuration.deployment.target,
     agents: configuration.developerExperience.agents.join(", ") || "none",

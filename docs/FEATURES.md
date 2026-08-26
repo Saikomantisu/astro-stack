@@ -78,3 +78,7 @@ Adding a new selection group still requires a configuration field, default,
 validation, and one wizard location. This is intentional. New categories change
 the public configuration contract and the order of the guided flow, so they
 should remain explicit.
+
+The CMS group follows this path. `content.cms` owns the `none` and `pages`
+values, while the Pages CMS definition owns its root configuration, media
+folder, compatibility check, and completion note.

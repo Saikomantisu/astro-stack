@@ -68,7 +68,7 @@ Sections:
 - Project
 - Agent Instructions and Editor Integration
 - Styling & Tooling
-- Content
+- Content and CMS
 - Features
 - Deployment
 - Summary

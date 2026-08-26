@@ -32,6 +32,10 @@ and its required packages; it never adds Astro Stack itself. The exact package
 manifest is generated in your project directory and is the source of truth for
 its dependencies.
 
+Pages CMS is configuration-only. Selecting it adds `.pages.yml` and a public
+media directory, but it does not add a package. Pages CMS edits the generated
+content files through the connected GitHub repository.
+
 ## Maintaining a generated project
 
 Install, run, and upgrade dependencies from the generated project's directory
