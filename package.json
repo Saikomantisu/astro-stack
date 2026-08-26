@@ -30,7 +30,7 @@
     "test:watch": "vitest",
     "changeset": "changeset",
     "version:packages": "changeset version && node scripts/update-release-changelog.mjs",
-    "release:publish": "pnpm build && changeset publish"
+    "release:publish": "pnpm build && node scripts/publish-packages.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.3",

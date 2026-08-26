@@ -39,8 +39,11 @@ changelogs. Do not edit a generated package changelog by hand.
    Run `pnpm test:generated` for this release change as well as the standard
    verification commands.
 3. Merge the version PR. From that exact commit, run `pnpm release:publish`
-   with the registry credentials for the publishing account. Never publish from
-   an unreviewed local branch.
+   with the registry credentials for the publishing account. The script builds
+   the workspace, then publishes each package in dependency order so npm web
+   authentication remains interactive and pnpm resolves workspace dependency
+   ranges in the published manifests. Never publish from an unreviewed local
+   branch.
 4. Confirm the registry package version, install and smoke-test it in a fresh
    temporary directory, then create a GitHub release and an annotated
    `v<version>` tag from the merged version commit. Copy the generated package
