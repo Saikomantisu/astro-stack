@@ -12,7 +12,7 @@ interface Props {
   title?: string;
   description?: string;
   /** Site-relative path (no leading slash) or absolute URL. */
-  ogImage?: string;
+  ogImage?: string | false;
   /** Open Graph type: website for marketing pages. */
   ogType?: "website" | "article";
   /** When true, inject default SoftwareApplication / WebSite JSON-LD. */
@@ -32,7 +32,7 @@ const {
 
 const pageTitle = formatTitle(title);
 const canonical = absoluteUrl(Astro.url.pathname);
-const ogImageUrl = absoluteUrl(ogImage);
+const ogImageUrl = ogImage === false ? undefined : absoluteUrl(ogImage);
 const siteName = siteConfig.name;
 ---
 
@@ -56,18 +56,18 @@ const siteName = siteConfig.name;
 <meta property="og:title" content={pageTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
-<meta property="og:image" content={ogImageUrl} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content={`${siteName}: ${siteConfig.tagline}`} />
+{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+{ogImageUrl && <meta property="og:image:width" content="1200" />}
+{ogImageUrl && <meta property="og:image:height" content="630" />}
+{ogImageUrl && <meta property="og:image:alt" content={`${siteName}: ${siteConfig.tagline}`} />}
 <meta property="og:locale" content="en_US" />
 
 <!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:card" content={ogImageUrl ? "summary_large_image" : "summary"} />
 <meta name="twitter:title" content={pageTitle} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={ogImageUrl} />
-<meta name="twitter:image:alt" content={`${siteName}: ${siteConfig.tagline}`} />
+{ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+{ogImageUrl && <meta name="twitter:image:alt" content={`${siteName}: ${siteConfig.tagline}`} />}
 
 {
   jsonLd && (

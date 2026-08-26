@@ -1,0 +1,162 @@
+---
+import { getCollection } from "astro:content";
+import ArrowRight from "@tabler/icons/outline/arrow-right.svg";
+import ArrowUpRight from "@tabler/icons/outline/arrow-up-right.svg";
+import BaseLink from "@/components/common/BaseLink.astro";
+import Container from "@/components/common/Container.astro";
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import { formatNewsDate, sortNews } from "@/lib/news";
+import { links } from "@/lib/site";
+
+const newsItems = sortNews(await getCollection("news"));
+const featuredStory = newsItems.find((item) => item.data.featured);
+const latestStories = newsItems.filter((item) => !item.data.featured);
+
+if (!featuredStory) {
+  throw new Error("The news page requires one featured story.");
+}
+---
+
+<MarketingLayout
+  title="News"
+  description="Release stories, project notes, and practical updates from Astro Stack."
+>
+  <section class="relative overflow-hidden border-b border-border/60">
+    <div
+      class="pointer-events-none absolute inset-0 opacity-60"
+      style="background: radial-gradient(circle at 76% 16%, color-mix(in oklab, var(--primary) 26%, transparent), transparent 30rem), radial-gradient(circle at 20% 92%, color-mix(in oklab, var(--peach) 10%, transparent), transparent 26rem);"
+      aria-hidden="true"
+    ></div>
+    <Container class="relative py-16 sm:py-24">
+      <div class="max-w-3xl">
+        <p class="text-peach text-xs font-bold tracking-[0.18em] uppercase">
+          Astro Stack news
+        </p>
+        <h1 class="font-display mt-5 text-5xl leading-[0.98] font-semibold tracking-[-0.045em] text-balance sm:text-7xl">
+          Notes from the launchpad.
+        </h1>
+        <p class="text-muted-foreground mt-6 max-w-2xl text-lg leading-relaxed sm:text-xl">
+          Release stories go beyond the changelog, explaining what shipped, why
+          it matters, and what we're building next.
+        </p>
+      </div>
+    </Container>
+  </section>
+
+  <Container class="py-12 sm:py-16">
+    <article class="group relative overflow-hidden rounded-2xl border border-border bg-card/60">
+      <div class="grid min-h-[25rem] lg:grid-cols-[1.1fr_0.9fr]">
+        <div class="flex flex-col justify-between p-7 sm:p-10 lg:p-12">
+          <div>
+            <div class="flex flex-wrap items-center gap-3 text-xs font-semibold tracking-[0.12em] uppercase">
+              <span class="text-peach">Latest release</span>
+              <span class="text-border" aria-hidden="true">/</span>
+              <time class="text-muted-foreground" datetime={featuredStory.data.publishedAt.toISOString()}>
+                {formatNewsDate(featuredStory.data.publishedAt)}
+              </time>
+            </div>
+            <h2 class="font-display mt-6 max-w-2xl text-3xl leading-tight tracking-[-0.03em] text-balance sm:text-5xl">
+              {featuredStory.data.title}
+            </h2>
+            <p class="text-muted-foreground mt-5 max-w-xl text-base leading-relaxed sm:text-lg">
+              {featuredStory.data.description}
+            </p>
+          </div>
+          <BaseLink
+            href={`news/${featuredStory.id}/`}
+            class="focus-visible:ring-outline/50 mt-10 inline-flex w-fit items-center gap-2 rounded-md text-sm font-semibold outline-none transition-colors hover:text-peach focus-visible:ring-3"
+          >
+            Read the story
+            <ArrowRight class="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+          </BaseLink>
+        </div>
+
+        <div class="relative min-h-64 overflow-hidden border-t border-border bg-background/40 lg:min-h-full lg:border-t-0 lg:border-l">
+          <div class="absolute inset-0 opacity-35" style="background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 42px 42px;" aria-hidden="true"></div>
+          <div class="absolute inset-8 rounded-2xl border border-border/80 bg-background/75 p-5 shadow-2xl shadow-black/30 sm:inset-12 sm:p-7" aria-hidden="true">
+            <div class="flex items-center gap-2 border-b border-border/70 pb-4">
+              <span class="size-2.5 rounded-full bg-primary"></span>
+              <span class="size-2.5 rounded-full bg-peach"></span>
+              <span class="size-2.5 rounded-full bg-cyan"></span>
+            </div>
+            <div class="mt-7 space-y-4 font-mono text-xs sm:text-sm">
+              <p><span class="text-peach">content:</span></p>
+              <p class="pl-4"><span class="text-cyan">cms:</span> pages</p>
+              <p class="text-muted-foreground pt-3">◆ Writing editor configuration</p>
+              <p><span class="text-cyan">✓</span> .pages.yml configured</p>
+              <p><span class="text-cyan">✓</span> Media path ready</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </Container>
+
+  <section class="border-t border-border/60 bg-card/20">
+    <Container class="py-14 sm:py-20">
+      <div class="flex flex-col gap-5 border-b border-border/60 pb-8 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-peach text-xs font-bold tracking-[0.16em] uppercase">Latest updates</p>
+          <h2 class="font-display mt-3 text-3xl tracking-[-0.03em] sm:text-4xl">What shipped and why</h2>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2">
+        {
+          latestStories.map((story, index) => (
+            <article class:list={[
+              "group flex min-h-80 flex-col border-border/60 py-8 lg:px-8 lg:py-10",
+              index > 0 && "border-t lg:border-t-0 lg:border-l",
+              index === 0 && "lg:pl-0",
+              index === latestStories.length - 1 && "lg:pr-0",
+            ]}>
+              <div class="flex items-center gap-3 text-[0.7rem] font-semibold tracking-[0.12em] uppercase">
+                <span class={story.data.category === "Product" ? "text-cyan" : "text-peach"}>{story.data.category}</span>
+                <span class="text-border" aria-hidden="true">/</span>
+                <time class="text-muted-foreground" datetime={story.data.publishedAt.toISOString()}>{formatNewsDate(story.data.publishedAt)}</time>
+              </div>
+              <h3 class="font-display mt-7 text-2xl leading-tight tracking-[-0.025em] text-balance">
+                {story.data.title}
+              </h3>
+              <p class="text-muted-foreground mt-4 text-sm leading-relaxed">
+                {story.data.description}
+              </p>
+              <BaseLink
+                href={`news/${story.id}/`}
+                class="focus-visible:ring-outline/50 mt-auto inline-flex w-fit items-center gap-2 rounded-md pt-8 text-sm font-semibold outline-none transition-colors group-hover:text-peach focus-visible:ring-3"
+              >
+                Read the story
+                <ArrowRight class="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </BaseLink>
+            </article>
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-t border-border/60">
+    <Container class="py-14 sm:py-20">
+      <div class="relative overflow-hidden rounded-2xl border border-border bg-card px-7 py-10 sm:px-10 lg:flex lg:items-center lg:justify-between lg:gap-12 lg:px-12">
+        <div class="pointer-events-none absolute -top-28 -right-24 size-80 rounded-full bg-primary/15 blur-3xl" aria-hidden="true"></div>
+        <div class="relative max-w-2xl">
+          <p class="text-peach text-xs font-bold tracking-[0.16em] uppercase">Follow the build</p>
+          <h2 class="font-display mt-3 text-3xl tracking-[-0.03em] text-balance sm:text-4xl">
+            Get each update from the source.
+          </h2>
+          <p class="text-muted-foreground mt-4 leading-relaxed">
+            Watch the repository for release announcements, pull requests, and the decisions behind the next Astro Stack update.
+          </p>
+        </div>
+        <BaseLink
+          href={links.github}
+          external
+          class="bg-primary text-primary-foreground focus-visible:ring-outline/50 relative mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-md px-5 text-sm font-semibold transition-colors hover:bg-primary-accent focus-visible:ring-3 lg:mt-0 lg:shrink-0"
+        >
+          Follow on GitHub
+          <ArrowUpRight class="size-4" aria-hidden="true" />
+        </BaseLink>
+      </div>
+    </Container>
+  </section>
+</MarketingLayout>

@@ -1,0 +1,44 @@
+---
+title: Astro Stack 1.0 gives each project its own blueprint
+description: Marketing, client, blog, documentation, and portfolio projects now start from focused templates. Blog and documentation builds own their content collections and routes.
+category: Release
+publishedAt: 2026-07-20
+readingTime: 5 min read
+order: 1
+featured: false
+relatedLinks:
+  - label: Project types guide
+    href: docs/project-types/
+  - label: Generated project ownership
+    href: docs/generated-projects/
+  - label: Astro Stack changelog
+    href: changelog/
+---
+
+## What changed in 1.0
+
+Astro Stack 1.0 replaces the shared starter with separate blueprints for Marketing, Client Website, Blog, Documentation, Portfolio, and Blank projects.
+
+Blog and Documentation now own their content collections and routes. The release also fixes generated project installation, quality-tool checks, contact forms, and documentation navigation.
+
+## One starter was doing too many jobs
+
+Early Astro Stack releases shared one broad starter across several project types. That kept the generator small, but it also made the selected project type less meaningful. A blog and a portfolio could begin with more shared structure than either one needed.
+
+Version 1.0 replaces that shared starter with focused blueprints. The project choice now decides which routes, layouts, and content files exist before optional features are added.
+
+## What each blueprint owns
+
+Marketing, client website, and portfolio projects receive pages and layouts for their specific job. Blog and documentation projects own their native content collections and routes. The blank option stays deliberately small for teams that want to begin with Astro's basic structure.
+
+This also keeps dependencies honest. A project does not receive content tooling, starter routes, or runtime packages unless its blueprint or another selected feature needs them.
+
+- Marketing replaces the old `saas-landing` project type.
+- Blog and Documentation include their required collections.
+- Generated projects still contain no Astro Stack runtime dependency.
+
+## The breaking change is in the project name
+
+Automation that selected `saas-landing` should now select `marketing`. The new name covers product pages, campaign sites, and company marketing work without tying the template to one business model.
+
+Projects generated before 1.0 do not need a migration. Astro Stack creates new projects and then steps away, so an existing codebase continues on its own dependency and release schedule.

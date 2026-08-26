@@ -11,7 +11,8 @@ import { site as siteConfig } from "@/lib/site";
 interface Props {
   title?: string;
   description?: string;
-  ogImage?: string;
+  ogImage?: string | false;
+  ogType?: "website" | "article";
   jsonLd?: boolean;
   noindex?: boolean;
 }
@@ -20,6 +21,7 @@ const {
   title = siteConfig.name,
   description = siteConfig.description,
   ogImage,
+  ogType = "website",
   jsonLd = false,
   noindex = false,
 } = Astro.props;
@@ -32,6 +34,7 @@ const {
       title={title}
       description={description}
       ogImage={ogImage}
+      ogType={ogType}
       jsonLd={jsonLd}
       noindex={noindex}
     />

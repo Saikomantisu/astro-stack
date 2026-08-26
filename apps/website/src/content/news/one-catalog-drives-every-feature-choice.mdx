@@ -1,0 +1,42 @@
+---
+title: One catalog now drives every feature choice
+description: The CLI and generator now read from the same typed feature definitions. Conflicting files, scripts, adapters, and environment variables fail before generation begins.
+category: Engineering
+publishedAt: 2026-08-26
+readingTime: 6 min read
+order: 2
+featured: false
+relatedLinks:
+  - label: Feature catalog architecture
+    href: https://github.com/Saikomantisu/astro-stack/blob/main/docs/FEATURES.md
+  - label: Configuration reference
+    href: docs/configuration/
+---
+
+## What changed in 1.1.0
+
+Astro Stack 1.1.0 moves selectable features into a shared, typed catalog. The CLI reads its choices from that catalog, and the generator reads the resolved output from the same definitions.
+
+This release also adds conflict checks for files, scripts, dependency versions, adapters, environment variables, and required capabilities. Invalid combinations stop before the generator writes a project.
+
+## The old split invited drift
+
+A project option appears in more than one place. The CLI needs a label and prompt. The generator needs files, dependencies, configuration, and validation. When those lists live apart, a new option can reach one layer without reaching the other.
+
+That is manageable with a few choices. Astro Stack now covers project types, styling, content, forms, deployment, editors, quality tools, and workflow files. Repeating the same catalog would make every addition harder to review.
+
+## Each feature now owns its contribution
+
+The `@astro-stack/features` package now defines the selectable catalog. A definition includes its prompt label, the configuration value that activates it, the capabilities it needs, and the output it contributes.
+
+The CLI reads the choices from that catalog. The generator reads the resolved contributions from the same definitions. A Tailwind choice can add its package and Vite plugin, while a deployment choice can add an adapter and declare a server runtime.
+
+## Conflicts stop before files are written
+
+The resolver combines compatible contributions and rejects ambiguous ones. Two features cannot claim different Astro adapters, overwrite the same generated file, or assign conflicting versions to one dependency.
+
+Capability checks handle relationships that are less direct. Resend and webhook forms require a server runtime, for example. The resolver reports the incompatible selection and a correction before generation starts.
+
+## Why this work matters to users
+
+This release does not add another prompt for the sake of it. It makes future prompts safer to add. One definition now carries the choice from the wizard to the generated project, and the resolver checks that it composes with everything already selected.

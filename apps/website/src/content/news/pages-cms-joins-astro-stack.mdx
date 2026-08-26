@@ -1,0 +1,54 @@
+---
+title: Pages CMS joins the stack
+description: Choose Pages CMS with Markdown, MDX, or a built-in content collection. Astro Stack writes the matching editor fields and media paths without adding a runtime package.
+category: Product
+publishedAt: 2026-08-26
+readingTime: 6 min read
+order: 3
+featured: true
+relatedLinks:
+  - label: Content guide
+    href: docs/content/
+  - label: Configuration reference
+    href: docs/configuration/
+  - label: Astro Stack 1.1.0 changelog
+    href: changelog/
+---
+
+## What shipped in 1.1.0
+
+Astro Stack 1.1.0 adds Pages CMS as an optional content editor for generated projects. Select it in the wizard or pass `--cms pages` when your project uses file-backed content.
+
+The integration is configuration-only. It does not add a JavaScript package, a runtime service, or an Astro Stack account to the generated project.
+
+- A collection-aware `.pages.yml` file at the project root.
+- A repository-backed media path under `public/images`.
+- Editor fields matched to Markdown, MDX, Blog, and Documentation content.
+- A clear setup note after project generation.
+
+## Why Pages CMS fits Astro projects
+
+Astro handles file-backed content well, but editing Markdown in a code editor is not a good fit for every team. Pages CMS adds a browser editor on top of a GitHub repository. Writers get forms and media uploads while developers keep content in the project.
+
+Astro Stack now prepares that connection during project creation. The generated site still runs without a CMS package or an Astro Stack account.
+
+## How the generated configuration works
+
+When you choose Pages CMS, Astro Stack adds a root `.pages.yml` file and a public images directory. The configuration points at the content source you selected and describes the frontmatter fields the editor should show.
+
+Markdown bodies use the rich-text editor. MDX bodies use the code editor so embedded components stay intact. Built-in blog and documentation collections get mappings that match their existing schemas.
+
+## Supported content setups
+
+Pages CMS needs files to edit. The wizard accepts it with Markdown, MDX, Content Collections, Blog, or Documentation. It rejects the selection when a project has no file-backed content instead of creating an empty CMS configuration.
+
+- Markdown uses the rich-text body editor.
+- MDX uses the code editor so embedded components remain intact.
+- Blog and Documentation use their built-in Astro content collections.
+- Generic Content Collections keep their schema-aligned frontmatter fields.
+
+## Finish the connection after generation
+
+Push the generated project to GitHub, then connect that repository in Pages CMS. The editor reads `.pages.yml` and stores uploaded media in the path Astro Stack prepared.
+
+Content edits return to the repository as commits. They can use the same pull request, review, and deployment process as application changes. Astro Stack is no longer involved once the project exists.
