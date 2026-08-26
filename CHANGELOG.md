@@ -11,6 +11,10 @@ Release notes are assembled from merged changesets when the release version PR
 is created. Do not add hand-written package entries here; add a changeset to
 the pull request that introduced the change instead.
 
+## 1.1.1
+
+- Fix published package manifests so internal workspace dependencies resolve to installable registry versions.
+
 ## 1.1.0
 
 - Add a Pages CMS option that generates collection-aware `.pages.yml` configuration and repository-backed media setup.
