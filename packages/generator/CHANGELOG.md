@@ -1,5 +1,14 @@
 # @astro-stack/generator
 
+## 1.1.1
+
+### Patch Changes
+
+- 71c1118: Fix published package manifests so internal workspace dependencies resolve to installable registry versions.
+- Updated dependencies [71c1118]
+  - @astro-stack/features@1.1.1
+  - @astro-stack/utils@1.1.1
+
 ## 1.1.0
 
 ### Minor Changes
