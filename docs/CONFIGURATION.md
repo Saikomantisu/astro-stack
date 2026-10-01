@@ -49,7 +49,9 @@ Supported agent targets are `codex` (versioned `AGENTS.md`) and `claude`
 Cursor own `.vscode/settings.json` and `.vscode/extensions.json`, so they are
 mutually exclusive. Zed uses `.zed/settings.json`. VS Code/Cursor
 recommendations include Astro plus only the selected ESLint, Prettier, and
-Biome extensions. The generator creates these files only for selected targets,
+Biome extensions. When Pages CMS is selected, each agent target also receives
+the vendored `astro-to-pagescms` skill under `.claude/skills/` or
+`.agents/skills/`. The generator creates these files only for selected targets,
 and its new-project-only writer never replaces an existing project directory or
 user-owned file.
 

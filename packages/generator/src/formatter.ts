@@ -24,7 +24,10 @@ export async function formatProjectTemplates(
 ): Promise<ProjectTemplate[]> {
   return Promise.all(
     templates.map(async (template) => {
-      if (!formattableExtensions.has(extname(template.destination)))
+      if (
+        template.verbatim ||
+        !formattableExtensions.has(extname(template.destination))
+      )
         return template;
       return {
         ...template,

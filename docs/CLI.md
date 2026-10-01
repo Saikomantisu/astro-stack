@@ -90,7 +90,8 @@ fail before the CLI writes project files.
 Agent and editor setup is optional: press Enter on either interactive
 multi-select, or omit the corresponding automation flags, to skip it. Optional
 `codex` and `claude` agent targets generate versioned `AGENTS.md` and
-`CLAUDE.md` files respectively. Optional `vscode` and `cursor` targets generate
+`CLAUDE.md` files respectively; combined with `--cms pages`, each also gets
+the `astro-to-pagescms` agent skill. Optional `vscode` and `cursor` targets generate
 `.vscode/settings.json` and `.vscode/extensions.json`, with recommendations
 only for the selected code-quality tooling. The `zed` target generates
 `.zed/settings.json` with selected formatting behavior. VS Code and Cursor

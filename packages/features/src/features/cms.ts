@@ -1,4 +1,11 @@
-import type { ProjectConfiguration } from "@astro-stack/utils";
+import { readdirSync, readFileSync } from "node:fs";
+import { join, relative, sep } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import type {
+  AgentInstructionTarget,
+  ProjectConfiguration,
+} from "@astro-stack/utils";
 import type { FeatureTemplate } from "../contracts.js";
 import { defineFeature } from "../define-feature.js";
 
@@ -90,6 +97,50 @@ ${sharedFields}
 ${mdx ? mdxBody : markdownBody}`;
 }
 
+const pagesCmsSkillName = "astro-to-pagescms";
+const pagesCmsSkillDirectory = fileURLToPath(
+  new URL(`../../assets/skills/${pagesCmsSkillName}/`, import.meta.url),
+);
+const agentSkillDirectories = {
+  codex: ".agents/skills",
+  claude: ".claude/skills",
+} as const satisfies Record<AgentInstructionTarget, string>;
+
+let pagesCmsSkillFiles: readonly FeatureTemplate[] | undefined;
+
+/** Reads the vendored Pages CMS skill once, in a stable file order. */
+function readPagesCmsSkillFiles(): readonly FeatureTemplate[] {
+  pagesCmsSkillFiles ??= readdirSync(pagesCmsSkillDirectory, {
+    recursive: true,
+    withFileTypes: true,
+  })
+    .filter((entry) => entry.isFile())
+    .map((entry) => {
+      const path = join(entry.parentPath, entry.name);
+      return {
+        destination: relative(pagesCmsSkillDirectory, path)
+          .split(sep)
+          .join("/"),
+        content: readFileSync(path, "utf8"),
+        verbatim: true,
+      };
+    })
+    .sort((a, b) => (a.destination < b.destination ? -1 : 1));
+  return pagesCmsSkillFiles;
+}
+
+/** Installs the Pages CMS skill for each selected coding agent. */
+function pagesCmsSkillTemplates(
+  configuration: ProjectConfiguration,
+): readonly FeatureTemplate[] {
+  return configuration.developerExperience.agents.flatMap((agent) =>
+    readPagesCmsSkillFiles().map((template) => ({
+      ...template,
+      destination: `${agentSkillDirectories[agent]}/${pagesCmsSkillName}/${template.destination}`,
+    })),
+  );
+}
+
 function pagesCmsTemplates(
   configuration: ProjectConfiguration,
 ): readonly FeatureTemplate[] {
@@ -112,6 +163,7 @@ settings:
 `,
     },
     { destination: "public/images/.gitkeep", content: "" },
+    ...pagesCmsSkillTemplates(configuration),
   ];
 }
 
