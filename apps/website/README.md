@@ -17,17 +17,19 @@ pnpm --filter @astro-stack/website check
 
 ## Base path
 
-Default build targets **project GitHub Pages**:
+The site deploys to GitHub Pages under the custom domain
+`astrostack.ravinath.dev`, served from the root:
 
 | Env | Default |
 | --- | --- |
-| `SITE_URL` | `https://saikomantisu.github.io` |
-| `SITE_BASE` | `/astro-stack` |
+| `SITE_URL` | `https://astrostack.ravinath.dev` |
+| `SITE_BASE` | `/` |
 
-Use `withBase()` / `import.meta.env.BASE_URL` for all internal asset and nav URLs.
+Keep using `withBase()` / `import.meta.env.BASE_URL` for all internal asset and
+nav URLs so the site still builds under a sub-path if `SITE_BASE` is set.
 
 ```sh
-SITE_BASE=/astro-stack pnpm --filter @astro-stack/website build
+pnpm --filter @astro-stack/website build
 pnpm --filter @astro-stack/website preview
 ```
 
