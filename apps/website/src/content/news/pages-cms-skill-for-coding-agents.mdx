@@ -1,0 +1,43 @@
+---
+title: Your coding agent now knows Pages CMS
+description: Projects that pair Pages CMS with Claude Code or Codex now include an agent skill for keeping .pages.yml in step with your Astro content collections.
+category: Product
+publishedAt: 2026-10-01
+readingTime: 4 min read
+order: 4
+featured: true
+relatedLinks:
+  - label: Content guide
+    href: docs/content/
+  - label: Configuration reference
+    href: docs/configuration/
+  - label: Astro Stack 1.2.0 changelog
+    href: changelog/
+---
+
+## What shipped in 1.2.0
+
+Astro Stack 1.2.0 adds the `astro-to-pagescms` agent skill to generated projects. You get it when you select Pages CMS and at least one coding agent, in the wizard or with `--cms pages --agent claude` or `--agent codex`.
+
+- Claude Code projects receive it in `.claude/skills/astro-to-pagescms/`.
+- Codex projects receive it in `.agents/skills/astro-to-pagescms/`.
+- Projects without a coding agent, or without Pages CMS, get nothing new.
+
+## Why a skill
+
+Astro Stack writes a `.pages.yml` that matches your content on day one. Your schema will not stay that way. A new field in `content.config.ts`, a renamed collection, or a switch from Markdown to MDX all need a matching change in the CMS configuration, and nothing in Astro checks that the two agree.
+
+That translation is easy to get subtly wrong. A Zod `.default()` should not become a required field. An `image()` field needs media paths Astro can resolve. A markdown body never appears in the schema at all, but editors still need a `body` field to reach it. The skill gives your agent the full mapping from Zod types to Pages CMS fields, the Pages CMS configuration reference, and worked conversions, so it can make those changes correctly when you ask.
+
+## What the agent does with it
+
+Ask your agent to add a collection to the CMS, expose a new field, or check that `.pages.yml` still matches the schema. The skill tells it to:
+
+- Read the Astro schema and a real content file before mapping anything.
+- Make mechanical translations directly, and ask before structural ones such as grouping collections or hiding fields from editors.
+- Keep `settings.content.merge` on when fields are deliberately left out, so editor saves do not delete them.
+- Verify the result by saving an entry without changes, checking the diff, and running `astro build`.
+
+## Shipped with the CLI, not fetched
+
+The skill is vendored inside Astro Stack and written into your project exactly as reviewed, without formatting changes. Generation stays offline and reproducible, and the same CLI version always writes the same skill. Like everything else Astro Stack generates, the files belong to your project. Edit them, extend them, or delete them.

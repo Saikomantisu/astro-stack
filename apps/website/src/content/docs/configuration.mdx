@@ -17,7 +17,7 @@ Selections are additive: a project receives only the files, configuration, and d
 
 Your project selection controls the name, output directory, starter page structure, package manager, and whether Git is initialized. The generator never replaces an existing directory or user-owned file.
 
-Optional agent instructions add versioned `AGENTS.md` for Codex and `CLAUDE.md` for Claude. Optional editor integrations add:
+Optional agent instructions add versioned `AGENTS.md` for Codex and `CLAUDE.md` for Claude. When Pages CMS is also selected, each agent receives the `astro-to-pagescms` skill in `.agents/skills/` or `.claude/skills/`. Optional editor integrations add:
 
 - VS Code or Cursor: `.vscode/settings.json` and `.vscode/extensions.json`, with recommendations only for selected tooling.
 - Zed: `.zed/settings.json` with the selected formatting behavior.
