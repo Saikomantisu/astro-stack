@@ -42,8 +42,10 @@ changelogs. Do not edit a generated package changelog by hand.
    with the registry credentials for the publishing account. The script builds
    the workspace, then publishes each package in dependency order so npm web
    authentication remains interactive and pnpm resolves workspace dependency
-   ranges in the published manifests. Never publish from an unreviewed local
-   branch.
+   ranges in the published manifests. After each publish, the script waits
+   until the package tarball downloads from the registry before publishing its
+   dependents, because npm can list a version before serving its tarball.
+   Never publish from an unreviewed local branch.
 4. Confirm the registry package version, install and smoke-test it in a fresh
    temporary directory, then create a GitHub release and an annotated
    `v<version>` tag from the merged version commit. Copy the generated package

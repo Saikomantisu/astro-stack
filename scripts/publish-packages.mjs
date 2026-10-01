@@ -32,6 +32,39 @@ function packageIsPublished(name, version) {
   process.exit(result.status ?? 1);
 }
 
+const tarballTimeoutMs = 15 * 60 * 1000;
+const tarballPollMs = 15 * 1000;
+
+/**
+ * npm can list a version before its tarball is served. Publishing a dependent
+ * package in that window ships a release that fresh installs cannot resolve,
+ * so wait until the tarball itself downloads before continuing.
+ */
+async function waitForTarball(name, version, registry) {
+  const basename = name.split("/").pop();
+  const url = `${registry.replace(/\/$/, "")}/${name}/-/${basename}-${version}.tgz`;
+  const deadline = Date.now() + tarballTimeoutMs;
+
+  for (;;) {
+    const response = await fetch(url, {
+      method: "HEAD",
+      cache: "no-store",
+    }).catch(() => undefined);
+    if (response?.ok) {
+      console.log(`Tarball available: ${name}@${version}`);
+      return;
+    }
+    if (Date.now() >= deadline)
+      throw new Error(
+        `${name}@${version} tarball is still unavailable at ${url}. Do not move the latest tag until it downloads.`,
+      );
+    console.log(
+      `Waiting for ${name}@${version} tarball (HTTP ${response?.status ?? "error"})...`,
+    );
+    await new Promise((resolve) => setTimeout(resolve, tarballPollMs));
+  }
+}
+
 function ensureTag(name, version) {
   const tag = `${name}@${version}`;
   const existing = spawnSync(
@@ -68,9 +101,12 @@ for (const packageDirectory of packageDirectories) {
     readFileSync(join(directory, "package.json"), "utf8"),
   );
   const { name, version } = packageJson;
+  const registry =
+    packageJson.publishConfig?.registry ?? "https://registry.npmjs.org/";
 
   if (!dryRun && packageIsPublished(name, version)) {
     console.log(`Already published: ${name}@${version}`);
+    await waitForTarball(name, version, registry);
     ensureTag(name, version);
     continue;
   }
@@ -88,5 +124,8 @@ for (const packageDirectory of packageDirectories) {
     { cwd: directory },
   );
 
-  if (!dryRun) ensureTag(name, version);
+  if (!dryRun) {
+    await waitForTarball(name, version, registry);
+    ensureTag(name, version);
+  }
 }
