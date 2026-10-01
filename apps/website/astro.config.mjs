@@ -5,8 +5,8 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
-// Interim project-Pages defaults; override via env in the deploy workflow.
-const site = process.env.SITE_URL ?? "https://saikomantisu.github.io";
+// Served from a custom domain at the root; override via env if that changes.
+const site = process.env.SITE_URL ?? "https://astrostack.ravinath.dev";
 const base = process.env.SITE_BASE ?? "/";
 
 // https://astro.build/config

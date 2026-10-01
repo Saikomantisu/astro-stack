@@ -1,6 +1,5 @@
-# https://saikomantisu.github.io/astro-stack/
+# https://astrostack.ravinath.dev/
 User-agent: *
 Allow: /
 
-# Project GitHub Pages base path
-Sitemap: https://saikomantisu.github.io/astro-stack/sitemap-index.xml
+Sitemap: https://astrostack.ravinath.dev/sitemap-index.xml

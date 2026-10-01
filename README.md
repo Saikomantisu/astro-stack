@@ -8,6 +8,8 @@ codebase—without a starter repository full of things you did not choose.
 
 **No unnecessary files. No unnecessary dependencies. Just the stack you choose.**
 
+Website and docs: [astrostack.ravinath.dev](https://astrostack.ravinath.dev)
+
 Every generated project is fully project-owned and has no Astro Stack runtime
 dependency. Read the [generated-project ownership guarantee](./docs/GENERATED_PROJECTS.md).
 

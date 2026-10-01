@@ -28,8 +28,8 @@ jobs:
     name: Build website
     runs-on: ubuntu-latest
     env:
-      SITE_URL: https://${{ github.repository_owner }}.github.io
-      SITE_BASE: /${{ github.event.repository.name }}
+      SITE_URL: https://astrostack.ravinath.dev
+      SITE_BASE: /
     steps:
       - name: Check out repository
         uses: actions/checkout@v5

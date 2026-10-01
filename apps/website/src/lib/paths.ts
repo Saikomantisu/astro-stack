@@ -3,7 +3,7 @@
  * `import.meta.env.BASE_URL` always ends with `/`.
  *
  * Hash-only paths (`#features`) resolve to the homepage under base
- * (`/astro-stack/#features`) so section links work from any route.
+ * (`/#features`, or `/sub-path/#features` under a base) so section links work from any route.
  */
 export function withBase(path = "/"): string {
   const base = import.meta.env.BASE_URL;
