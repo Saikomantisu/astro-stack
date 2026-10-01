@@ -101,6 +101,37 @@ describe("createProject", () => {
     }
   });
 
+  it("leaves verbatim templates unformatted", async () => {
+    const content = "| a | b |\n| --- | --- |\n| long value | x |\n";
+    const [template] = await formatProjectTemplates([
+      { destination: "SKILL.md", content, verbatim: true },
+    ]);
+
+    expect(template?.content).toBe(content);
+  });
+
+  it("writes the vendored Pages CMS skill byte for byte", async () => {
+    const directory = await generateFrom({
+      project: { type: "blog" },
+      content: { cms: "pages" },
+      developerExperience: { agents: ["claude"] },
+    });
+    const source = await readFile(
+      new URL(
+        "../../features/assets/skills/astro-to-pagescms/SKILL.md",
+        import.meta.url,
+      ),
+      "utf8",
+    );
+
+    await expect(
+      readFile(
+        join(directory, ".claude/skills/astro-to-pagescms/SKILL.md"),
+        "utf8",
+      ),
+    ).resolves.toBe(source);
+  });
+
   it("runs feature lifecycle hooks in deterministic generation order", async () => {
     const parent = await mkdtemp(join(tmpdir(), "astro-stack-generator-"));
     directories.push(parent);

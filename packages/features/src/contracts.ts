@@ -15,6 +15,8 @@ export interface FeatureDependency {
 export interface FeatureTemplate {
   destination: string;
   content: string;
+  /** Writes the content byte for byte, skipping generated-project formatting. */
+  verbatim?: boolean;
 }
 /** A JavaScript expression rendered without JSON stringification in Astro config. */
 export interface AstroConfigExpression {

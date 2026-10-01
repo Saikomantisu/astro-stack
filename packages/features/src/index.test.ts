@@ -154,6 +154,45 @@ describe("resolveFeatures", () => {
     ).toBe(false);
   });
 
+  it("installs the Pages CMS skill only for selected coding agents", () => {
+    const skillDestinations = (agents: ("codex" | "claude")[]) =>
+      resolveFeatures(
+        mergeProjectConfiguration({
+          project: { type: "blog" },
+          content: { cms: "pages" },
+          developerExperience: { agents },
+        }),
+      )
+        .templates.map(({ destination }) => destination)
+        .filter((destination) => destination.includes("astro-to-pagescms"));
+
+    expect(skillDestinations([])).toEqual([]);
+    expect(skillDestinations(["claude"])).toContain(
+      ".claude/skills/astro-to-pagescms/SKILL.md",
+    );
+    expect(skillDestinations(["claude"])).toContain(
+      ".claude/skills/astro-to-pagescms/references/patterns/blocks.md",
+    );
+    expect(skillDestinations(["codex", "claude"])).toEqual(
+      expect.arrayContaining([
+        ".agents/skills/astro-to-pagescms/SKILL.md",
+        ".claude/skills/astro-to-pagescms/SKILL.md",
+      ]),
+    );
+
+    const withoutCms = resolveFeatures(
+      mergeProjectConfiguration({
+        project: { type: "blog" },
+        developerExperience: { agents: ["claude"] },
+      }),
+    );
+    expect(
+      withoutCms.templates.some(({ destination }) =>
+        destination.includes("astro-to-pagescms"),
+      ),
+    ).toBe(false);
+  });
+
   it("detects file, configuration, and dependency conflicts before generation", () => {
     const alwaysSelected = () => true;
     const registry: readonly FeatureDefinition[] = [

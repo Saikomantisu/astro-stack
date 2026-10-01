@@ -34,7 +34,10 @@ its dependencies.
 
 Pages CMS is configuration-only. Selecting it adds `.pages.yml` and a public
 media directory, but it does not add a package. Pages CMS edits the generated
-content files through the connected GitHub repository.
+content files through the connected GitHub repository. When a coding agent is
+also selected, the project includes the `astro-to-pagescms` agent skill
+(`.claude/skills/` for Claude Code, `.agents/skills/` for Codex) to help keep
+`.pages.yml` in sync with the content collections.
 
 ## Maintaining a generated project
 

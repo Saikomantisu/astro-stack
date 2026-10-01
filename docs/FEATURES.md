@@ -81,4 +81,7 @@ should remain explicit.
 
 The CMS group follows this path. `content.cms` owns the `none` and `pages`
 values, while the Pages CMS definition owns its root configuration, media
-folder, compatibility check, and completion note.
+folder, compatibility check, completion note, and the vendored agent skill it
+installs for selected coding agents. Vendored assets live in
+`packages/features/assets` and are documented in its README. Templates marked
+`verbatim` skip generated-project formatting so vendored files ship unchanged.

@@ -7,6 +7,8 @@ import {
 export interface ProjectTemplate {
   destination: string;
   content: string;
+  /** Writes the content byte for byte, skipping generated-project formatting. */
+  verbatim?: boolean;
 }
 
 interface TemplateContext {
