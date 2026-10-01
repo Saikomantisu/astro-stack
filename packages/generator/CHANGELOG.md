@@ -1,5 +1,17 @@
 # @astro-stack/generator
 
+## 1.2.0
+
+### Minor Changes
+
+- 347400e: Install the `astro-to-pagescms` agent skill when Pages CMS is selected together with a coding agent (`.claude/skills/` for Claude Code, `.agents/skills/` for Codex). The skill is vendored in the package and written byte for byte, without generated-project formatting.
+
+### Patch Changes
+
+- Updated dependencies [347400e]
+  - @astro-stack/features@1.2.0
+  - @astro-stack/utils@1.2.0
+
 ## 1.1.1
 
 ### Patch Changes

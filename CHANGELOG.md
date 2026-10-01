@@ -11,6 +11,10 @@ Release notes are assembled from merged changesets when the release version PR
 is created. Do not add hand-written package entries here; add a changeset to
 the pull request that introduced the change instead.
 
+## 1.2.0
+
+- Install the `astro-to-pagescms` agent skill when Pages CMS is selected together with a coding agent (`.claude/skills/` for Claude Code, `.agents/skills/` for Codex). The skill is vendored in the package and written byte for byte, without generated-project formatting.
+
 ## 1.1.1
 
 - Fix published package manifests so internal workspace dependencies resolve to installable registry versions.
