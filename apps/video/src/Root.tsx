@@ -1,6 +1,16 @@
 import "./index.css";
-import { AstroStackCliDemo } from "./Composition";
+import {
+  AstroStackCliDemo,
+  AstroStackPromo,
+  AstroStackTerminal,
+} from "./Composition";
 
 export const RemotionRoot: React.FC = () => {
-  return <AstroStackCliDemo />;
+  return (
+    <>
+      <AstroStackCliDemo />
+      <AstroStackTerminal />
+      <AstroStackPromo />
+    </>
+  );
 };
