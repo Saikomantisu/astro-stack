@@ -41,9 +41,8 @@ name, the output directory defaults to `./<project-name>` and can be edited.
 
 ## Supported choices and defaults
 
-The following are the complete v0.1.1 selection set. Defaults apply to omitted
-non-interactive options and are preselected in the wizard unless noted
-otherwise.
+This table lists every choice in Astro Stack 1.2. Omitted non-interactive
+options fall back to the default, and the wizard preselects it unless noted.
 
 | Area | Supported choices | Default |
 | --- | --- | --- |

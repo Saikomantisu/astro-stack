@@ -63,6 +63,10 @@ running it again.
 - `packages/templates`: source templates copied or rendered into generated
   projects; it is not published as a runtime package.
 - `packages/utils`: framework-agnostic shared utilities.
+- `apps/website`: the documentation and product site. It is not published to npm.
+- `apps/video`: Remotion compositions for product videos. It is not published
+  to npm. Its [README](../apps/video/README.md) covers rendering and the audio
+  scripts, which also need Python 3 with numpy and ffmpeg.
 
 Package source belongs in `src/` and compiled output goes to `dist/`. Do not
 import from another package's source or `dist` directory: import its declared
