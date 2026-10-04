@@ -5,8 +5,8 @@ export {
   rgbToOklch,
   toCss,
 } from "./color";
-export type { EasingName, SpringName } from "./motion";
-export { easings, springs } from "./motion";
+export type { EasingName, SpringConfig, SpringName } from "./motion";
+export { easings, springStep, springs } from "./motion";
 export type { RemocnTheme, RemocnUIProviderProps } from "./theme";
 export {
   defaultDarkTheme,
@@ -14,12 +14,20 @@ export {
   RemocnUIProvider,
   useRemocnTheme,
 } from "./theme";
-export type { TypewriterOptions, TypewriterState } from "./timeline";
+export type {
+  SpringKey,
+  SpringTrackOptions,
+  TypedGroup,
+  TypewriterOptions,
+  TypewriterState,
+} from "./timeline";
 export {
   clamp01,
   framesFor,
+  keystrokeFrames,
   revealCount,
   revealedText,
+  springTrack,
   useCurrentState,
   useStateTransition,
   useTypewriter,

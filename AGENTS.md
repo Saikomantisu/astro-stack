@@ -13,6 +13,8 @@ This repository is early-stage. Prefer well-scoped improvements that strengthen 
 - `packages/utils`: shared, framework-agnostic utilities.
 - `packages/features`: self-contained feature definitions and supporting documentation.
 - `packages/templates`: source templates used by the generator.
+- `apps/website`: the documentation and product site at astrostack.ravinath.dev.
+- `apps/video`: Remotion compositions for product videos. See its README.
 - `docs`: product requirements, architecture, and guiding principles.
 
 ## Development commands

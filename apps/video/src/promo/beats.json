@@ -1,0 +1,428 @@
+{
+  "source": "Mixkit #694 \"House Two\" (Mixkit Stock Music Free License)",
+  "sourceStartSeconds": 128.4656,
+  "bpm": 120.02,
+  "fps": 60,
+  "beats": [
+    {
+      "index": 0,
+      "bar": 1,
+      "beat": 1,
+      "seconds": 0.0,
+      "frame": 0
+    },
+    {
+      "index": 1,
+      "bar": 1,
+      "beat": 2,
+      "seconds": 0.5021,
+      "frame": 30
+    },
+    {
+      "index": 2,
+      "bar": 1,
+      "beat": 3,
+      "seconds": 1.0014,
+      "frame": 60
+    },
+    {
+      "index": 3,
+      "bar": 1,
+      "beat": 4,
+      "seconds": 1.5006,
+      "frame": 90
+    },
+    {
+      "index": 4,
+      "bar": 2,
+      "beat": 1,
+      "seconds": 2.0027,
+      "frame": 120
+    },
+    {
+      "index": 5,
+      "bar": 2,
+      "beat": 2,
+      "seconds": 2.499,
+      "frame": 150
+    },
+    {
+      "index": 6,
+      "bar": 2,
+      "beat": 3,
+      "seconds": 3.0012,
+      "frame": 180
+    },
+    {
+      "index": 7,
+      "bar": 2,
+      "beat": 4,
+      "seconds": 3.5004,
+      "frame": 210
+    },
+    {
+      "index": 8,
+      "bar": 3,
+      "beat": 1,
+      "seconds": 4.0025,
+      "frame": 240
+    },
+    {
+      "index": 9,
+      "bar": 3,
+      "beat": 2,
+      "seconds": 4.5018,
+      "frame": 270
+    },
+    {
+      "index": 10,
+      "bar": 3,
+      "beat": 3,
+      "seconds": 5.001,
+      "frame": 300
+    },
+    {
+      "index": 11,
+      "bar": 3,
+      "beat": 4,
+      "seconds": 5.5002,
+      "frame": 330
+    },
+    {
+      "index": 12,
+      "bar": 4,
+      "beat": 1,
+      "seconds": 6.0024,
+      "frame": 360
+    },
+    {
+      "index": 13,
+      "bar": 4,
+      "beat": 2,
+      "seconds": 6.4987,
+      "frame": 390
+    },
+    {
+      "index": 14,
+      "bar": 4,
+      "beat": 3,
+      "seconds": 7.0008,
+      "frame": 420
+    },
+    {
+      "index": 15,
+      "bar": 4,
+      "beat": 4,
+      "seconds": 7.5,
+      "frame": 450
+    },
+    {
+      "index": 16,
+      "bar": 5,
+      "beat": 1,
+      "seconds": 8.0022,
+      "frame": 480
+    },
+    {
+      "index": 17,
+      "bar": 5,
+      "beat": 2,
+      "seconds": 8.5043,
+      "frame": 510
+    },
+    {
+      "index": 18,
+      "bar": 5,
+      "beat": 3,
+      "seconds": 9.0006,
+      "frame": 540
+    },
+    {
+      "index": 19,
+      "bar": 5,
+      "beat": 4,
+      "seconds": 9.4999,
+      "frame": 570
+    },
+    {
+      "index": 20,
+      "bar": 6,
+      "beat": 1,
+      "seconds": 10.002,
+      "frame": 600
+    },
+    {
+      "index": 21,
+      "bar": 6,
+      "beat": 2,
+      "seconds": 10.5012,
+      "frame": 630
+    },
+    {
+      "index": 22,
+      "bar": 6,
+      "beat": 3,
+      "seconds": 11.0005,
+      "frame": 660
+    },
+    {
+      "index": 23,
+      "bar": 6,
+      "beat": 4,
+      "seconds": 11.4997,
+      "frame": 690
+    },
+    {
+      "index": 24,
+      "bar": 7,
+      "beat": 1,
+      "seconds": 12.0018,
+      "frame": 720
+    },
+    {
+      "index": 25,
+      "bar": 7,
+      "beat": 2,
+      "seconds": 12.501,
+      "frame": 750
+    },
+    {
+      "index": 26,
+      "bar": 7,
+      "beat": 3,
+      "seconds": 13.0032,
+      "frame": 780
+    },
+    {
+      "index": 27,
+      "bar": 7,
+      "beat": 4,
+      "seconds": 13.5024,
+      "frame": 810
+    },
+    {
+      "index": 28,
+      "bar": 8,
+      "beat": 1,
+      "seconds": 14.0016,
+      "frame": 840
+    },
+    {
+      "index": 29,
+      "bar": 8,
+      "beat": 2,
+      "seconds": 14.5009,
+      "frame": 870
+    },
+    {
+      "index": 30,
+      "bar": 8,
+      "beat": 3,
+      "seconds": 15.0001,
+      "frame": 900
+    },
+    {
+      "index": 31,
+      "bar": 8,
+      "beat": 4,
+      "seconds": 15.4993,
+      "frame": 930
+    },
+    {
+      "index": 32,
+      "bar": 9,
+      "beat": 1,
+      "seconds": 16.0015,
+      "frame": 960
+    },
+    {
+      "index": 33,
+      "bar": 9,
+      "beat": 2,
+      "seconds": 16.5007,
+      "frame": 990
+    },
+    {
+      "index": 34,
+      "bar": 9,
+      "beat": 3,
+      "seconds": 16.9999,
+      "frame": 1020
+    },
+    {
+      "index": 35,
+      "bar": 9,
+      "beat": 4,
+      "seconds": 17.4991,
+      "frame": 1050
+    },
+    {
+      "index": 36,
+      "bar": 10,
+      "beat": 1,
+      "seconds": 18.0013,
+      "frame": 1080
+    },
+    {
+      "index": 37,
+      "bar": 10,
+      "beat": 2,
+      "seconds": 18.4976,
+      "frame": 1110
+    },
+    {
+      "index": 38,
+      "bar": 10,
+      "beat": 3,
+      "seconds": 18.9997,
+      "frame": 1140
+    },
+    {
+      "index": 39,
+      "bar": 10,
+      "beat": 4,
+      "seconds": 19.499,
+      "frame": 1170
+    },
+    {
+      "index": 40,
+      "bar": 11,
+      "beat": 1,
+      "seconds": 20.0011,
+      "frame": 1200
+    },
+    {
+      "index": 41,
+      "bar": 11,
+      "beat": 2,
+      "seconds": 20.5003,
+      "frame": 1230
+    },
+    {
+      "index": 42,
+      "bar": 11,
+      "beat": 3,
+      "seconds": 20.9995,
+      "frame": 1260
+    },
+    {
+      "index": 43,
+      "bar": 11,
+      "beat": 4,
+      "seconds": 21.4988,
+      "frame": 1290
+    },
+    {
+      "index": 44,
+      "bar": 12,
+      "beat": 1,
+      "seconds": 21.998,
+      "frame": 1320
+    },
+    {
+      "index": 45,
+      "bar": 12,
+      "beat": 2,
+      "seconds": 22.4972,
+      "frame": 1350
+    },
+    {
+      "index": 46,
+      "bar": 12,
+      "beat": 3,
+      "seconds": 22.9994,
+      "frame": 1380
+    },
+    {
+      "index": 47,
+      "bar": 12,
+      "beat": 4,
+      "seconds": 23.4986,
+      "frame": 1410
+    },
+    {
+      "index": 48,
+      "bar": 13,
+      "beat": 1,
+      "seconds": 24.0007,
+      "frame": 1440
+    },
+    {
+      "index": 49,
+      "bar": 13,
+      "beat": 2,
+      "seconds": 24.5,
+      "frame": 1470
+    },
+    {
+      "index": 50,
+      "bar": 13,
+      "beat": 3,
+      "seconds": 24.9992,
+      "frame": 1500
+    },
+    {
+      "index": 51,
+      "bar": 13,
+      "beat": 4,
+      "seconds": 25.4984,
+      "frame": 1530
+    },
+    {
+      "index": 52,
+      "bar": 14,
+      "beat": 1,
+      "seconds": 26.0005,
+      "frame": 1560
+    },
+    {
+      "index": 53,
+      "bar": 14,
+      "beat": 2,
+      "seconds": 26.4998,
+      "frame": 1590
+    },
+    {
+      "index": 54,
+      "bar": 14,
+      "beat": 3,
+      "seconds": 26.999,
+      "frame": 1620
+    },
+    {
+      "index": 55,
+      "bar": 14,
+      "beat": 4,
+      "seconds": 27.4982,
+      "frame": 1650
+    },
+    {
+      "index": 56,
+      "bar": 15,
+      "beat": 1,
+      "seconds": 28.0004,
+      "frame": 1680
+    },
+    {
+      "index": 57,
+      "bar": 15,
+      "beat": 2,
+      "seconds": 28.4996,
+      "frame": 1710
+    },
+    {
+      "index": 58,
+      "bar": 15,
+      "beat": 3,
+      "seconds": 28.9988,
+      "frame": 1740
+    },
+    {
+      "index": 59,
+      "bar": 15,
+      "beat": 4,
+      "seconds": 29.498,
+      "frame": 1770
+    }
+  ]
+}

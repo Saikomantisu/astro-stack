@@ -1,0 +1,46 @@
+{
+  "key-0": {
+    "file": "audio/sfx/key-0.wav",
+    "peakSeconds": 0.03333
+  },
+  "key-1": {
+    "file": "audio/sfx/key-1.wav",
+    "peakSeconds": 0.03333
+  },
+  "key-2": {
+    "file": "audio/sfx/key-2.wav",
+    "peakSeconds": 0.03333
+  },
+  "key-3": {
+    "file": "audio/sfx/key-3.wav",
+    "peakSeconds": 0.03333
+  },
+  "enter": {
+    "file": "audio/sfx/enter.wav",
+    "peakSeconds": 0.03333
+  },
+  "tick": {
+    "file": "audio/sfx/tick.wav",
+    "peakSeconds": 0.03333
+  },
+  "soft-tick": {
+    "file": "audio/sfx/soft-tick.wav",
+    "peakSeconds": 0.03333
+  },
+  "space": {
+    "file": "audio/sfx/space.wav",
+    "peakSeconds": 0.03333
+  },
+  "move": {
+    "file": "audio/sfx/move.wav",
+    "peakSeconds": 0.03333
+  },
+  "print": {
+    "file": "audio/sfx/print.wav",
+    "peakSeconds": 0.03333
+  },
+  "ready": {
+    "file": "audio/sfx/ready.wav",
+    "peakSeconds": 0.07729
+  }
+}

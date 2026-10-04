@@ -159,12 +159,12 @@ choices must fail before files are written.
 
 # Initial Project Types
 
-- Marketing Website
-- Client Website
+- Marketing site
+- Client project
 - Blog
 - Documentation
 - Portfolio
-- Blank Project
+- Blank project
 
 ---
 
@@ -207,14 +207,14 @@ choices must fail before files are written.
 - Prettier
 - Biome
 
-## v0.1.1 Scope Boundary
+## 1.x scope boundary
 
-The initial release supports only the project types and selections listed in
-this document's **Initial Project Types** and **Initial Feature Set** sections.
+The 1.x line supports only the project types and selections listed in this
+document's **Initial Project Types** and **Initial Feature Set** sections.
 Authentication, analytics, search, community or team presets, and updates to
-existing generated projects are explicitly deferred beyond v0.1.1. They must
-not be presented as available CLI selections or implied by generated-project
-behavior until their requirements and support policies are defined.
+existing generated projects are deferred and are not part of 1.x. The CLI must
+not offer them, and generated projects must not imply them, until each has
+defined requirements and a support policy.
 
 The initial release also includes an Astro Stack documentation and product
 website deployed on GitHub Pages. It must provide a product overview,
@@ -223,7 +223,7 @@ documentation before final release validation begins.
 
 ## Generated-Project Support Policy
 
-Astro Stack v0.1.1 generates projects with `astro` `^7.0.7`. Generated
+Astro Stack 1.2 generates projects with `astro` `^7.0.7`. Generated
 projects require Node.js `>=22.12.0` and an even-numbered Node.js release. The
 CLI requires Node.js `>=22.13` because its pinned pnpm version has that runtime
 minimum.
@@ -238,7 +238,7 @@ The generator supports these package-manager versions for generated projects:
 | Bun | `>=1.3.0` |
 
 Each generated project uses exactly the package manager selected in the CLI and
-produces only that manager's lockfile. The v0.1.1 compatibility commitment is
+produces only that manager's lockfile. The 1.x compatibility commitment is
 to install dependencies, type-check, and production-build every supported
 selection with the listed runtime and package-manager ranges. Compatibility
 with older Astro majors, older package-manager releases, or an unlisted package

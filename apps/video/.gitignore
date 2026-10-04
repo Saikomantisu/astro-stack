@@ -6,3 +6,9 @@ build
 
 # Ignore the output video from Git but not videos you import into src/.
 out
+
+# Licensed music stays local. See "Music" in README.md to download the track
+# and rebuild the cuts. Generated UI sounds in public/audio/sfx/ are committed.
+public/audio/*.mp3
+public/audio/promo-music.wav
+public/audio/terminal-music.wav

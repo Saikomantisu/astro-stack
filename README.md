@@ -39,7 +39,7 @@ corresponding files, dependencies, and configuration.
 
 | Flight system | Available choices |
 | --- | --- |
-| Project | Marketing site, client site, blog, documentation, portfolio, SaaS landing page, or blank project |
+| Project | Marketing site, client project, blog, documentation, portfolio, or blank project |
 | Styling | Tailwind CSS or vanilla CSS |
 | Content | None, Markdown, MDX, or Content Collections |
 | CMS | None or Pages CMS |
@@ -48,19 +48,24 @@ corresponding files, dependencies, and configuration.
 | Tooling | Strict or relaxed TypeScript, ESLint, Prettier, Biome, Codex/Claude instructions, VS Code/Cursor/Zed integration, and optional Git hooks |
 
 ```text
-✦ astro stack ✦
-
-Project
-───────────────────────────────
-
-Project name
-❯ my-website
-
-What are you building?
-❯ Marketing Website
-
-Package manager
-❯ pnpm
+┌  ✦ astro stack ✦ — Set your coordinates.
+│
+◇  Project name
+│  my-website
+│
+◇  Where should it be created?
+│  ./my-website
+│
+◇  What are you building?
+│  Marketing site
+│
+◆  Package manager
+│  ○ npm
+│  ● pnpm
+│  ○ Yarn
+│  ○ Bun
+│  ↑/↓ to navigate • Enter: confirm
+└
 ```
 
 When your flight plan is complete, Astro Stack creates the project, installs
@@ -79,9 +84,11 @@ Read the full [product principles](./docs/PRINCIPLES.md) and
 
 ## Release baseline
 
-The initial public release is **v0.1.1**. The CLI supports **Node.js >=22.13**
-and uses the pinned pnpm workspace version **pnpm@11.0.8**. Generated-project
-runtime and package-manager requirements are defined in the
+Astro Stack is on the 1.x line. The current release is 1.2.0, and the
+[CLI changelog](./packages/cli/CHANGELOG.md) lists what changed in each version.
+
+The CLI needs Node.js 22.13 or later. The workspace pins pnpm 11.0.8. Generated
+projects have their own runtime and package-manager requirements, listed in the
 [support policy](./docs/PRD.md#generated-project-support-policy).
 
 ## On the horizon
