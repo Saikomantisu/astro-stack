@@ -4,7 +4,7 @@ import Prose from "@/components/common/Prose.astro";
 import SimplePageLayout from "@/layouts/SimplePageLayout.astro";
 import { links, site } from "@/lib/site";
 
-const updated = "2026-07-14";
+const updated = "2026-10-08";
 ---
 
 <SimplePageLayout
@@ -21,12 +21,16 @@ const updated = "2026-07-14";
     <h2>Summary</h2>
     <p>
       The {site.name} marketing website is a <strong>static site</strong>. For
-      the current release (v1 of this site):
+      the current release:
     </p>
     <ul>
       <li>
-        We do <strong>not</strong> use analytics cookies or third-party tracking
-        scripts.
+        We use <strong>Cloudflare Web Analytics</strong>, a cookieless,
+        privacy-focused analytics service, to count page views.
+      </li>
+      <li>
+        We do <strong>not</strong> set analytics cookies or use fingerprinting
+        to track you across sites.
       </li>
       <li>
         We do <strong>not</strong> run advertising pixels or session-replay tools.
@@ -54,6 +58,21 @@ const updated = "2026-07-14";
       install.
     </p>
 
+    <h2>Analytics</h2>
+    <p>
+      We use Cloudflare Web Analytics to understand which pages are visited and
+      how the site performs. A small script loaded from Cloudflare reports page
+      views, referrer, browser and device type, country, and page-load timing.
+      It does not use cookies or local storage, does not fingerprint visitors,
+      and is not used to track you across other websites. Cloudflare processes
+      this data under its{" "}
+      <BaseLink href="https://www.cloudflare.com/privacypolicy/" external>
+        privacy policy
+      </BaseLink>
+      . You can block the script with any content blocker without affecting the
+      site.
+    </p>
+
     <h2>External links</h2>
     <p>
       Links to GitHub, npm, or other third-party sites are subject to those
@@ -70,8 +89,8 @@ const updated = "2026-07-14";
 
     <h2>Changes</h2>
     <p>
-      If we add analytics or other data collection later, we will update this
-      page before enabling it and describe what is collected and why.
+      If we change our analytics or add other data collection, we will update
+      this page before enabling it and describe what is collected and why.
     </p>
 
     <h2>Contact</h2>

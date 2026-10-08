@@ -30,6 +30,7 @@ jobs:
     env:
       SITE_URL: https://astrostack.ravinath.dev
       SITE_BASE: /
+      PUBLIC_CF_ANALYTICS_TOKEN: ${{ vars.CF_ANALYTICS_TOKEN }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
